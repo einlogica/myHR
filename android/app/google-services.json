@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1087954814595",
+    "project_id": "einlogicahr",
+    "storage_bucket": "einlogicahr.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087954814595:android:4419473c6136971b4a7db6",
+        "android_client_info": {
+          "package_name": "com.einlogica.einlogica_hr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3BklVrw1DdF4TReAlcjkSOGuTtoZtvMM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
