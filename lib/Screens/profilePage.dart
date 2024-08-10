@@ -398,7 +398,7 @@ class _profilePageState extends State<profilePage> {
                                   height: 40,
 
                                   child: ElevatedButton(
-                                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                     onPressed: (){
                                       Navigator.push(context, MaterialPageRoute(builder: (context){
                                         return editEmployeePage(User:currentUser,PersonalInfo: personalInfo,callback: getInfo,);
@@ -413,7 +413,7 @@ class _profilePageState extends State<profilePage> {
                                   width: w-50,
                                   height: 40,
                                   child: ElevatedButton(
-                                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                     onPressed: ()async{
                                       setState(() {
                                         progressIndicator=true;
@@ -433,7 +433,7 @@ class _profilePageState extends State<profilePage> {
                                   height: 40,
 
                                   child: currentUser.Status=="INACTIVE"?const SizedBox():ElevatedButton(
-                                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent)),
+                                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.deepOrangeAccent)),
                                     onPressed: ()async{
                                       // String status = await apiServices().deactivateEmployee(widget.currentUser.Mobile);
                                       // showMessage(status);

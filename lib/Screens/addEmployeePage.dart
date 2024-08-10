@@ -287,7 +287,7 @@ class _addEmployeePageState extends State<addEmployeePage> {
 
 
 
-                        const SizedBox(height: 20,),
+                        const SizedBox(height: 10,),
                         SizedBox(
                           width: w,
                           height: 60,
@@ -342,7 +342,7 @@ class _addEmployeePageState extends State<addEmployeePage> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 2,)
+                        const SizedBox(height: 20,)
 
                       ],
                     ),
