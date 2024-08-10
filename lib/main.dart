@@ -4,12 +4,14 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:upgrader/upgrader.dart';
 import 'firebase_options.dart';
 
 
 Future<void> main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
+  // await Upgrader.clearSavedSettings();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -49,6 +51,9 @@ class MyApp extends StatelessWidget {
         );
       },
       home: login(),
+      // home: UpgradeAlert(
+      //   child: login(),
+      // ),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: [
         GlobalWidgetsLocalizations.delegate,

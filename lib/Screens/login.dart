@@ -10,6 +10,8 @@ import 'package:einlogica_hr/services/apiServices.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math' as math;
 
+import 'package:upgrader/upgrader.dart';
+
 
 
 TextEditingController _mobileCtrl = TextEditingController();
@@ -124,90 +126,71 @@ class _loginState extends State<login> {
     });
 
     return Scaffold(
-      body: CustomPaint(
-        painter: PatternPainter(),
-        child: Center(
-          child: Container(
-            width: w>h?w/2:w,
-            height: w>h?h/2:h,
-            decoration: const BoxDecoration(
-                // gradient: LinearGradient(
-                //   begin: Alignment.bottomCenter,
-                //   end: Alignment.topCenter,
-                //   colors: [Color(0xff020024),Color(0xff0c0c5b)],
-                // ),
-                // color: Colors.white
-            ),
+      body: UpgradeAlert(
+        showLater: true,
+        showIgnore: false,
+        showReleaseNotes: false,
+        dialogStyle: UpgradeDialogStyle.cupertino,
+        // upgrader: Upgrader(
+          // debugDisplayAlways: true,
+          // debugLogging: true,
+        // ),
+        child: CustomPaint(
+          painter: PatternPainter(),
+          child: Center(
             child: Container(
-              width: w-50,
-              // height: h/3,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                // color: Colors.grey,
+              width: w>h?w/2:w,
+              height: w>h?h/2:h,
+              decoration: const BoxDecoration(
+                  // gradient: LinearGradient(
+                  //   begin: Alignment.bottomCenter,
+                  //   end: Alignment.topCenter,
+                  //   colors: [Color(0xff020024),Color(0xff0c0c5b)],
+                  // ),
+                  // color: Colors.white
               ),
-              child: Stack(
-                children: [
-                  !defPass?Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // SizedBox(
-                        //   width: w,
-                        //   height: 80,
-                        //   child: Image(image: AssetImage('$logo'),),
-                        //
-                        // ),
-                        // const Text("Spectra Telecom",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
-                        // const SizedBox(height: 20,),
-                        SizedBox(
-                          width: w-(w/3),
-                            child: Text("Sign In",style: TextStyle(fontSize: 30,color: Colors.blue),),
-                        ),
-                        const SizedBox(height: 10,),
-                        SizedBox(
-                          width: w-(w/3),
-                          child: Text("Please use your credentials",style: TextStyle(fontSize: 12,color: Colors.grey),),
-                        ),
-                        const SizedBox(height: 40,),
-                        SizedBox(
-                          width: w-(w/3),
-                          // height: 50,
-                          child:TextFormField(
-                            enabled: true,
-                            controller: _mobileCtrl,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.phone),
-                              hintText: "Mobile",
-                              enabled: true,
-                              // border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue.shade900),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                          )
-                        ),
-                        const SizedBox(height: 20,),
-                        SizedBox(
-                            width: w-w/3,
+              child: Container(
+                width: w-50,
+                // height: h/3,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  // color: Colors.grey,
+                ),
+                child: Stack(
+                  children: [
+                    !defPass?Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // SizedBox(
+                          //   width: w,
+                          //   height: 80,
+                          //   child: Image(image: AssetImage('$logo'),),
+                          //
+                          // ),
+                          // const Text("Spectra Telecom",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                          // const SizedBox(height: 20,),
+                          SizedBox(
+                            width: w-(w/3),
+                              child: Text("Sign In",style: TextStyle(fontSize: 30,color: Colors.blue),),
+                          ),
+                          const SizedBox(height: 10,),
+                          SizedBox(
+                            width: w-(w/3),
+                            child: Text("Please use your credentials",style: TextStyle(fontSize: 12,color: Colors.grey),),
+                          ),
+                          const SizedBox(height: 40,),
+                          SizedBox(
+                            width: w-(w/3),
                             // height: 50,
                             child:TextFormField(
                               enabled: true,
-                              obscureText: true,
-                              controller: _passwordCtrl,
+                              controller: _mobileCtrl,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
-                                prefixIcon: const Icon(Icons.password),
-                                hintText: "Pin",
+                                prefixIcon: const Icon(Icons.phone),
+                                hintText: "Mobile",
                                 enabled: true,
                                 // border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                                 border: OutlineInputBorder(
@@ -223,211 +206,240 @@ class _loginState extends State<login> {
                                 ),
                               ),
                             )
-                        ),
-                        const SizedBox(height: 20,),
-                        SizedBox(
-                          width: w-w/3,
-                          child: ElevatedButton(
-                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
-                              onPressed: (){
-                            _onLogin();
-                              },
-                              child: const Text("Login",style: TextStyle(color: Colors.white),)),
-                        ),
-
-                        const SizedBox(height: 5,),
-                        // Container(
-                        //   width: w-100,
-                        //   height: 20,
-                        //   child: Center(child: Text("$_error",style: TextStyle(color: Colors.red),),),
-                        // )
-                      ],
-                    ),
-                  ):SizedBox(),
-                  defPass?Center(
-                    child: Container(
-                      width: w>h?w/2-50:w-50,
-                      height: h/3,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black),
-                        color: Colors.white,
-                      ),
-
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: w>h?w/2-50:w-50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20)),
-                              color: Colors.green,
-                            ),
-
-                            child: const Center(
-                              child: Text("Change Password",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white,fontSize: 18),),
-                            ),
                           ),
+                          const SizedBox(height: 20,),
                           SizedBox(
-                            width: w>h?w/2-50:w-50,
-                            height: 50,
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: w>h?w/8:w/4,
-                                  height: 40,
-                                  child: const Center(child: Text("New Pin",style: TextStyle(fontWeight: FontWeight.bold),),),
-                                ),
-                                SizedBox(
-                                  width: w>h?w/4:w/2,
-                                  // height: 40,
-                                  child: TextFormField(
-                                    enabled: true,
-                                    maxLength: 6,
-
-                                    controller: _newpass1Ctrl,
-                                    keyboardType: TextInputType.number,
-                                    obscureText: true,
-                                    decoration: InputDecoration(
-                                      // icon: Icon(Icons.phone),
-                                      hintText: 'max 6 digit',
-                                      counterText: '',
-                                      enabled: true,
-                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                                    ),
+                              width: w-w/3,
+                              // height: 50,
+                              child:TextFormField(
+                                enabled: true,
+                                obscureText: true,
+                                controller: _passwordCtrl,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  prefixIcon: const Icon(Icons.password),
+                                  hintText: "Pin",
+                                  enabled: true,
+                                  // border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: w>h?w/2-50:w-50,
-                            height: 50,
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: w>h?w/8:w/4,
-                                  height: 40,
-                                  child: const Center(child: Text("Confirm Pin",style: TextStyle(fontWeight: FontWeight.bold),),),
-                                ),
-                                SizedBox(
-                                  width: w>h?w/4:w/2,
-                                  // height: 40,
-                                  child: TextFormField(
-                                    enabled: true,
-                                    maxLength: 6,
-                                    controller: _newpass2Ctrl,
-                                    keyboardType: TextInputType.number,
-                                    obscureText: true,
-                                    decoration: InputDecoration(
-                                      // icon: Icon(Icons.phone),
-                                      hintText: 'max 6 digit',
-                                      counterText: '',
-                                      enabled: true,
-                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                                    ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue.shade900),
+                                    borderRadius: BorderRadius.circular(8.0),
                                   ),
-                                )
-                              ],
-                            ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                ),
+                              )
                           ),
+                          const SizedBox(height: 20,),
                           SizedBox(
-                            width: w-100,
-                            height: 50,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                ElevatedButton(
-                                    onPressed: (){
-                                      setState(() {
-                                        // _mobileCtrl.text="";
-                                        _passwordCtrl.text="";
-                                        _newpass1Ctrl.text="";
-                                        _newpass2Ctrl.text="";
-                                        defPass=false;
-                                      });
-
-                                    },
-                                    child: const Text("Cancel")
-                                ),
-                                ElevatedButton(
-                                    onPressed: ()async{
-
-                                      setState(() {
-                                        loginPressed=true;
-                                      });
-
-                                      if(_newpass1Ctrl.text==_newpass2Ctrl.text && _newpass1Ctrl.text.length>3){
-                                        String status = await apiServices().changePassword(_mobileCtrl.text, _passwordCtrl.text,_newpass2Ctrl.text,false);
-                                        // print("Status ===== $status");
-
-                                        if(status=="Success"){
-                                          _error="Password Changed; Login again";
-                                          showMessage(_error);
-                                          loginPressed=false;
-                                          defPass=false;
-                                        }
-                                        else{
-                                          _error="Something went wrong";
-                                        }
-
-                                        // _mobileCtrl.text="";
-                                        _passwordCtrl.text="";
-                                        _newpass1Ctrl.text="";
-                                        _newpass2Ctrl.text="";
-                                        loginPressed=false;
-                                        setState(() {
-
-                                        });
-                                        Future.delayed(const Duration(seconds: 2),(){
-                                            setState(() {
-                                              _error="";
-                                            });
-                                          });
-
-                                      }
-                                      else{
-                                        _error="Invalid Password";
-                                        showMessage(_error);
-                                        // _mobileCtrl.text="";
-                                        _passwordCtrl.text="";
-                                        _newpass1Ctrl.text="";
-                                        _newpass2Ctrl.text="";
-                                        // print(_error);
-                                        setState(() {
-                                          loginPressed=false;
-                                          // defPass=false;
-                                        });
-                                      }
-
-                                    },
-                                    child: const Text("Submit")
-                                ),
-                              ],
-                            ),
+                            width: w-w/3,
+                            child: ElevatedButton(
+                                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
+                                onPressed: (){
+                              _onLogin();
+                                },
+                                child: const Text("Login",style: TextStyle(color: Colors.white),)),
                           ),
-                          const SizedBox(height: 10,)
 
+                          const SizedBox(height: 5,),
+                          // Container(
+                          //   width: w-100,
+                          //   height: 20,
+                          //   child: Center(child: Text("$_error",style: TextStyle(color: Colors.red),),),
+                          // )
                         ],
                       ),
-                    ),
-                  ):const SizedBox(),
-                  loginPressed?Center(
-                    child: Center(
+                    ):SizedBox(),
+                    defPass?Center(
                       child: Container(
-                        width: w-20,
-                        height: h/3+100,
-                        color: Colors.white.withOpacity(.6),
-                        child: const Center(child: SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: CircularProgressIndicator(),
-                        ),),
+                        width: w>h?w/2-50:w-50,
+                        height: h/3,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.black),
+                          color: Colors.white,
+                        ),
+
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: w>h?w/2-50:w-50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20)),
+                                color: Colors.green,
+                              ),
+
+                              child: const Center(
+                                child: Text("Change Password",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white,fontSize: 18),),
+                              ),
+                            ),
+                            SizedBox(
+                              width: w>h?w/2-50:w-50,
+                              height: 50,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: w>h?w/8:w/4,
+                                    height: 40,
+                                    child: const Center(child: Text("New Pin",style: TextStyle(fontWeight: FontWeight.bold),),),
+                                  ),
+                                  SizedBox(
+                                    width: w>h?w/4:w/2,
+                                    // height: 40,
+                                    child: TextFormField(
+                                      enabled: true,
+                                      maxLength: 6,
+
+                                      controller: _newpass1Ctrl,
+                                      keyboardType: TextInputType.number,
+                                      obscureText: true,
+                                      decoration: InputDecoration(
+                                        // icon: Icon(Icons.phone),
+                                        hintText: 'max 6 digit',
+                                        counterText: '',
+                                        enabled: true,
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: w>h?w/2-50:w-50,
+                              height: 50,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: w>h?w/8:w/4,
+                                    height: 40,
+                                    child: const Center(child: Text("Confirm Pin",style: TextStyle(fontWeight: FontWeight.bold),),),
+                                  ),
+                                  SizedBox(
+                                    width: w>h?w/4:w/2,
+                                    // height: 40,
+                                    child: TextFormField(
+                                      enabled: true,
+                                      maxLength: 6,
+                                      controller: _newpass2Ctrl,
+                                      keyboardType: TextInputType.number,
+                                      obscureText: true,
+                                      decoration: InputDecoration(
+                                        // icon: Icon(Icons.phone),
+                                        hintText: 'max 6 digit',
+                                        counterText: '',
+                                        enabled: true,
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: w-100,
+                              height: 50,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ElevatedButton(
+                                      onPressed: (){
+                                        setState(() {
+                                          // _mobileCtrl.text="";
+                                          _passwordCtrl.text="";
+                                          _newpass1Ctrl.text="";
+                                          _newpass2Ctrl.text="";
+                                          defPass=false;
+                                        });
+
+                                      },
+                                      child: const Text("Cancel")
+                                  ),
+                                  ElevatedButton(
+                                      onPressed: ()async{
+
+                                        setState(() {
+                                          loginPressed=true;
+                                        });
+
+                                        if(_newpass1Ctrl.text==_newpass2Ctrl.text && _newpass1Ctrl.text.length>3){
+                                          String status = await apiServices().changePassword(_mobileCtrl.text, _passwordCtrl.text,_newpass2Ctrl.text,false);
+                                          // print("Status ===== $status");
+
+                                          if(status=="Success"){
+                                            _error="Password Changed; Login again";
+                                            showMessage(_error);
+                                            loginPressed=false;
+                                            defPass=false;
+                                          }
+                                          else{
+                                            _error="Something went wrong";
+                                          }
+
+                                          // _mobileCtrl.text="";
+                                          _passwordCtrl.text="";
+                                          _newpass1Ctrl.text="";
+                                          _newpass2Ctrl.text="";
+                                          loginPressed=false;
+                                          setState(() {
+
+                                          });
+                                          Future.delayed(const Duration(seconds: 2),(){
+                                              setState(() {
+                                                _error="";
+                                              });
+                                            });
+
+                                        }
+                                        else{
+                                          _error="Invalid Password";
+                                          showMessage(_error);
+                                          // _mobileCtrl.text="";
+                                          _passwordCtrl.text="";
+                                          _newpass1Ctrl.text="";
+                                          _newpass2Ctrl.text="";
+                                          // print(_error);
+                                          setState(() {
+                                            loginPressed=false;
+                                            // defPass=false;
+                                          });
+                                        }
+
+                                      },
+                                      child: const Text("Submit")
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 10,)
+
+                          ],
+                        ),
                       ),
-                    ),
-                  ):const SizedBox(),
-                ],
+                    ):const SizedBox(),
+                    loginPressed?Center(
+                      child: Center(
+                        child: Container(
+                          width: w-20,
+                          height: h/3+100,
+                          color: Colors.white.withOpacity(.6),
+                          child: const Center(child: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: CircularProgressIndicator(),
+                          ),),
+                        ),
+                      ),
+                    ):const SizedBox(),
+                  ],
+                ),
               ),
             ),
           ),

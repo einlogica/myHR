@@ -42,7 +42,7 @@ class apiServices{
   //test
   // var url = "https://testingcontainerapp--5zu536l.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
 
-  var appVersion ="V1.1.0+7";
+  var appVersion ="V1.0.2+8";
   // var emp = "";
 
 //================================================================================================================================================= USERS
@@ -115,7 +115,7 @@ class apiServices{
     } on PlatformException {
       id = 'Failed to get Unique Identifier';
     }
-
+    print(id);
     if(id==_identifier){
       return true;
     }
