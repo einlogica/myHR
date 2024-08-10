@@ -298,7 +298,7 @@ class _addEmployeePageState extends State<addEmployeePage> {
                                 width:w/3,
                                 height: 40,
                                 child: ElevatedButton(
-                                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blueAccent)),
+                                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blueAccent)),
                                     onPressed: (){
                                       clearFields();
                                       Navigator.pop(context);
@@ -308,7 +308,7 @@ class _addEmployeePageState extends State<addEmployeePage> {
                                 width: w/3,
                                 height: 40,
                                 child: ElevatedButton(
-                                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blueAccent)),
+                                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blueAccent)),
                                     onPressed: ()async{
                                       setState(() {
                                         _loading=true;

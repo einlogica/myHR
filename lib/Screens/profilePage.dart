@@ -214,7 +214,7 @@ class _profilePageState extends State<profilePage> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         ElevatedButton(
-                                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                          style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                           onPressed: (){
                                             imgFromCamera=true;
                                             if(Platform.isAndroid){
@@ -225,7 +225,7 @@ class _profilePageState extends State<profilePage> {
                                           child: const Icon(Icons.camera,color: Colors.white,),
                                         ),
                                         ElevatedButton(
-                                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                          style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                           onPressed: (){
                                             imgFromCamera=false;
                                             if(Platform.isAndroid){
@@ -290,7 +290,7 @@ class _profilePageState extends State<profilePage> {
                                 width: w-50,
                                 height: 40,
                                 child: ElevatedButton(
-                                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                  style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                   onPressed: ()async{
                                     setState(() {
                                       progressIndicator=true;
@@ -328,7 +328,7 @@ class _profilePageState extends State<profilePage> {
                                   width: w-50,
                                   height: 40,
                                   child: ElevatedButton(
-                                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                     onPressed: ()async{
                                       setState(() {
                                         progressIndicator=true;
@@ -348,7 +348,7 @@ class _profilePageState extends State<profilePage> {
                                   width: w-50,
                                   height: 40,
                                   child: ElevatedButton(
-                                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                     onPressed: (){
                                       Navigator.push(context, MaterialPageRoute(builder: (context){
                                         return attendancePage(mobile: currentUser.Mobile,permission: widget.permission,);
@@ -363,7 +363,7 @@ class _profilePageState extends State<profilePage> {
                                   width: w-50,
                                   height: 40,
                                   child: ElevatedButton(
-                                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                     onPressed: (){
                                       Navigator.push(context, MaterialPageRoute(builder: (context){
                                         return timesheetPage(mobile: currentUser.Mobile, name: currentUser.Name,permission: "EMP-MAN",);
@@ -378,7 +378,7 @@ class _profilePageState extends State<profilePage> {
                                   width: w-50,
                                   height: 40,
                                   child: ElevatedButton(
-                                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                     onPressed: (){
                                       Navigator.push(context, MaterialPageRoute(builder: (context){
                                         return billPage(mobile: currentUser.Mobile, name: currentUser.Name,permission: "MAN",HLP: widget.HLP,);
