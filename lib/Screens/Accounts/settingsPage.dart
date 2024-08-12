@@ -93,19 +93,20 @@ class _settingsPageState extends State<settingsPage> {
             child: Column(
               children: [
                 Container(
-                  height: 80+t,
+                  height: 60+t,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                         colors: [AppColors.themeStart,AppColors.themeStop]
                     ),
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20))
                   ),
                   child: Column(
                     children: [
                       SizedBox(height: t,),
                       SizedBox(
-                        height: 80,
+                        height: 60,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -193,7 +194,7 @@ class _settingsPageState extends State<settingsPage> {
                       },
                       child: SizedBox(
                         width: w/4,
-                        child: Center(child: Text("T&C")),
+                        child: Center(child: Text("T&C",style: TextStyle(fontSize: 11),)),
                       ),
                     ),
                     InkWell(
@@ -204,7 +205,7 @@ class _settingsPageState extends State<settingsPage> {
                       },
                       child: SizedBox(
                         width: w/4,
-                        child: Center(child: Text("Privacy")),
+                        child: Center(child: Text("Privacy",style: TextStyle(fontSize: 11),)),
                       ),
                     ),
 
@@ -216,7 +217,7 @@ class _settingsPageState extends State<settingsPage> {
                       },
                       child: SizedBox(
                         width: w/4,
-                        child: Center(child: Text("Refund")),
+                        child: Center(child: Text("Refund",style: TextStyle(fontSize: 11),)),
                       ),
                     ),
                   ],

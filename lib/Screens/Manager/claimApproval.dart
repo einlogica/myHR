@@ -551,7 +551,7 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
       child: (approved && approvedExpenseList.isEmpty) || (!approved && pendingExpenseList.isEmpty)? const Center(
         child: Text("Nothing to display"),
       ):ListView.builder(
-          padding: EdgeInsets.zero,
+          padding: EdgeInsets.only(bottom: 50),
           itemCount: approved?approvedExpenseList.length:pendingExpenseList.length,
           itemBuilder: (context,int index){
             // print(index);

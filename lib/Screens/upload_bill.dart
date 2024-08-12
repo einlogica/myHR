@@ -679,7 +679,7 @@ class _upload_billState extends State<upload_bill> {
 
 
   Future getImage() async {
-    if(Platform.isAndroid){
+    // if(Platform.isAndroid || Platform.isIOS){
       if(imgFromCamera==true){
         // pickedImage = await ImagePicker.pickImage(source: ImageSource.camera);
         // pickedImage = await ImagePicker.platform.pickImage(source: ImageSource.camera);
@@ -689,14 +689,12 @@ class _upload_billState extends State<upload_bill> {
       else{
         pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery,imageQuality: 70);
       }
-    }
-    else if(kIsWeb){
-      // print("======================WEB");
-      pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery,imageQuality: 70);
-    }
-    // else{
-    //   print("======================Other");
     // }
+    // else if(kIsWeb){
+    //   // print("======================WEB");
+    //   pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery,imageQuality: 70);
+    // }
+
 
     // print("===================");
     // print(pickedImage.toString());

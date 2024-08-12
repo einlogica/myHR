@@ -118,7 +118,7 @@ class _billPageState extends State<billPage> {
               Container(
                 width: w,
                 // height: h,
-                height: 160+t,
+                height: 120+t,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(bottomRight: Radius.circular(20),bottomLeft: Radius.circular(20)),
                   gradient: LinearGradient(
@@ -132,7 +132,7 @@ class _billPageState extends State<billPage> {
                     SizedBox(height: t,),
                     SizedBox(
                       width:w,
-                      height: 80,
+                      height: 50,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -178,7 +178,7 @@ class _billPageState extends State<billPage> {
                       child: Center(
                         child: Container(
                           width: w*.8,
-                          height: 80,
+                          height: 60,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.white,
@@ -593,8 +593,8 @@ class _billPageState extends State<billPage> {
                             ),
                           ),
                           SizedBox(
-                            width: w/4,
-                            child: Text(item.Date,style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.black)),
+                            width: w/2,
+                            child: Align(alignment: Alignment.centerRight,child: Text(item.Date,style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.black))),
                           )
 
                         ],

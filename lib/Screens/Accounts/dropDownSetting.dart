@@ -62,19 +62,20 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
             Column(
               children: [
                 Container(
-                  height: 80+t,
+                  height: 60+t,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                         colors: [AppColors.themeStart,AppColors.themeStop]
                     ),
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20))
                   ),
                   child: Column(
                     children: [
                       SizedBox(height: t,),
                       SizedBox(
-                        height: 80,
+                        height: 60,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -164,7 +165,7 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
                   children: [
                     Container(
                         width: w,
-                        height: 80,
+                        height: 60,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                               begin: Alignment.bottomCenter,

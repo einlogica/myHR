@@ -97,6 +97,7 @@ class _profilePageState extends State<profilePage> {
     setState(() {
       progressIndicator=false;
     });
+    // Acc=await apiServices().getAccounts();
     personalInfo = await apiServices().checkPersonalInfo(widget.mobile);
   }
 
@@ -137,7 +138,7 @@ class _profilePageState extends State<profilePage> {
             child: Column(
               children: [
                 Container(
-                  height: 80+t,
+                  height: 60+t,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
@@ -150,7 +151,7 @@ class _profilePageState extends State<profilePage> {
                     children: [
                       SizedBox(height: t,),
                       SizedBox(
-                        height: 80,
+                        height: 60,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -217,9 +218,10 @@ class _profilePageState extends State<profilePage> {
                                           style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                           onPressed: (){
                                             imgFromCamera=true;
-                                            if(Platform.isAndroid){
-                                              getImage();
-                                            }
+                                            // if(Platform.isAndroid || Platform.isIOS){
+                                            //   getImage();
+                                            // }
+                                            getImage();
 
                                           },
                                           child: const Icon(Icons.camera,color: Colors.white,),
@@ -228,9 +230,10 @@ class _profilePageState extends State<profilePage> {
                                           style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                           onPressed: (){
                                             imgFromCamera=false;
-                                            if(Platform.isAndroid){
-                                              getImage();
-                                            }
+                                            // if(Platform.isAndroid){
+                                            //   getImage();
+                                            // }
+                                            getImage();
 
                                           },
                                           child: const Icon(Icons.image,color: Colors.white,),
@@ -489,7 +492,7 @@ class _profilePageState extends State<profilePage> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 30),
 
                         ],
                       ),

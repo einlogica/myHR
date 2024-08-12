@@ -138,7 +138,7 @@ class _attendancePageState extends State<attendancePage> {
                     children: [
                       SizedBox(height: t,),
                       SizedBox(
-                        height: 80,
+                        height: 60,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -195,7 +195,7 @@ class _attendancePageState extends State<attendancePage> {
                     // height: h/2,
                     // color: Colors.grey,
                     child: ListView.builder(
-                        padding: EdgeInsets.zero,
+                        padding: EdgeInsets.only(bottom: 50),
                         // physics: NeverScrollableScrollPhysics(),
                         itemCount: attList.length,
                         itemBuilder: (context,index){

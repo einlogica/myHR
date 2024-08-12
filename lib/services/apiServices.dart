@@ -1362,7 +1362,7 @@ class apiServices{
     if(response.body.trim()!="Failed"){
       var data = jsonDecode(response.body.trim());
       for( var d in data){
-        Acc.add(d['AccName']);
+        Acc.add(d['Type']);
       }
     }
     return Acc;

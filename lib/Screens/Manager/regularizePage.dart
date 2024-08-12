@@ -99,7 +99,7 @@ class _regularizePageState extends State<regularizePage> {
 
                 Expanded(
                     child:regularizeList.isEmpty?const Center(child: Text("Nothing to display"),):ListView.builder(
-                        padding: EdgeInsets.zero,
+                        padding: EdgeInsets.only(bottom: 50),
                         itemCount: regularizeList.length,
                         itemBuilder: (context,index){
                           return Padding(

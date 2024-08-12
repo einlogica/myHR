@@ -98,7 +98,7 @@ class _dashboardState extends State<dashboard> {
             child: Column(
               children: [
                 Container(
-                  height: 80+t,
+                  height: 60+t,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
@@ -111,7 +111,7 @@ class _dashboardState extends State<dashboard> {
                     children: [
                       SizedBox(height: t,),
                       SizedBox(
-                        height: 80,
+                        height: 60,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -308,7 +308,7 @@ class _dashboardState extends State<dashboard> {
               width: w-20,
 
               child: ListView.builder(
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsets.only(bottom: 50),
                   itemCount: employeeList.length,
                   itemBuilder: (context,index){
                     return Padding(

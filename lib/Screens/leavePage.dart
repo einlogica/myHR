@@ -115,7 +115,7 @@ class _leavePageState extends State<leavePage> {
               children: [
 
                 Container(
-                  height: 80+t,
+                  height: 60+t,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
@@ -128,7 +128,7 @@ class _leavePageState extends State<leavePage> {
                     children: [
                       SizedBox(height: t,),
                       SizedBox(
-                        height: 80,
+                        height: 60,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -312,7 +312,7 @@ class _leavePageState extends State<leavePage> {
             ),
             AnimatedPositioned(
                 // top:leavePressed?h-230-(w-40):h-40,
-                top:leavePressed?h*.2:h-40,
+                top:leavePressed?h*.2:h-50,
                 duration: const Duration(milliseconds: 500),
                 child: SizedBox(
                   width: w,
@@ -331,7 +331,7 @@ class _leavePageState extends State<leavePage> {
                         },
                         child: Container(
                           width: w/3,
-                          height: 40,
+                          height: 50,
                           decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(topLeft: Radius.circular(60),topRight: Radius.circular(60)),
                             color: AppColors.buttonColorDark
@@ -399,8 +399,8 @@ class _leavePageState extends State<leavePage> {
                                 child: Center(child: Text("Selected Days : ${dateList.length.toString()}",style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 16),)),
                               ),
                             ),
-                            // const SizedBox(height: 20,),
-                            Spacer(),
+                            const SizedBox(height: 20,),
+                            // Spacer(),
                             SizedBox(
                               width: w,
                               height: 50,

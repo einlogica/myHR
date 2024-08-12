@@ -149,7 +149,8 @@ class _homePageState extends State<homePage> {
   setProfileImage()async{
     // print("Setting profile image =================");
     imageFile=await apiServices().getBill(widget.currentUser.ImageFile, "Profile");
-
+    setState(() {
+    });
   }
 
   fetchAttStatus()async{
@@ -216,7 +217,7 @@ class _homePageState extends State<homePage> {
                         children: [
                           SizedBox(height: t,),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.only(left: 8.0,right: 8.0,top: 8.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,7 +243,23 @@ class _homePageState extends State<homePage> {
                                     }));
                                   },
                                 ),
-                                // Spacer(),
+                                Padding(
+                                  padding: const EdgeInsets.only(left:10.0,top: 10.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(widget.currentUser.Name,style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.white),),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left:5.0),
+                                        child: Text(widget.currentUser.Position,style: const TextStyle(color: Colors.white),),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left:5.0),
+                                        child: Text(widget.currentUser.Mobile,style: const TextStyle(color: Colors.white),),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                                 Expanded(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -258,30 +275,44 @@ class _homePageState extends State<homePage> {
 
                                         ),
                                       ),
-                                      const SizedBox(height: 10,),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(widget.currentUser.Name,style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.white),),
-                                              Text(widget.currentUser.Position,style: const TextStyle(color: Colors.white),),
-                                              Text(widget.currentUser.Mobile,style: const TextStyle(color: Colors.white),)
-                                            ],
-                                          ),
-                                          InkWell(
-                                            onTap: (){
-                                              Navigator.pop(context);
-                                            },
-                                            child: const SizedBox(
+                                      SizedBox(height: 10,),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: InkWell(
+                                          onTap: (){
+                                            Navigator.pop(context);
+                                          },
+                                          child: const SizedBox(
                                               width:80,
                                               height:50,
                                               child: Icon(Icons.exit_to_app,color: Colors.white,)
-                                            ),
-                                          )
-                                        ],
+                                          ),
+                                        ),
                                       )
+                                      // const SizedBox(height: 10,),
+                                      // Row(
+                                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      //   children: [
+                                      //     Column(
+                                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                                      //       children: [
+                                      //         Text(widget.currentUser.Name,style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.white),),
+                                      //         Text(widget.currentUser.Position,style: const TextStyle(color: Colors.white),),
+                                      //         Text(widget.currentUser.Mobile,style: const TextStyle(color: Colors.white),),
+                                      //       ],
+                                      //     ),
+                                      //     InkWell(
+                                      //       onTap: (){
+                                      //         Navigator.pop(context);
+                                      //       },
+                                      //       child: const SizedBox(
+                                      //         width:80,
+                                      //         height:50,
+                                      //         child: Icon(Icons.exit_to_app,color: Colors.white,)
+                                      //       ),
+                                      //     )
+                                      //   ],
+                                      // )
                                     ],
                                   ),
                                 ),
@@ -289,6 +320,7 @@ class _homePageState extends State<homePage> {
                               ],
                             ),
                           ),
+
                         ],
                       ),
                     ),
@@ -332,7 +364,7 @@ class _homePageState extends State<homePage> {
               //     ),
               //   ),
               // ):SizedBox(height: 20,),
-              SizedBox(height: 20,),
+              SizedBox(height: 10,),
               Expanded(
                   child: SizedBox(
                     // color: _color2,
@@ -524,7 +556,7 @@ class _homePageState extends State<homePage> {
                             ),
                           ):const SizedBox(),
 
-                          const SizedBox(height: 20,),
+                          // const SizedBox(height: 10,),
                           const Align(
                               alignment: Alignment.centerLeft,
 
@@ -732,7 +764,7 @@ class _homePageState extends State<homePage> {
                               ),
                             ),
                           ),
-
+                          const SizedBox(height: 20,),
                         ],
                       ),
                     ),

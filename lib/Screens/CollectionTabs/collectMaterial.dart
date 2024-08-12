@@ -1018,7 +1018,7 @@ class _collectMaterialState extends State<collectMaterial> {
   }
 
   Future getImage() async {
-    if(Platform.isAndroid){
+    // if(Platform.isAndroid){
       if(imgFromCamera==true){
         pickedImage = await ImagePicker().pickImage(source: ImageSource.camera,imageQuality: 70);
         // pickedImage = await ImagePicker.platform.pickImage(source: ImageSource.camera);
@@ -1028,11 +1028,11 @@ class _collectMaterialState extends State<collectMaterial> {
         // pickedImage = await ImagePicker.platform.getImageFromSource(source: ImageSource.gallery);
         pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery,imageQuality: 70);
       }
-    }
-    else if(kIsWeb){
-      // print("======================WEB");
-      pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery,imageQuality: 70);
-    }
+    // }
+    // else if(kIsWeb){
+    //   // print("======================WEB");
+    //   pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery,imageQuality: 70);
+    // }
     // else{
     //   print("======================Other");
     // }

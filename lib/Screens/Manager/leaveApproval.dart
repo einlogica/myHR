@@ -310,7 +310,7 @@ class _leaveApprovalPageState extends State<leaveApprovalPage> {
               child: (approved && approvedList.isEmpty) || (!approved && pendingList.isEmpty)?const Center(
                 child: Text("Nothing to display"),
               ):ListView.builder(
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsets.only(bottom: 50),
                   itemCount: approved?approvedList.length:pendingList.length,
                   itemBuilder: (context,index){
                     var item = approved?approvedList[index]:pendingList[index];

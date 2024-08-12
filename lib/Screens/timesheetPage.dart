@@ -164,7 +164,7 @@ class _timesheetPageState extends State<timesheetPage> {
             child: Column(
               children: [
                 Container(
-                  height: 80+t,
+                  height: 60+t,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
@@ -177,7 +177,7 @@ class _timesheetPageState extends State<timesheetPage> {
                     children: [
                       SizedBox(height: t,),
                       SizedBox(
-                        height: 80,
+                        height: 60,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -251,7 +251,7 @@ class _timesheetPageState extends State<timesheetPage> {
                 const SizedBox(height: 5,),
                 Expanded(
                   child: ListView.builder(
-                    padding: EdgeInsets.zero,
+                    padding: EdgeInsets.only(bottom: 50),
                       itemCount: filteredactList.length,
                       itemBuilder: (context,index){
 
