@@ -226,7 +226,7 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
                           width: w/4,
                           height: 60,
                           child: ElevatedButton(
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue),foregroundColor: MaterialStateProperty.all(Colors.white)),
+                            style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blue),foregroundColor: WidgetStateProperty.all(Colors.white)),
                             onPressed: (){
                               selectedList.add(_addCtrl.text.trim());
                               _addCtrl.clear();

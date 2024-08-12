@@ -27,7 +27,6 @@ import 'package:einlogica_hr/Screens/timesheetPage.dart';
 import 'package:einlogica_hr/services/apiServices.dart';
 import 'package:einlogica_hr/services/locationService.dart';
 import 'package:einlogica_hr/style/colors.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../Models/summaryModel.dart';
 
 
@@ -838,11 +837,11 @@ class _homePageState extends State<homePage> {
                         );
                       }
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
                     SizedBox(
                       height: 30,
                       child: ElevatedButton(
-                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue),shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blue),shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               )
@@ -851,14 +850,14 @@ class _homePageState extends State<homePage> {
                           setState(() {
                             pending=false;
                           });
-                      }, child: Text("  OK  ",style: TextStyle(color: Colors.white),)),
+                      }, child: const Text("  OK  ",style: TextStyle(color: Colors.white),)),
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
                   ],
                 ),
               ),
             ),
-          ):SizedBox(),
+          ):const SizedBox(),
         ],
       ),
     );

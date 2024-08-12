@@ -189,7 +189,7 @@ class _downloadsPageState extends State<downloadsPage> {
                   width: w-50,
                   height: 50,
                   child: ElevatedButton(
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                      style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                       onPressed: ()async{
                     setState(() {
                       refresh=true;
@@ -278,7 +278,7 @@ class _downloadsPageState extends State<downloadsPage> {
                         width:w>h?w/2:w-80,
                         height: 40,
                         child: ElevatedButton(
-                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                          style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                           onPressed: (){
                             setState(() {
                               enableList=false;
@@ -320,10 +320,10 @@ class _downloadsPageState extends State<downloadsPage> {
                               });
                             },
                             child: Text("Download"),
-                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue),foregroundColor: MaterialStateProperty.all(Colors.white)),
+                          style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blue),foregroundColor: WidgetStateProperty.all(Colors.white)),
                         ),
                         ElevatedButton(
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue),foregroundColor: MaterialStateProperty.all(Colors.white)),
+                            style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blue),foregroundColor: WidgetStateProperty.all(Colors.white)),
                             onPressed: (){
                               setState(() {
                                 tableView=false;

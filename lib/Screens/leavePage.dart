@@ -411,7 +411,7 @@ class _leavePageState extends State<leavePage> {
                                     width:w/2-1,
                                     height: 50,
                                     child: ElevatedButton(
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.transparent),shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                        style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.transparent),shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(10.0),
                                             )
@@ -444,7 +444,7 @@ class _leavePageState extends State<leavePage> {
                                     width:w/2-1,
                                     height: 50,
                                     child: ElevatedButton(
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.transparent),shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                        style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.transparent),shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(10.0),
                                             )

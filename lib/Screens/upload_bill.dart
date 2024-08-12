@@ -4,7 +4,6 @@ import 'package:einlogica_hr/Widgets/FieldArea.dart';
 import 'package:einlogica_hr/Widgets/FieldAreaWithCalendar.dart';
 import 'package:einlogica_hr/Widgets/FieldAreaWithDropDown.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -404,7 +403,7 @@ class _upload_billState extends State<upload_bill> {
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
                                       ElevatedButton(
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                        style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                         onPressed: (){
                                           imgFromCamera=true;
                                           getImage();
@@ -412,7 +411,7 @@ class _upload_billState extends State<upload_bill> {
                                         child: const Icon(Icons.camera,color: Colors.white,),
                                       ),
                                       ElevatedButton(
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                        style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                         onPressed: (){
                                           imgFromCamera=false;
                                           getImage();
@@ -484,7 +483,7 @@ class _upload_billState extends State<upload_bill> {
                                     width: w/3,
                                     height: 40,
                                     child: ElevatedButton(
-                                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                      style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                       onPressed: (){
                                         clearFields();
                                         clearShop();
@@ -499,7 +498,7 @@ class _upload_billState extends State<upload_bill> {
                                     width: w/3,
                                     height: 40,
                                     child: ElevatedButton(
-                                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                      style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                       onPressed: ()async{
 
 

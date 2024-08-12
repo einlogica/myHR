@@ -472,7 +472,7 @@ class _timesheetPageState extends State<timesheetPage> {
                     width: w,
                     height: 60,
                     child: ElevatedButton(
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark),shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark),shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(0.0),
                           )
@@ -601,7 +601,7 @@ class _timesheetPageState extends State<timesheetPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 ElevatedButton(
-                                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                     onPressed: ()async{
                                       setState(() {
                                         _loading=true;
@@ -644,7 +644,7 @@ class _timesheetPageState extends State<timesheetPage> {
                       
                                     }, child: const Text("Submit",style: TextStyle(color: Colors.white),)),
                                 ElevatedButton(
-                                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                     onPressed: (){
                                       clearFields();
                                       setState(() {

@@ -5,7 +5,6 @@ import 'package:einlogica_hr/Models/collectionModel.dart';
 import 'package:einlogica_hr/Widgets/FieldAreaWithCalendar.dart';
 import 'package:einlogica_hr/Widgets/FieldAreaWithDropDown.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:geolocator/geolocator.dart';
@@ -733,7 +732,7 @@ class _collectMaterialState extends State<collectMaterial> {
                                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                               children: [
                                                 ElevatedButton(
-                                                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                                  style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                                   onPressed: (){
                                                     imgFromCamera=true;
                                                     getImage();
@@ -741,7 +740,7 @@ class _collectMaterialState extends State<collectMaterial> {
                                                   child: const Icon(Icons.camera,color: Colors.white,),
                                                 ),
                                                 ElevatedButton(
-                                                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark)),
+                                                  style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                                   onPressed: (){
                                                     imgFromCamera=false;
                                                     getImage();
@@ -821,7 +820,7 @@ class _collectMaterialState extends State<collectMaterial> {
                                           child: ElevatedButton(
                                             style: ButtonStyle(
                                                 backgroundColor:
-                                                MaterialStateProperty.all(
+                                                WidgetStateProperty.all(
                                                     AppColors
                                                         .buttonColorDark)),
                                             onPressed: () {
@@ -844,7 +843,7 @@ class _collectMaterialState extends State<collectMaterial> {
                                           child: ElevatedButton(
                                             style: ButtonStyle(
                                                 backgroundColor:
-                                                MaterialStateProperty.all(
+                                                WidgetStateProperty.all(
                                                     AppColors
                                                         .buttonColorDark)),
                                             onPressed: () async{

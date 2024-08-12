@@ -355,7 +355,7 @@ class _billPageState extends State<billPage> {
                 width: w,
                 height: 60,
                 child: ElevatedButton(
-                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.buttonColorDark),shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark),shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(1.0),
                       )
@@ -472,7 +472,7 @@ class _billPageState extends State<billPage> {
                             width: w/4,
                             height: 30,
                             child: ElevatedButton(
-                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
+                              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.teal)),
                               onPressed: (){
                                 setState(() {
                                   delPressed=false;
@@ -485,7 +485,7 @@ class _billPageState extends State<billPage> {
                             width: w/4,
                             height: 30,
                             child: ElevatedButton(
-                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
+                              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.teal)),
                               onPressed: ()async{
                                 setState(() {
                                   refresh=true;
