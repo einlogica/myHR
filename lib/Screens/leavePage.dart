@@ -251,7 +251,7 @@ class _leavePageState extends State<leavePage> {
                     width: w-20,
                     // color: Colors.green,
                     child: ListView.builder(
-                        padding: EdgeInsets.zero,
+                        padding: const EdgeInsets.only(bottom: 50),
                         itemCount: leaveList.length,
                         itemBuilder: (context,index){
                           return Padding(
@@ -352,119 +352,121 @@ class _leavePageState extends State<leavePage> {
                               colors: [AppColors.themeStop,AppColors.themeStart]
                           ),
                         ),
-                        child: Column(
-                          // crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 30,),
-                            // Text("Add Comments"),
-                            Center(
-                              child: SizedBox(
-                                width: w-100,
-                                height: 80,
-                                // color: Colors.white,
-                                child: FieldArea(title: "Comments",type: TextInputType.text,ctrl: _commentCtrl,len: 50,),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            // crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 30,),
+                              // Text("Add Comments"),
+                              Center(
+                                child: SizedBox(
+                                  width: w-100,
+                                  height: 80,
+                                  // color: Colors.white,
+                                  child: FieldArea(title: "Comments",type: TextInputType.text,ctrl: _commentCtrl,len: 50,),
 
+                                ),
                               ),
-                            ),
 
-                            calendar(),
+                              calendar(),
 
-                            SizedBox(
-                              width: w-20,
-                              height: 50,
-                              child: dateList.length<2?Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const SizedBox(width: 50,),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Checkbox(
+                              SizedBox(
+                                width: w-20,
+                                height: 50,
+                                child: dateList.length<2?Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(width: 50,),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Checkbox(
 
-                                      value: halfDay,
-                                      onChanged: (value){
-                                        halfDay= !halfDay;
-                                        setState(() {
+                                        value: halfDay,
+                                        onChanged: (value){
+                                          halfDay= !halfDay;
+                                          setState(() {
 
-                                        });
-                                      },
+                                          });
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: w/4,
-                                    // color: Colors.green,
-                                    child: const Text("Half Day?",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),),
-                                  ),
-                                ],
-                              ):SizedBox(
-                                child: Center(child: Text("Selected Days : ${dateList.length.toString()}",style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 16),)),
+                                    SizedBox(
+                                      width: w/4,
+                                      // color: Colors.green,
+                                      child: const Text("Half Day?",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),),
+                                    ),
+                                  ],
+                                ):SizedBox(
+                                  child: Center(child: Text("Selected Days : ${dateList.length.toString()}",style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 16),)),
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 20,),
-                            // Spacer(),
-                            SizedBox(
-                              width: w,
-                              height: 50,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    width:w/2-1,
-                                    height: 50,
-                                    child: ElevatedButton(
-                                        style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.transparent),shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(10.0),
-                                            )
-                                        )),
-                                        onPressed: ()async{
-                                          // print(_currentDate);
-                                          if(_commentCtrl.text==""){
-                                            showMessage("Invalid entry");
-                                            return;
-                                          }
-                                          else if(dateList.isEmpty){
-                                            showMessage("Invalid date");
-                                            return;
-                                          }
-                                          setState(() {
-                                            _loading=true;
-                                          });
+                              const SizedBox(height: 20,),
+                              // Spacer(),
+                              SizedBox(
+                                width: w,
+                                height: 50,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width:w/2-1,
+                                      height: 50,
+                                      child: ElevatedButton(
+                                          style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.transparent),shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                              )
+                                          )),
+                                          onPressed: ()async{
+                                            // print(_currentDate);
+                                            if(_commentCtrl.text==""){
+                                              showMessage("Invalid entry");
+                                              return;
+                                            }
+                                            else if(dateList.isEmpty){
+                                              showMessage("Invalid date");
+                                              return;
+                                            }
+                                            setState(() {
+                                              _loading=true;
+                                            });
 
-                                          dateList.forEach((element) {dateList2.add(DateFormat('yyyy-MM-dd').format(element));});
-                                          String status = await apiServices().applyLeave(widget.mobile,widget.name,dateList2, _commentCtrl.text, halfDay?0.5:dateList.length.toDouble());
-                                          showMessage(status);
-                                          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(status)));
-                                          _commentCtrl.clear();
-                                          halfDay=false;
-                                          leavePressed=false;
-                                          await fetchData(DateTime.now().year.toString(),DateTime.now().month.toString());
-                                    }, child: const Text("Submit",style: TextStyle(color: Colors.white),)),
-                                  ),
-                                  SizedBox(
-                                    width:w/2-1,
-                                    height: 50,
-                                    child: ElevatedButton(
-                                        style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.transparent),shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(10.0),
-                                            )
-                                        )
-                                        ),
-                                        onPressed: (){
-                                          setState(() {
+                                            dateList.forEach((element) {dateList2.add(DateFormat('yyyy-MM-dd').format(element));});
+                                            String status = await apiServices().applyLeave(widget.mobile,widget.name,dateList2, _commentCtrl.text, halfDay?0.5:dateList.length.toDouble());
+                                            showMessage(status);
+                                            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(status)));
                                             _commentCtrl.clear();
+                                            halfDay=false;
                                             leavePressed=false;
-                                            dateList.clear();
-                                            dateList2.clear();
-                                            _currentDate=DateTime.now();
-                                          });
-                                    }, child: const Text("Cancel",style: TextStyle(color: Colors.white),)),
-                                  )
-                                ],
+                                            await fetchData(DateTime.now().year.toString(),DateTime.now().month.toString());
+                                      }, child: const Text("Submit",style: TextStyle(color: Colors.white),)),
+                                    ),
+                                    SizedBox(
+                                      width:w/2-1,
+                                      height: 50,
+                                      child: ElevatedButton(
+                                          style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.transparent),shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                              )
+                                          )
+                                          ),
+                                          onPressed: (){
+                                            setState(() {
+                                              _commentCtrl.clear();
+                                              leavePressed=false;
+                                              dateList.clear();
+                                              dateList2.clear();
+                                              _currentDate=DateTime.now();
+                                            });
+                                      }, child: const Text("Cancel",style: TextStyle(color: Colors.white),)),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            // const SizedBox(height: 20,)
-                          ],
+                              const SizedBox(height: 20,)
+                            ],
+                          ),
                         ),
                       ),
                     ],

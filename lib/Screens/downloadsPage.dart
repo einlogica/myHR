@@ -62,7 +62,7 @@ class _downloadsPageState extends State<downloadsPage> {
   }
 
   fetchAll()async{
-    reporteeList = await apiServices().getReportees(widget.mobile,"ALL");
+    reporteeList = await apiServices().getReportees(widget.mobile,"ALL",DateTime.now().toString());
     // employees.clear();
     for (var d in reporteeList){
       employees.add(d.Name);
@@ -314,7 +314,8 @@ class _downloadsPageState extends State<downloadsPage> {
                               setState(() {
                                 refresh=true;
                               });
-                              await _saveToFile(dropdownvalue);
+                              // print(dropdownvalue);
+                              await _saveToFile(reportDropDown);
                               setState(() {
                                 refresh=false;
                               });

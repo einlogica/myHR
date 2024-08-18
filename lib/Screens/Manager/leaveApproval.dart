@@ -377,7 +377,7 @@ class _leaveApprovalPageState extends State<leaveApprovalPage> {
                                       children: [
                                         const SizedBox(height: 10,),
                                         Text(item.Name,style: const TextStyle(fontSize: 16,color: AppColors.buttonColorDark,fontWeight: FontWeight.bold),),
-                                        const SizedBox(height: 10,),
+                                        // const SizedBox(height: 10,),
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [

@@ -210,6 +210,7 @@ class _timesheetPageState extends State<timesheetPage> {
                                 );
                                 // print(_selected);
                                 if(_selected!=null){
+                                  searchCtrl.clear();
                                   await fetchList(_selected);
                                 }
                                 else{

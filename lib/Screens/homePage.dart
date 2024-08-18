@@ -556,13 +556,13 @@ class _homePageState extends State<homePage> {
                           ):const SizedBox(),
 
                           // const SizedBox(height: 10,),
-                          const Align(
-                              alignment: Alignment.centerLeft,
-
-                              child: Padding(
-                                padding: EdgeInsets.only(left:10.0),
-                                child: Text("What would you like to do?",style: TextStyle(fontSize: 18,color: Colors.grey,fontStyle: FontStyle.italic),),
-                              )),
+                          // const Align(
+                          //     alignment: Alignment.centerLeft,
+                          //
+                          //     child: Padding(
+                          //       padding: EdgeInsets.only(left:10.0),
+                          //       child: Text("What would you like to do?",style: TextStyle(fontSize: 18,color: Colors.grey,fontStyle: FontStyle.italic),),
+                          //     )),
                           const SizedBox(height: 20,),
                           SizedBox(
                             width: w,
@@ -711,7 +711,7 @@ class _homePageState extends State<homePage> {
                                     alignment: Alignment.centerLeft,
                                     child: Padding(
                                       padding: EdgeInsets.only(left:10.0),
-                                      child: Text("Today's Special",style: TextStyle(fontSize: 18,color: Colors.grey,fontStyle: FontStyle.italic),),
+                                      child: Text("Today's special",style: TextStyle(fontSize: 18,color: Colors.grey,fontStyle: FontStyle.italic),),
                                     )
                                 ),
                                 const SizedBox(height: 10,),

@@ -196,57 +196,6 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
                                         child: Icon(Icons.calendar_month,color: Colors.white,),
                                       ),
                                     ),
-                                    // SizedBox(
-                                    //   width: 40,
-                                    //   height: 40,
-                                    //   child: PopupMenuButton<String>(
-                                    //
-                                    //     icon: const Icon(Icons.search,color: Colors.white,),
-                                    //     color:Colors.white,
-                                    //
-                                    //     itemBuilder: (BuildContext context) {
-                                    //
-                                    //       return <PopupMenuEntry<String>>[
-                                    //         PopupMenuItem<String>(
-                                    //           value: 'Search',
-                                    //           child: SizedBox(
-                                    //             width: w,
-                                    //             child: TextField(
-                                    //               enabled: true,
-                                    //               controller: searchCtrl,
-                                    //               // keyboardType: TextInputType.number,
-                                    //               decoration: InputDecoration(
-                                    //                 suffixIcon: InkWell(
-                                    //                   child: const SizedBox(
-                                    //                     width: 40,
-                                    //                     height: 40,
-                                    //                     child: Icon(Icons.backspace),
-                                    //                   ),
-                                    //                   onTap: (){
-                                    //                     searchCtrl.clear();
-                                    //                   },
-                                    //                 ),
-                                    //                 // prefixIcon: Icon(Icons.phone),
-                                    //                 fillColor: Colors.white,
-                                    //                 filled: true,
-                                    //                 hintText: "Search Name/Type",
-                                    //                 enabled: true,
-                                    //                 // border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                                    //                 border: OutlineInputBorder(
-                                    //                   borderRadius: BorderRadius.circular(8.0),
-                                    //                   borderSide: BorderSide(color: Colors.blue.shade900),
-                                    //                 ),
-                                    //
-                                    //               ),
-                                    //             ),
-                                    //           ),
-                                    //         ),
-                                    //
-                                    //
-                                    //       ];
-                                    //     },
-                                    //   ),
-                                    // ),
                                   ],
                                 ),
                               ),
@@ -843,7 +792,10 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
                         children: [
                           item.Status=='Applied' || item.Status=='Rejected'?TextButton(
                             onPressed: () async{
-
+                              setState(() {
+                                refresh=true;
+                              });
+                              Navigator.of(context).pop();
                               String status = await apiServices().updateBill(item.ID, widget.currentUser.Permission, "Approved", commentsCtrl.text);
                               if(status=="Success"){
 
@@ -856,7 +808,10 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
                               widget.callback();
                               // print(_selected);
                               fetchClaims(_selected!);
-                              Navigator.of(context).pop();
+                              // setState(() {
+                              //   refresh=true;
+                              // });
+
                             },
                             child: Container(
                               width: w/4,

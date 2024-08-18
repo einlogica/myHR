@@ -63,7 +63,7 @@ class _generatePayrollPageState extends State<generatePayrollPage> {
   }
 
   fetchAll()async{
-    reporteeList = await apiServices().getReportees(widget.currentUser.Mobile,"ALL");
+    reporteeList = await apiServices().getReportees(widget.currentUser.Mobile,"ALL",DateTime.now().toString());
     // employees.clear();
     for (var d in reporteeList){
       employees.add(d.Name);

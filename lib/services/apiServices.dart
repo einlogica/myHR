@@ -42,7 +42,7 @@ class apiServices{
   //test
   // var url = "https://testingcontainerapp--5zu536l.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
 
-  var appVersion ="V1.0.2+8";
+  var appVersion ="V1.0.3+9";
   // var emp = "";
 
 //================================================================================================================================================= USERS
@@ -115,7 +115,7 @@ class apiServices{
     } on PlatformException {
       id = 'Failed to get Unique Identifier';
     }
-    print(id);
+    // print(id);
     if(id==_identifier){
       return true;
     }
@@ -177,11 +177,11 @@ class apiServices{
   }
 
   //To get employee list under a manager for dashboardPage
-  Future<List<reporteeModel>> getReportees(String mobile,String filter)async{
+  Future<List<reporteeModel>> getReportees(String mobile,String filter,String date)async{
     print("Executing get Reportees method");
     List<reporteeModel> userList=[];
 
-    final response = await apiRequest("jilariapi.php", {"action":"getReportees","mobile":mobile,"filter":filter,"emp":emp});
+    final response = await apiRequest("jilariapi.php", {"action":"getReportees","mobile":mobile,"filter":filter,"date":date,"emp":emp});
 
     if(response.body.trim()!="Failed"){
       var data = jsonDecode(response.body);
@@ -321,9 +321,29 @@ class apiServices{
 
 
   //==================================================================================================================================== Attendance
+
+
+  //Fetch Montly Attendance data for chart preparation
+  Future<List<Map<String,dynamic>>>getMonthlyAttendance(String mobile,String month,String year)async{
+    print("Executing get monthly attendance data method");
+    List<Map<String,dynamic>> att = [];
+    final response = await apiRequest("jilariapi.php", {"action":"getMonthlyAttendance","usermobile": mobile,"emp":emp,"month":month,"year":year});
+    // print("response= ${response.body.trim()}");
+    if(response.body.trim()!="Failed"){
+      var data = jsonDecode(response.body.trim());
+      for(var d in data){
+        att.add({'Day':int.parse(d['Day']),'AbsentCount':double.parse(d['AbsentCount']),'PresentCount':double.parse(d['PresentCount']),'LeaveCount':double.parse(d['LeaveCount']),'Total':double.parse(d['Total'])});
+      }
+    }
+
+    return att;
+  }
+
+
+
   //Fetch Todays attendance status
   Future<String> attendanceStatus(String mobile)async{
-    print("Executing sttendance status method");
+    print("Executing attendance status method");
     String status = "";
 
     final response = await apiRequest("jilariapi.php", {"action":"get_attendanceStatus","usermobile": mobile});
@@ -523,6 +543,25 @@ class apiServices{
 
 
   //========================================================================================================================================= EXPENSE
+
+  //Fetch Montly Attendance data for chart preparation
+  Future<List<Map<String,dynamic>>>getMonthlyExpense(String mobile,String month,String year)async{
+    print("Executing get monthly expense summary method");
+    List<Map<String,dynamic>> exp = [];
+    final response = await apiRequest("jilariapi.php", {"action":"getMonthlyExpense","usermobile": mobile,"emp":emp,"month":month,"year":year});
+    // print("response= ${response.body.trim()}");
+    if(response.body.trim()!="Failed"){
+      var data = jsonDecode(response.body.trim());
+      for(var d in data){
+        exp.add({'Type':d['Type'],'Amount':double.parse(d['Amount'])});
+      }
+    }
+
+    return exp;
+  }
+
+
+
   // Api to fetch user expenses
   Future<List<userExpenseModel>> getUserExpenses(String mob,String mon, String year,String type)async{
     print("executing getUserExpenses method");

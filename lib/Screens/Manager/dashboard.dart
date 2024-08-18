@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import 'package:einlogica_hr/Screens/Manager/reportees.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:einlogica_hr/Models/activityModel.dart';
@@ -9,7 +10,6 @@ import 'package:einlogica_hr/Models/userModel.dart';
 import 'package:einlogica_hr/Screens/Manager/claimApproval.dart';
 import 'package:einlogica_hr/Screens/Manager/leaveApproval.dart';
 import 'package:einlogica_hr/Screens/Manager/regularizePage.dart';
-import 'package:einlogica_hr/Screens/profilePage.dart';
 import 'package:einlogica_hr/Screens/timesheetPage.dart';
 import 'package:einlogica_hr/Widgets/loadingWidget.dart';
 import 'package:einlogica_hr/services/apiServices.dart';
@@ -30,6 +30,7 @@ class _dashboardState extends State<dashboard> {
 
   var w=0.00,h=0.00,t=0.00;
   List<reporteeModel> employeeList = [];
+  List<reporteeModel> inactiveEmployeeList = [];
   List<activityModel> actList =[];
   List<attendanceModel> regularizeList = [];
   TextEditingController commentsCtrl = TextEditingController();
@@ -40,6 +41,13 @@ class _dashboardState extends State<dashboard> {
   var data;
   List summary = ["","","",""];
   bool loadSummary=false;
+  DateTime currDate = DateTime.now();
+  List<Map<String, dynamic>> attendanceData = [];
+  List<Map<String, dynamic>> fetchedAttendanceData = [];
+  List<Map<String, dynamic>> expenseData = [];
+  double employeeCount=0;
+  double presentCount=0,absentCount=0,leaveCount=0;
+
 
   @override
   void initState() {
@@ -47,10 +55,29 @@ class _dashboardState extends State<dashboard> {
     super.initState();
 
     fetchEmployeeData();
+    fetchMonthlyData();
     fetchSummary();
 
   }
 
+  fetchMonthlyData()async{
+    //Attendance
+    fetchedAttendanceData = await apiServices().getMonthlyAttendance(widget.currentUser.Mobile,currDate.month.toString(),currDate.year.toString());
+    // print(fetchedAttendanceData);
+    attendanceData=fetchedAttendanceData.sublist(fetchedAttendanceData.length-8,fetchedAttendanceData.length-1);
+    employeeCount=attendanceData[0]['Total'];
+    presentCount=attendanceData.last['PresentCount'];
+    leaveCount=attendanceData.last['LeaveCount'];
+    absentCount=employeeCount-presentCount-leaveCount;
+    //Expense
+    expenseData = await apiServices().getMonthlyExpense(widget.currentUser.Mobile,currDate.month.toString(),currDate.year.toString());
+    // print(expenseData);
+    setState(() {
+
+    });
+
+    // expenseData = await apiServices().getMonthlyExpense(widget.currentUser.Mobile,currDate.month.toString(),currDate.year.toString());
+  }
 
 
   fetchEmployeeData()async{
@@ -58,10 +85,11 @@ class _dashboardState extends State<dashboard> {
     formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     employeeList.clear();
     if(widget.currentUser.Permission=="Admin"){
-      employeeList = await apiServices().getReportees(widget.currentUser.Mobile,"ALL");
+      employeeList = await apiServices().getReportees(widget.currentUser.Mobile,"ALL",formattedDate);
+      // inactiveEmployeeList = await apiServices().getReportees(widget.currentUser.Mobile,"INACTIVE");
     }
     else{
-      employeeList = await apiServices().getReportees(widget.currentUser.Mobile,"MANAGER");
+      employeeList = await apiServices().getReportees(widget.currentUser.Mobile,"MANAGER",formattedDate);
     }
     // await fetchSummary();
     setState(() {
@@ -141,144 +169,267 @@ class _dashboardState extends State<dashboard> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 10,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    InkWell(
-                      onTap: (){
 
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return regularizePage(currentUser: widget.currentUser,callback: fetchSummary,);
-                        }));
-                      },
-                      child: Container(
-                        width: w/2-20,
-                        height: 50,
-
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.lightBlue.shade300,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 15.0,right: 15.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text("Regularization",style: TextStyle(fontSize: 14,color: AppColors.buttonColorDark),),
-                              !loadSummary?SizedBox(width: 10,height: 10,child: CircularProgressIndicator()):Text(summary[0],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark),),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: (){
-                        // setState(() {
-                        //   _selected="Activity";
-                        // });
-                        if(widget.currentUser.Permission=="Admin"){
-                          Navigator.push(context, MaterialPageRoute(builder: (context){
-                            return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "ALL",);
-                          }));
-                        }
-                        else{
-                          Navigator.push(context, MaterialPageRoute(builder: (context){
-                            return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "MAN",);
-                          }));
-                        }
-
-                      },
-                      child: Container(
-                        width: w/2-20,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.lightBlue.shade300,
-                        ),
-
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 15.0,right: 15.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text("Activities",style: TextStyle(fontSize: 14,color: AppColors.buttonColorDark),),
-                              !loadSummary?SizedBox(width: 10,height: 10,child: CircularProgressIndicator()):Text(summary[1],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark))
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 10,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return leaveApprovalPage(currentUser: widget.currentUser,callback: fetchSummary,);
-                        }));
-                      },
-                      child: Container(
-                        width: w/2-20,
-                        height: 50,
-
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.lightBlue.shade300,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 15.0,right: 15.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text("Leave Requests",style: TextStyle(fontSize: 14,color: AppColors.buttonColorDark),),
-                              !loadSummary?SizedBox(width: 10,height: 10,child: CircularProgressIndicator()):Text(summary[2],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark),)
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: (){
-                        // setState(() {
-                        //   _selected="Claim";
-                        // });
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return claimApprovalPage(currentUser: widget.currentUser,callback: fetchSummary,);
-                        }));
-                      },
-                      child: Container(
-                        width: w/2-20,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.lightBlue.shade300,
-                        ),
-
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 15.0,right: 15.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text("Claim Requests",style: TextStyle(fontSize: 14,color: AppColors.buttonColorDark),),
-                              !loadSummary?SizedBox(width: 10,height: 10,child: CircularProgressIndicator()):Text(summary[3],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark))
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 20,),
                 Expanded(
-                  child: Container(
-                    child: reportees(),
+                  child: SingleChildScrollView(
+                    child: Column(children: [
+                      const SizedBox(height: 20,),
+                      InkWell(
+                        onTap: (){
 
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return reporteesPage(currentUser: widget.currentUser);
+                          }));
+                        },
+                        child: Container(
+                          width: w-20,
+                          height: 80,
+
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.grey,
+                                spreadRadius: 1,
+                                blurRadius: 2,
+                                offset: Offset(2, 2),
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15.0,right: 15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text("Reportees",style: TextStyle(fontSize: 18,color: AppColors.buttonColorDark,fontWeight: FontWeight.bold),),
+                                !loadSummary?SizedBox(width: 10,height: 18,child: CircularProgressIndicator()):Text(employeeCount.toStringAsFixed(0),style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark),),
+
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          InkWell(
+                            onTap: (){
+
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return regularizePage(currentUser: widget.currentUser,callback: fetchSummary,);
+                              }));
+                            },
+                            child: Container(
+                              width: w/2-20,
+                              height: 50,
+
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    spreadRadius: 1,
+                                    blurRadius: 2,
+                                    offset: Offset(2, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15.0,right: 15.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text("Regularization",style: TextStyle(fontSize: 14,color: AppColors.buttonColorDark,fontWeight: FontWeight.bold),),
+                                    !loadSummary?SizedBox(width: 10,height: 10,child: CircularProgressIndicator()):Text(summary[0],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark),),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: (){
+                              // setState(() {
+                              //   _selected="Activity";
+                              // });
+                              if(widget.currentUser.Permission=="Admin"){
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "ALL",);
+                                }));
+                              }
+                              else{
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "MAN",);
+                                }));
+                              }
+
+                            },
+                            child: Container(
+                              width: w/2-20,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    spreadRadius: 1,
+                                    blurRadius: 2,
+                                    offset: Offset(2, 2),
+                                  ),
+                                ],
+                              ),
+
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15.0,right: 15.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text("Activities",style: TextStyle(fontSize: 14,color: AppColors.buttonColorDark,fontWeight: FontWeight.bold),),
+                                    !loadSummary?const SizedBox(width: 10,height: 10,child: CircularProgressIndicator()):Text(summary[1],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark))
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 20,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return leaveApprovalPage(currentUser: widget.currentUser,callback: fetchSummary,);
+                              }));
+                            },
+                            child: Container(
+                              width: w/2-20,
+                              height: 50,
+
+                              // decoration: BoxDecoration(
+                              //   borderRadius: BorderRadius.circular(10),
+                              //   color: Colors.lightBlue.shade300,
+                              // ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    spreadRadius: 1,
+                                    blurRadius: 2,
+                                    offset: Offset(2, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15.0,right: 15.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text("Leave Requests",style: TextStyle(fontSize: 14,color: AppColors.buttonColorDark,fontWeight: FontWeight.bold),),
+                                    !loadSummary?SizedBox(width: 10,height: 10,child: CircularProgressIndicator()):Text(summary[2],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark),)
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: (){
+                              // setState(() {
+                              //   _selected="Claim";
+                              // });
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return claimApprovalPage(currentUser: widget.currentUser,callback: fetchSummary,);
+                              }));
+                            },
+                            child: Container(
+                              width: w/2-20,
+                              height: 50,
+                              // decoration: BoxDecoration(
+                              //   borderRadius: BorderRadius.circular(10),
+                              //   color: Colors.lightBlue.shade300,
+                              // ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    spreadRadius: 1,
+                                    blurRadius: 2,
+                                    offset: Offset(2, 2),
+                                  ),
+                                ],
+                              ),
+
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15.0,right: 15.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text("Claim Requests",style: TextStyle(fontSize: 14,color: AppColors.buttonColorDark,fontWeight: FontWeight.bold),),
+                                    !loadSummary?SizedBox(width: 10,height: 10,child: CircularProgressIndicator()):Text(summary[3],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark))
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 20,),
+                      Container(
+                          width: w-10,
+                          height: 30,
+                          color: Colors.lightBlue.shade300,
+                          child: const Center(child: Text("Summary",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),))),
+                      const SizedBox(height: 20,),
+                      employeeCount>0?Column(
+                        children: [
+
+                          const Padding(
+                            padding:  EdgeInsets.only(left: 20.0),
+                            child: Align(alignment: Alignment.bottomLeft,child: Text("Today's Attendance",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.indigo),)),
+                          ),
+                          SizedBox(
+                            width: w-10,
+                            height: 200,
+                            child: pieChartWidget(),
+                          ),
+                          const SizedBox(height: 40,),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 20.0),
+                            child: Align(alignment: Alignment.bottomLeft,child: Text("Weekly Attendance",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.indigo))),
+                          ),
+                          SizedBox(
+                            width: w-10,
+                            height: 200,
+                            child: monthlyChartWidget(),
+                          ),
+                          const SizedBox(height: 40,),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 20.0),
+                            child: Align(alignment: Alignment.bottomLeft,child: Text("Employee Expense",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.indigo))),
+                          ),
+                          SizedBox(
+                            width: w-10,
+                            // height: exp,
+                            child: expenseTable(),
+                          ),
+                          const SizedBox(height: 30,),
+                        ],
+                      ):Center(child:Text("Nothing to display"))
+
+
+
+                    ],),
                   ),
-                )
+                ),
+
               ],
             ),
           ),
@@ -289,76 +440,186 @@ class _dashboardState extends State<dashboard> {
   }
 
 
-  Widget reportees(){
-    return Center(
-      child: Column(
-        children: [
-          Container(
-            width: w-20,
-            height: 30,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: AppColors.themeStop,
-            ),
-            child: const Center(child: Text("Reportees",style: TextStyle(fontWeight: FontWeight.bold),)),
+  Widget pieChartWidget(){
+    return AspectRatio(
+      aspectRatio: 1.3,
+      child: Row(
+        children: <Widget>[
+          const SizedBox(
+            height: 18,
+            width: 80,
           ),
-          const SizedBox(height: 10,),
           Expanded(
-            child: SizedBox(
-              width: w-20,
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: PieChart(
+                PieChartData(
+                  borderData: FlBorderData(
+                    show: false,
+                  ),
+                  sectionsSpace: 0,
+                  centerSpaceRadius: 40,
+                  sections: _buildPieChartSections(),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            child: Column(
+              children: [
+                legendWidget("Present", Colors.green),
+                legendWidget("Absent", Colors.orange),
+                legendWidget("Leave", Colors.red),
 
-              child: ListView.builder(
-                  padding: EdgeInsets.only(bottom: 50),
-                  itemCount: employeeList.length,
-                  itemBuilder: (context,index){
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        // width: w-100,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              spreadRadius: 2,
-                              blurRadius: 2,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: ListTile(
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context){
-                              return profilePage(permission: widget.currentUser.Permission,mobile: employeeList[index].Mobile,callback: (){},HLP: widget.currentUser.Permission,Image: '${employeeList[index].Mobile}.png',);
-                            }));
-                          },
-                          title: Text(employeeList[index].Name,style: const TextStyle(color: AppColors.buttonColorDark,fontWeight: FontWeight.bold),),
-                          subtitle: Row(
-                            children: [
-                              Text(employeeList[index].Position),
-                              Spacer(),
-                              Text(employeeList[index].Location,style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold,color: employeeList[index].Location=="Absent" || employeeList[index].Location=="Leave"?Colors.red:Colors.green),),
-                            ],
-                          ),
-                          leading: const SizedBox(
-                              width: 20,
-                              height: 40,
-                              child: Center(child: Icon(Icons.person,size: 25,color: AppColors.buttonColor))),
-                          trailing: const SizedBox(
-                            width: 40,
-                            height: 40,
-                            child: Center(child: Icon(Icons.arrow_forward_ios_rounded,color: AppColors.buttonColorDark,)),
-                          )
-                        ),
-                      ),
-                    );
-                  }),
+              ],
             ),
           )
         ],
       ),
     );
   }
+
+  List<PieChartSectionData> _buildPieChartSections() {
+    // final total = presentCount + absentCount + leaveCount;
+    return [
+      PieChartSectionData(
+        color: Colors.green,
+        value: presentCount.toDouble(),
+        title: '${presentCount}',
+        radius: 50,
+        titleStyle: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+      PieChartSectionData(
+        color: Colors.orange,
+        value: absentCount.toDouble(),
+        title: '${absentCount}',
+        radius: 50,
+        titleStyle: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+      PieChartSectionData(
+        color: Colors.red,
+        value: leaveCount.toDouble(),
+        title: '${leaveCount}',
+        radius: 50,
+        titleStyle: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+    ];
+  }
+
+
+  Widget monthlyChartWidget(){
+    // print(employeeCount);
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: BarChart(
+        BarChartData(
+          alignment: BarChartAlignment.spaceAround,
+          maxY: (employeeCount/10).ceil()*10,  // Adjust maxY based on your data range
+          barTouchData: BarTouchData(enabled: true),
+          // titlesData: FlTitlesData(
+          //   leftTitles: AxisTitles(
+          //     sideTitles: SideTitles(
+          //       showTitles: true,
+          //       getTitlesWidget: (value, _) {
+          //         return Text(value.toInt().toString(), style: TextStyle(color: Colors.black, fontSize: 10));
+          //       },
+          //     ),
+          //   ),
+          //   bottomTitles: AxisTitles(
+          //     sideTitles: SideTitles(
+          //       showTitles: true,
+          //       getTitlesWidget: (value, _) {
+          //         return Text('Day ${value.toInt() + 1}', style: TextStyle(color: Colors.black, fontSize: 10));
+          //       },
+          //     ),
+          //   ),
+          // ),
+          gridData: FlGridData(show: false),
+
+          borderData: FlBorderData(
+            show: false,
+            border: Border.all(color: Colors.black.withOpacity(.2), width: 1),
+          ),
+          barGroups: attendanceData.map((data) {
+            return BarChartGroupData(
+              x: data['Day'],
+              barRods: [
+                // BarChartRodData(toY: double.parse(data['LeaveCount'].toString()), color: Colors.blue, width: 15),
+                // BarChartRodData(toY: double.parse(data['AbsentCount'].toString()), color: Colors.red, width: 15),
+                // BarChartRodData(toY: double.parse(data['PresentCount'].toString()), color: Colors.green, width: 15),
+                BarChartRodData(
+                  borderRadius: BorderRadius.circular(1),
+                  // toY: data['LeaveCount']+data['AbsentCount']+data['PresentCount'],
+                  toY: data['PresentCount'] + data['AbsentCount']+data['LeaveCount'],
+                  rodStackItems: [
+                    BarChartRodStackItem(0, data['PresentCount'], Colors.green),
+                    BarChartRodStackItem(data['PresentCount'], data['PresentCount'] + data['AbsentCount'], Colors.orange),
+                    BarChartRodStackItem(data['PresentCount'] + data['AbsentCount'], data['PresentCount'] + data['AbsentCount'] + data['LeaveCount'], Colors.red),
+                  ],
+                  width: 12,
+                ),
+              ],
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget expenseTable(){
+    return SizedBox(
+      // height: expenseData.length*50,
+      child: DataTable(
+        // headingRowColor: WidgetStateColor.resolveWith(
+        //         (states) => Colors.blue),
+        columnSpacing: 20,
+        columns: [
+          const DataColumn(label: Text('Type')),
+          const DataColumn(label: Text('Amount')),
+        ],
+        rows: expenseData.map((model) {
+          return DataRow(
+            cells: [
+              DataCell(Text(model['Type'],style: TextStyle(fontWeight: model['Type']=='Total'?FontWeight.bold:FontWeight.normal),)),
+              DataCell(Text(model['Amount'].toString(),style: TextStyle(fontWeight: model['Type']=='Total'?FontWeight.bold:FontWeight.normal),)),
+            ],
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget legendWidget(String name,Color col){
+    return Padding(
+      padding: const EdgeInsets.all(1.0),
+      child: SizedBox(
+        width: 80,
+        child: Row(
+          children: [
+            Container(
+              width: 10,
+              height: 10,
+              color: col,
+            ),
+            const SizedBox(width: 5,),
+            Center(child: Text(name,style: const TextStyle(color: Colors.black,fontSize: 12),)),
+          ],
+        ),
+      ),
+    );
+  }
+
 
 }
