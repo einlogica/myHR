@@ -66,8 +66,8 @@ class _dashboardState extends State<dashboard> {
     // print(fetchedAttendanceData);
     attendanceData=fetchedAttendanceData.sublist(fetchedAttendanceData.length-8,fetchedAttendanceData.length-1);
     employeeCount=attendanceData[0]['Total'];
-    presentCount=attendanceData.last['PresentCount'];
-    leaveCount=attendanceData.last['LeaveCount'];
+    presentCount=fetchedAttendanceData.last['PresentCount'];
+    leaveCount=fetchedAttendanceData.last['LeaveCount'];
     absentCount=employeeCount-presentCount-leaveCount;
     //Expense
     expenseData = await apiServices().getMonthlyExpense(widget.currentUser.Mobile,currDate.month.toString(),currDate.year.toString());

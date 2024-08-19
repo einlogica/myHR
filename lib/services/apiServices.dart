@@ -42,7 +42,7 @@ class apiServices{
   //test
   // var url = "https://testingcontainerapp--5zu536l.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
 
-  var appVersion ="V1.0.3+9";
+  var appVersion ="V1.0.4+10";
   // var emp = "";
 
 //================================================================================================================================================= USERS
