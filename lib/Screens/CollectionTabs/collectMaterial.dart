@@ -65,8 +65,8 @@ class _collectMaterialState extends State<collectMaterial> {
   bool shopSelected = false;
 
 
-  final TextEditingController _divisionCtrl = TextEditingController();
-  final TextEditingController _typeCtrl = TextEditingController();
+  // final TextEditingController _divisionCtrl = TextEditingController();
+  // final TextEditingController _typeCtrl = TextEditingController();
   final TextEditingController _shopNameController = TextEditingController();
   final TextEditingController _L1Controller = TextEditingController();
   final TextEditingController _L2Controller = TextEditingController();
@@ -83,9 +83,10 @@ class _collectMaterialState extends State<collectMaterial> {
   TextEditingController searchCtrl = TextEditingController();
 
 
-  List<String> typeList = ["Select", "Bank","Flat", "Hospital", "Office", "Shop"];
-  List<String> divList = ["Select","Division 12", "Division 13", "Division 14"];
-  List<String> itemList = ["Material","Cash"];
+  // List<String> typeList = ["Select", "Bank","Flat", "Hospital", "Office", "Shop"];
+  List<String> typeList = ["Select"];
+  List<String> divList = ["Select"];
+  List<String> itemList = ["Material","Cash","UPI","GST"];
   List<String> districtList = ["Select"];
   String dropDownDiv = "Select";
   String dropDownType = "Select";
@@ -99,8 +100,8 @@ class _collectMaterialState extends State<collectMaterial> {
   @override
   void dispose() {
     // TODO: implement dispose
-    _divisionCtrl.dispose();
-    _typeCtrl.dispose();
+    // _divisionCtrl.dispose();
+    // _typeCtrl.dispose();
     _shopNameController.dispose();
     _L1Controller.dispose();
     _L2Controller.dispose();
@@ -133,6 +134,12 @@ class _collectMaterialState extends State<collectMaterial> {
 
   fetchData() async {
     districtList=await apiServices().getDistrict("KERALA");
+    // print(districtList);
+    divList.addAll(await apiServices().fetchSettingsList("Site Name",widget.mobile));
+    // print(divList);
+    typeList.addAll(await apiServices().fetchSettingsList("Customer",widget.mobile));
+    // print(typeList);
+
     await fetchCollection(selectedDate);
     setState(() {
       _loading=false;
@@ -167,6 +174,9 @@ class _collectMaterialState extends State<collectMaterial> {
     // } else
     if (title == "Type") {
       dropDownType = selected;
+    }
+    else if(title == "Division"){
+      dropDownDiv = selected;
     }
     else if(title == "District"){
       distDropDown = selected;
@@ -476,12 +486,12 @@ class _collectMaterialState extends State<collectMaterial> {
 
                             child: Column(
                               children: [
-                                FieldArea(title: "Division", ctrl: _divisionCtrl, type: TextInputType.number, len: 3),
-                                // FieldAreaWithDropDown(
-                                //     title: "Division",
-                                //     dropList: divList,
-                                //     dropdownValue: dropDownDiv,
-                                //     callback: dropDownCallback),
+                                // FieldArea(title: "Division", ctrl: _divisionCtrl, type: TextInputType.number, len: 3),
+                                FieldAreaWithDropDown(
+                                    title: "Division",
+                                    dropList: divList,
+                                    dropdownValue: dropDownDiv,
+                                    callback: dropDownCallback),
                                 FieldAreaWithDropDown(
                                     title: "Type",
                                     dropList: typeList,
@@ -550,7 +560,7 @@ class _collectMaterialState extends State<collectMaterial> {
                                               return TextField(
                                                   controller: controller,
                                                   focusNode: focusNode,
-                                                  autofocus: true,
+                                                  autofocus: false,
                                                   decoration: const InputDecoration(
                                                     border: OutlineInputBorder(),
                                                     labelText: 'Search',
@@ -572,57 +582,7 @@ class _collectMaterialState extends State<collectMaterial> {
                                               });
                                             },
                                           )
-                                        // width: w-50,
-                                        // child: TypeAheadField(
-                                        //   textFieldConfiguration:
-                                        //   TextFieldConfiguration(
-                                        //     controller:
-                                        //     _shopNameController,
-                                        //     decoration: InputDecoration(
-                                        //       // icon: Icon(Icons.password),
-                                        //       hintText:
-                                        //       "Search Name",
-                                        //       // labelText: 'Name/GST',
-                                        //       filled: true,
-                                        //       fillColor: Colors.white,
-                                        //       enabled: true,
-                                        //       border: OutlineInputBorder(
-                                        //           borderRadius:
-                                        //           BorderRadius
-                                        //               .circular(10)),
-                                        //     ),
-                                        //     // decoration: InputDecoration(labelText: 'Enter shop name'),
-                                        //   ),
-                                        //   suggestionsCallback:
-                                        //       (pattern) async {
-                                        //     // Call a method to fetch shop name suggestions from the database
-                                        //     // print("AAA");
-                                        //     if (pattern.length > 2) {
-                                        //       shopSelected = false;
-                                        //       return await apiServices()
-                                        //           .getBiller(
-                                        //           pattern, "Name");
-                                        //     } else {
-                                        //       return [];
-                                        //     }
-                                        //   },
-                                        //   itemBuilder:
-                                        //       (context, suggestion) {
-                                        //     return ListTile(
-                                        //       title: Text(
-                                        //           "${suggestion.name}, Div: ${suggestion.division}"),
-                                        //       // subtitle: Text(suggestion.gst),
-                                        //     );
-                                        //   },
-                                        //   onSuggestionSelected:
-                                        //       (suggestion) {
-                                        //     // Handle the selection of a suggestion
-                                        //     selectedBiller = suggestion;
-                                        //     shopSelected = true;
-                                        //     _shopNameController.text =
-                                        //         suggestion.name;
-                                        //   },
-                                        // ),
+
                                       ),
                                     ),
                                     const SizedBox(
@@ -710,8 +670,8 @@ class _collectMaterialState extends State<collectMaterial> {
                                   children: [
                                     FieldAreaWithCalendar(title: "Date", ctrl: _dateController, type: TextInputType.datetime,days: 365,),
                                     FieldAreaWithDropDown(title: "Item", dropList: itemList, dropdownValue: itemDropDown, callback: dropDownCallback),
-                                    itemDropDown=='Cash'?SizedBox():FieldArea(title: "Dry Weight (KG)", ctrl: _dryController, type: TextInputType.number, len: 8),
-                                    itemDropDown=='Cash'?SizedBox():FieldArea(title: "Cloth Weight (KG)", ctrl: _clothController, type: TextInputType.number, len: 8),
+                                    itemDropDown!='Material'?const SizedBox():FieldArea(title: "Dry Weight (KG)", ctrl: _dryController, type: TextInputType.number, len: 8),
+                                    itemDropDown!='Material'?const SizedBox():FieldArea(title: "Cloth Weight (KG)", ctrl: _clothController, type: TextInputType.number, len: 8),
                                     FieldArea(title: "Collected Amount", ctrl: _amountCtrl, type: TextInputType.number, len: 5),
                                     SizedBox(height: 5,),
                                     SizedBox(
@@ -850,12 +810,12 @@ class _collectMaterialState extends State<collectMaterial> {
 
                                               //to add a new shop
                                               if(addNewShop){
-                                                if(_divisionCtrl.text.length>0 && dropDownType!="Select" && _shopNameController.text!="" && _L1Controller.text!="" && distDropDown!="Select"){
+                                                if(dropDownDiv!="Select" && dropDownType!="Select" && _shopNameController.text!="" && _L1Controller.text!="" && distDropDown!="Select"){
 
                                                   setState(() {
                                                     _loading=true;
                                                   });
-                                                  selectedBiller=billerModel(id: "", name: _shopNameController.text, addressl1: _L1Controller.text, addressl2: _L2Controller.text, addressl3: _L3Controller.text, district: distDropDown, mobile: _phoneController.text, gst: _gstController.text, division: _divisionCtrl.text, type: dropDownType,createDate: "",createTime: "",createUser: "",createMobile: "");
+                                                  selectedBiller=billerModel(id: "", name: _shopNameController.text, addressl1: _L1Controller.text, addressl2: _L2Controller.text, addressl3: _L3Controller.text, district: distDropDown, mobile: _phoneController.text, gst: _gstController.text, division: dropDownDiv, type: dropDownType,createDate: "",createTime: "",createUser: "",createMobile: "");
                                                   var status = await apiServices().addBiller(selectedBiller,widget.name,widget.mobile);
                                                   if(status=="Success"){
                                                     setState(() {
@@ -882,7 +842,18 @@ class _collectMaterialState extends State<collectMaterial> {
                                                   setState(() {
                                                     _loading=true;
                                                   });
-                                                  _position = await Geolocator.getCurrentPosition();
+                                                  bool locPer = await locationServices().checkLocationServices();
+                                                  if(!locPer){
+                                                    setState(() {
+                                                      _loading=false;
+                                                    });
+                                                    showMessage("Location permission denied");
+                                                    return;
+                                                  }
+                                                  else{
+                                                    _position = await Geolocator.getCurrentPosition();
+                                                  }
+                                                  // showMessage("Location fetch completed");
                                                   String baseimage="";
 
                                                   if(imageLoaded) {

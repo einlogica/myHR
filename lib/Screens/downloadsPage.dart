@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:csv/csv.dart';
 import 'package:einlogica_hr/Models/billerModel.dart';
-import 'package:einlogica_hr/Screens/upload_bill.dart';
 import 'package:einlogica_hr/Widgets/FieldAreaWithCalendar.dart';
 import 'package:einlogica_hr/Widgets/FieldAreaWithDropDown.dart';
 import 'package:einlogica_hr/services/savefile.dart';
@@ -592,7 +591,7 @@ class _downloadsPageState extends State<downloadsPage> {
           // trackerList.add(trackerModel(Mobile: d['Mobile'], Name: d['Name'], Site: d['Site'],FromLoc: ,ToLoc: d['ToLoc'],KM: d['KM'], Date: d['Date'], Type: d['Type'], BillNo: d['BillNo'], Amount: double.parse(d['Amount']), Filename: d['Filename'],Status: d['Status']));
 
           trackerList.add(userExpenseModel(ID: d['ID'], Mobile: d['Mobile'], Name: d['Name'], Site: d['Site'], LabourName: d['LabourName'],LabourCount: d['LabourCount'], Duration: d['Duration'], FromLoc: d['FromLoc'],
-              ToLoc: d['ToLoc'], KM: d['KM'], Date: d['Date'], Type: d['Type'],Item: d['Item'], ShopName: d['ShopName']??"", ShopDist: d['ShopDist']??"", ShopPhone: d['ShopPhone']??"", ShopGst: d['ShopGST']??"",
+              ToLoc: d['ToLoc'], KM: d['KM'], Date: d['Date'], Type: d['Type'],Item: d['Item'], ShopName: d['ShopDesc']??"", ShopDist: d['ShopDist']??"", ShopPhone: d['ShopPhone']??"", ShopGst: d['ShopGST']??"",
               BillNo: d['BillNo'], Amount: d['Amount'], Filename: d['Filename'], Status: d['Status'], L1Status: d['L1Status'], L1Comments: d['L1Comments'], L2Status: d['L2Status'],
               L2Comments: d['L2Comments'],FinRemarks: d['FinRemarks']));
         }
@@ -773,29 +772,27 @@ class _downloadsPageState extends State<downloadsPage> {
 
       });
     }
-    else if(item=="Location"){
-      rows.add(["Mobile","Name","Division","Type","BuildingName","AddressL1","AddressL2","AddressL3","District","Phone","GST","Date",'Amount','FileName']);
+    else if(item=="Locations"){
+      rows.add(["ShopName","Address L1","Address L2","Address L3","District","Phone","GST","Division","Type","Date","Time","User",'UserMobile']);
+      // billerList.add(billerModel(id: d['ShopID'], name: d['ShopName'], addressl1: d['AddressL1'], addressl2: d['AddressL2'], addressl3: d['AddressL3'], district: d['District'], mobile: d['Phone'], gst: d['GST'],division: d['Division'],type: d['Type'],createDate: d['CreateDate'],createTime: d['CreateTime'],createUser: d['CreateUser'],createMobile: d['CreateMobile']));
 
-      collectionList.forEach((element) async{
-        if(element.item=="Cash"){
+      billerList.forEach((element) async{
           List<dynamic> row = [];//List<dynamic>();
-          row.add(element.mobile);
-          row.add(element.name);
-          row.add(element.div);
-          row.add(element.type);
-          row.add(element.shopname);
-          row.add(element.l1);
-          row.add(element.l2);
-          row.add(element.l3);
-          row.add(element.dist);
-          row.add(element.phone);
-          row.add(element.gst);
-          row.add(element.date);
-          row.add(element.tot);
-          row.add(element.file);
-          rows.add(row);
-        }
 
+          row.add(element.name);
+          row.add(element.addressl1);
+          row.add(element.addressl2);
+          row.add(element.addressl3);
+          row.add(element.district);
+          row.add(element.mobile);
+          row.add(element.gst);
+          row.add(element.division);
+          row.add(element.type);
+          row.add(element.createDate);
+          row.add(element.createTime);
+          row.add(element.createUser);
+          row.add(element.createMobile);
+          rows.add(row);
       });
     }
 

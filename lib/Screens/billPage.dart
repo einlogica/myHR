@@ -572,68 +572,78 @@ class _billPageState extends State<billPage> {
               children: [
 
                 const SizedBox(height: 20,),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                SizedBox(
+                  width: w-20,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: w/4,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: AppColors.buttonColor
+                              ),
+                              child: Center(
+                                child: Text("Rs ${item.Amount} /-",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.white),),
+                              ),
+                            ),
+                            SizedBox(
+                              width: w/2,
+                              child: Align(alignment: Alignment.centerRight,child: Text(item.Date,style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.black))),
+                            )
+
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10,),
+                      SizedBox(
+                        child: Column(
+
+                          children: [
+                          billText("Type", item.Type),
+                          item.Item==""?const SizedBox():billText("Specify", item.Item),
+                          item.Site==""?const SizedBox():billText("Location", item.Site),
+                          item.Type=="Purchase"?Column(
+                            children: [
+                              item.ShopName==""?const SizedBox():billText("Shop", item.ShopName),
+                              item.ShopDist==""?const SizedBox():billText("District", item.ShopDist),
+                              item.ShopDist==""?const SizedBox():billText("GST", item.ShopGst),
+                              item.ShopPhone==""?const SizedBox():billText("Phone", item.ShopPhone),
+                            ],
+                          ):billText("Description", item.Site),
+                          // item.FromLoc==""?Container():SizedBox(height: 5,),
+                          item.LabourName==""?const SizedBox():billText("Labour Name", item.LabourName),
+                          item.Duration==""?const SizedBox():billText("Duration", item.Duration),
+                          item.FromLoc==""?const SizedBox():billText("From", item.FromLoc),
+                          item.ToLoc==""?const SizedBox():billText("To", item.ToLoc),
+                          item.KM.toString()=="0"?const SizedBox():billText("KM", item.KM),
+                          item.L1Status==""?const SizedBox():billText("Manager", item.L1Status),
+                          item.L1Comments==""?const SizedBox():billText("Comments", item.L1Comments),
+                          item.L2Status==""?const SizedBox():billText("Admin", item.L2Status),
+                          item.L2Comments==""?const SizedBox():billText("Comments", item.L2Comments),
+                        ],),
+                      ),
+
+                      const SizedBox(height: 10,),
+                      Row(
                         children: [
-                          Container(
-                            width: w/4,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: AppColors.buttonColor
-                            ),
-                            child: Center(
-                              child: Text("Rs ${item.Amount} /-",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.white),),
-                            ),
-                          ),
-                          SizedBox(
-                            width: w/2,
-                            child: Align(alignment: Alignment.centerRight,child: Text(item.Date,style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.black))),
-                          )
+                          const SizedBox(width: 20,),
+                          Text("Status: ${item.Status}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                          const SizedBox(width: 20,),
 
                         ],
                       ),
-                    ),
-                    const SizedBox(height: 10,),
-                    billText("Type", item.Type),
-                    // SizedBox(height: 5,),
-                    item.Item==""?const SizedBox():billText("Specify", item.Item),
-                    item.Type=="Purchase"?Column(
-                      children: [
-                        billText("Shop", item.ShopName),
-                        billText("District", item.ShopDist),
-                        billText("GST", item.ShopGst),
-                        billText("Phone", item.ShopPhone),
-                      ],
-                    ):billText("Description", item.Site),
-                    // item.FromLoc==""?Container():SizedBox(height: 5,),
-                    item.LabourName==""?const SizedBox():billText("Labour Name", item.LabourName),
-                    item.Duration==""?const SizedBox():billText("Duration", item.Duration),
-                    item.FromLoc==""?const SizedBox():billText("From", item.FromLoc),
-                    item.ToLoc==""?const SizedBox():billText("To", item.ToLoc),
-                    item.KM.toString()=="0"?const SizedBox():billText("KM", item.KM),
-                    item.L1Status==""?const SizedBox():billText("Manager", item.L1Status),
-                    item.L1Comments==""?const SizedBox():billText("Comments", item.L1Comments),
-                    item.L2Status==""?const SizedBox():billText("Admin", item.L2Status),
-                    item.L2Comments==""?const SizedBox():billText("Comments", item.L2Comments),
-                    const SizedBox(height: 10,),
-                    Row(
-                      children: [
-                        const SizedBox(width: 20,),
-                        Text("Status: ${item.Status}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
-                        const SizedBox(width: 20,),
+                      const SizedBox(height: 10,)
 
-                      ],
-                    ),
-                    const SizedBox(height: 10,)
-
-                  ],
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 20,),
                 SizedBox(

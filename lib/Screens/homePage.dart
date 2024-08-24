@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:einlogica_hr/Screens/CollectionTabs/collectMaterial.dart';
 import 'package:einlogica_hr/Screens/Accounts/settingsPage.dart';
+import 'package:einlogica_hr/Screens/CollectionTabs/collectionsummary.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -608,6 +609,12 @@ class _homePageState extends State<homePage> {
                                 return collectMaterial(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: widget.currentUser.Permission,);
                               }));
                           }):SizedBox(),
+                          collectionTab=='1' && widget.currentUser.Permission=='Admin'?const SizedBox(height: 30,):SizedBox(),
+                          collectionTab=='1' && widget.currentUser.Permission=='Admin'?gridContainer3('assets/summary.png', "Collection Summary", (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return collectionSumaryPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: widget.currentUser.Permission,);
+                            }));
+                          }):SizedBox(),
 
                           const SizedBox(height: 30,),
                           SizedBox(
@@ -728,12 +735,15 @@ class _homePageState extends State<homePage> {
                                           child: ListTile(
                                             title: SizedBox(
                                               width: w/1.5,
-                                              child: Row(
-                                                children: [
-                                                  Text("Happy ${eventList[index].date}",style: const TextStyle(fontStyle: FontStyle.italic),),
-                                                  const SizedBox(width: 20,),
-                                                  Text(eventList[index].title,style: const TextStyle(fontWeight: FontWeight.bold,fontStyle: FontStyle.italic),),
-                                                ],
+                                              child: SingleChildScrollView(
+                                                scrollDirection: Axis.horizontal,
+                                                child: Row(
+                                                  children: [
+                                                    Text("Happy ${eventList[index].date}",style: const TextStyle(fontStyle: FontStyle.italic),),
+                                                    const SizedBox(width: 20,),
+                                                    Text(eventList[index].title,style: const TextStyle(fontWeight: FontWeight.bold,fontStyle: FontStyle.italic),),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                             leading: Container(

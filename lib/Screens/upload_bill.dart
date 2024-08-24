@@ -29,6 +29,7 @@ var items = [
 ];
 
 List<String> travel =['Vehicle','Taxi','Bus'];
+List<String> districtList = ["Select"];
 // String desc="";
 bool otherSelected=false;
 
@@ -93,6 +94,7 @@ class _upload_billState extends State<upload_bill> {
   String selectedVehicle="Other";
   List<String> siteList = ["Select","Other"];
   String dropdownsite = "Select";
+  String dropdowndistrict = "Select";
 
   @override
   void dispose() {
@@ -137,6 +139,7 @@ class _upload_billState extends State<upload_bill> {
         vehicleList.add("${d['Type']}");
       }
     }
+    districtList=await apiServices().getDistrict("KERALA");
     setState(() {
 
     });
@@ -148,6 +151,9 @@ class _upload_billState extends State<upload_bill> {
     }
     else if(title=="Location"){
       dropdownsite=selected;
+    }
+    else if(title=="District"){
+      dropdowndistrict=selected;
     }
     else if(title=="Type"){
       addNewShop=false;
@@ -271,7 +277,7 @@ class _upload_billState extends State<upload_bill> {
                                           autofocus: true,
                                           decoration: const InputDecoration(
                                             border: OutlineInputBorder(),
-                                            labelText: 'Search',
+                                            labelText: 'Search Shop',
                                           )
                                       );
                                     },
@@ -365,7 +371,8 @@ class _upload_billState extends State<upload_bill> {
                               // FieldArea(title: "Address L1", ctrl: _L1Controller, type: TextInputType.text, len: 50),
                               // FieldArea(title: "Address L2", ctrl: _L2Controller, type: TextInputType.text, len: 50),
                               // FieldArea(title: "Address L3", ctrl: _L3Controller, type: TextInputType.text, len: 50),
-                              FieldArea(title: "District", ctrl: _distController, type: TextInputType.text, len: 20),
+                              // FieldArea(title: "District", ctrl: _distController, type: TextInputType.text, len: 20),
+                              FieldAreaWithDropDown(title: "District", dropList: districtList, dropdownValue: dropdowndistrict, callback: dropDownCallback),
                               FieldArea(title: "Phone", ctrl: _phoneController, type: TextInputType.text, len: 15),
                               FieldArea(title: "GST", ctrl: _gstController, type: TextInputType.text, len: 20),
 
@@ -503,8 +510,14 @@ class _upload_billState extends State<upload_bill> {
 
 
                                         bool validate = validateInputs();
+
                                         if(!validate){
                                           return;
+                                        }
+
+                                        String location = dropdownsite;
+                                        if(dropdownsite=="Other"){
+                                          location=_siteCtrl.text;
                                         }
 
                                         String status="";
@@ -535,10 +548,10 @@ class _upload_billState extends State<upload_bill> {
                                           }
 
 
-                                          status = await apiServices().uploadPurchaseBill(widget.mobile,widget.name, typeName,_specifyCtrl.text,_siteCtrl.text,_billnoCtrl.text, amt.toString(), dateController.text, baseimage, imageLoaded.toString(),selectedBiller);
+                                          status = await apiServices().uploadPurchaseBill(widget.mobile,widget.name, typeName,_specifyCtrl.text,location,_billnoCtrl.text, amt.toString(), dateController.text, baseimage, imageLoaded.toString(),selectedBiller);
                                         }
                                         else if(dropdownvalue=='Daily-Wage'){
-                                          status = await apiServices().addDailyWages(widget.mobile, widget.name, _siteCtrl.text, _labourCtrl.text, _countCtrl.text, _durationCtrl.text,_amountCtrl.text,dateController.text);
+                                          status = await apiServices().addDailyWages(widget.mobile, widget.name, location, _labourCtrl.text, _countCtrl.text, _durationCtrl.text,_amountCtrl.text,dateController.text);
                                         }
                                         else{
                                           var sitevalue=_specifyCtrl.text;
@@ -557,7 +570,7 @@ class _upload_billState extends State<upload_bill> {
                                           // else{
                                           //   sitevalue=_siteCtrl.text;
                                           // }
-                                          status = await apiServices().uploadBill(widget.mobile,widget.name, typeName, sitevalue,_siteCtrl.text, _fromCtrl.text,
+                                          status = await apiServices().uploadBill(widget.mobile,widget.name, typeName, sitevalue,location, _fromCtrl.text,
                                               _toCtrl.text, _kmCtrl.text, _billnoCtrl.text, amt.toString(), dateController.text, baseimage, imageLoaded.toString());
                                         }
 
@@ -747,6 +760,11 @@ class _upload_billState extends State<upload_bill> {
 
   bool validateInputs(){
     // print(dropdownvalue);
+
+    if(dropdownsite=='Other' && _siteCtrl.text==""){
+      showMessage("Invalid Inputs");
+      return false;
+    }
     if(dropdownvalue=='Vehicle'){
       if(_siteCtrl.text=="" || _kmCtrl.text=="" || dateController.text=="" || _amountCtrl.text==""){
         showMessage("Invalid Inputs");

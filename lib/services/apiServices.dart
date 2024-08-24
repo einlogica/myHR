@@ -573,7 +573,7 @@ class apiServices{
       var data = jsonDecode(response.body);
       userExpenseList.clear();
       for (var d in data){
-        userExpenseList.add(userExpenseModel(ID:d['ID'],Mobile: d['Mobile'], Name: d['Name'],Site: d['Site'],LabourName: d['LabourName'],LabourCount: d['LabourCount'],Duration: d['Duration'],FromLoc: d['FromLoc'],ToLoc: d['ToLoc'],KM: d['KM'], Date : d['Date'], Type: d['Type'],Item: d['Item'], ShopName: d['ShopName']==null?"":d['ShopName'],ShopDist: d['District']==null?"":d['District'],ShopPhone: d['Phone']==null?"":d['Phone'],ShopGst: d['GST']==null?"":d['GST'],BillNo: d['BillNo'], Amount: d['Amount'], Filename: d['Filename'],Status: d['Status'],L1Status: d['L1Status'],L1Comments: d['L1Comments'],L2Status: d['L2Status'],L2Comments: d['L2Comments'],FinRemarks: d['FinRemarks']));
+        userExpenseList.add(userExpenseModel(ID:d['ID'],Mobile: d['Mobile'], Name: d['Name'],Site: d['Site'],LabourName: d['LabourName'],LabourCount: d['LabourCount'],Duration: d['Duration'],FromLoc: d['FromLoc'],ToLoc: d['ToLoc'],KM: d['KM'], Date : d['Date'], Type: d['Type'],Item: d['Item'], ShopName: d['ShopDesc']==null?"":d['ShopDesc'],ShopDist: d['District']==null?"":d['District'],ShopPhone: d['Phone']==null?"":d['Phone'],ShopGst: d['GST']==null?"":d['GST'],BillNo: d['BillNo'], Amount: d['Amount'], Filename: d['Filename'],Status: d['Status'],L1Status: d['L1Status'],L1Comments: d['L1Comments'],L2Status: d['L2Status'],L2Comments: d['L2Comments'],FinRemarks: d['FinRemarks']));
       }
     }
 
@@ -747,6 +747,7 @@ class apiServices{
 
     final response = await apiRequest("jilariapi.php", {"action":"upload_purchasebill","emp":emp,"usermobile": mobile,"username":name,"type": type,"item":item,"site":site,"billno":billno,"billamount":amt,"billdate":date,"file":file,"fileavailable":avail,"id":biller.id,
       "shop":biller.name,"l1":biller.addressl1,"l2":biller.addressl2,"l3":biller.addressl3,"dist":biller.district,"phone":biller.mobile,"gst":biller.gst});
+    // print(response.body);
     if(response.statusCode == 200) {
       var data = jsonDecode(response.body.trim());
       if (data['Status'] == "Success") {
@@ -811,6 +812,55 @@ class apiServices{
 
   //===============================================================================================================================================  Collection
 
+  //Fetch material summary
+  Future<List<Map<String,dynamic>>>getMaterialSummary(String mobile)async{
+    print("Executing get material summary data method");
+    List<Map<String,dynamic>> att = [];
+    final response = await apiRequest("jilariapi.php", {"action":"getMaterialSummary","usermobile": mobile,"emp":emp});
+    print("response= ${response.body.trim()}");
+    if(response.body.trim().isNotEmpty){
+      var data = jsonDecode(response.body.trim());
+      for(var d in data){
+        att.add({'division':d['division'],'type':d['type'],'Shops':d['Shops'],'dryweight':d['dryweight'],'clothweight':d['clothweight'],'rejAmount':d['rejAmount']});
+      }
+    }
+
+    return att;
+  }
+
+  //Fetch material summary
+  Future<List<Map<String,dynamic>>>getBillerSummary(String mobile)async{
+    print("Executing get biller summary data method");
+    List<Map<String,dynamic>> att = [];
+    final response = await apiRequest("jilariapi.php", {"action":"getBillerSummary","usermobile": mobile,"emp":emp});
+    print("response= ${response.body.trim()}");
+    if(response.body.trim().isNotEmpty){
+      var data = jsonDecode(response.body.trim());
+      for(var d in data){
+        att.add({'Division':d['Type'],'Visited':d['Visited'],'New':d['NewAddition']});
+      }
+    }
+
+    return att;
+  }
+
+  //Fetch cash summary
+  Future<List<Map<String,dynamic>>>getCashSummary(String mobile)async{
+    print("Executing get biller summary data method");
+    List<Map<String,dynamic>> att = [];
+    final response = await apiRequest("jilariapi.php", {"action":"getCashSummary","usermobile": mobile,"emp":emp});
+    print("response= ${response.body.trim()}");
+    if(response.body.trim().isNotEmpty){
+      var data = jsonDecode(response.body.trim());
+      for(var d in data){
+        att.add({'Type':d['Item'],'Amount':d['Amount']});
+      }
+    }
+
+    return att;
+  }
+
+
   Future<String> uploadCollection(String usermobile,String username, String shopid,String shopname, String date, String dry,String cloth, String amt, String image, double lat, double long,String item)async{
     print("Executing upload collection method");
     String status="";
@@ -832,7 +882,7 @@ class apiServices{
     print("Executing get collection method");
     List<collectionModel> collectionList =[];
     final response = await apiRequest("jilariapi.php", {"action":"getCollection","usermobile":mobile,"per":per,"emp": emp,"date":date,});
-
+    // print(response.body.trim());
     if(response.statusCode==200 && response.body.trim()!="Failed"){
       var data = jsonDecode(response.body);
 

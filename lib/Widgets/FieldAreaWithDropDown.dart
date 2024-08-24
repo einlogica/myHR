@@ -21,6 +21,8 @@ class _FieldAreaWithDropDownState extends State<FieldAreaWithDropDown> {
       child: SizedBox(
         width: w-50,
         child: DropdownButtonFormField(
+          menuMaxHeight: 200,
+          dropdownColor: Colors.blue.shade50,
           items: widget.dropList.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,

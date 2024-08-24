@@ -608,10 +608,16 @@ class _timesheetPageState extends State<timesheetPage> {
                                         _loading=true;
                                       });
                                       String status="";
-                                      if(dropdownsite!="Select" && dateController.text!="" && dropdownvalue!="Select" && dropdowncustomer!="Select"){
+
+                                      String loc=dropdownsite;
+                                      if(dropdownsite=="Other"){
+                                        loc=_siteCtrl.text;
+                                      }
+
+                                      if(dropdownsite!="Select" && dateController.text!="" && dropdownvalue!="Select" && dropdowncustomer!="Select" && loc!=""){
                                         String cust=dropdowncustomer;
                                         String act=dropdownvalue;
-                                        String loc=dropdownsite;
+
                                           if(dropdowncustomer=='Others'){
                                             cust=custCtrl.text;
                                           }
@@ -620,9 +626,7 @@ class _timesheetPageState extends State<timesheetPage> {
                                             act=_activityCtrl.text;
                                           }
 
-                                          if(dropdownsite=="Other"){
-                                            loc=_siteCtrl.text;
-                                          }
+
                       
                       
                                           status = await apiServices().postActivity(widget.name, widget.mobile, act, loc,dateController.text,_drive,_startCtrl.text,_endCtrl.text, _position.latitude.toString(), _position.longitude.toString(), act,cust,remarksCtrl.text);
