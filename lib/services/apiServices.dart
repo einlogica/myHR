@@ -42,7 +42,7 @@ class apiServices{
   //test
   // var url = "https://testingcontainerapp--5zu536l.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
 
-  var appVersion ="V1.0.4+10";
+  var appVersion ="V1.0.5+11";
   // var emp = "";
 
 //================================================================================================================================================= USERS
@@ -813,10 +813,11 @@ class apiServices{
   //===============================================================================================================================================  Collection
 
   //Fetch material summary
-  Future<List<Map<String,dynamic>>>getMaterialSummary(String mobile)async{
+  Future<List<Map<String,dynamic>>>getMaterialSummary(String mobile, DateTime Date)async{
     print("Executing get material summary data method");
+    String date = DateFormat('yyyy-MM-dd').format(Date);
     List<Map<String,dynamic>> att = [];
-    final response = await apiRequest("jilariapi.php", {"action":"getMaterialSummary","usermobile": mobile,"emp":emp});
+    final response = await apiRequest("jilariapi.php", {"action":"getMaterialSummary","usermobile": mobile,"emp":emp,"date":date});
     print("response= ${response.body.trim()}");
     if(response.body.trim().isNotEmpty){
       var data = jsonDecode(response.body.trim());
@@ -829,10 +830,11 @@ class apiServices{
   }
 
   //Fetch material summary
-  Future<List<Map<String,dynamic>>>getBillerSummary(String mobile)async{
+  Future<List<Map<String,dynamic>>>getBillerSummary(String mobile,DateTime Date)async{
     print("Executing get biller summary data method");
+    String date = DateFormat('yyyy-MM-dd').format(Date);
     List<Map<String,dynamic>> att = [];
-    final response = await apiRequest("jilariapi.php", {"action":"getBillerSummary","usermobile": mobile,"emp":emp});
+    final response = await apiRequest("jilariapi.php", {"action":"getBillerSummary","usermobile": mobile,"emp":emp,"date":date});
     print("response= ${response.body.trim()}");
     if(response.body.trim().isNotEmpty){
       var data = jsonDecode(response.body.trim());
@@ -845,10 +847,11 @@ class apiServices{
   }
 
   //Fetch cash summary
-  Future<List<Map<String,dynamic>>>getCashSummary(String mobile)async{
+  Future<List<Map<String,dynamic>>>getCashSummary(String mobile,DateTime Date)async{
     print("Executing get biller summary data method");
+    String date = DateFormat('yyyy-MM-dd').format(Date);
     List<Map<String,dynamic>> att = [];
-    final response = await apiRequest("jilariapi.php", {"action":"getCashSummary","usermobile": mobile,"emp":emp});
+    final response = await apiRequest("jilariapi.php", {"action":"getCashSummary","usermobile": mobile,"emp":emp,"date":date});
     print("response= ${response.body.trim()}");
     if(response.body.trim().isNotEmpty){
       var data = jsonDecode(response.body.trim());

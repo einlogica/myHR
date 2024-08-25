@@ -1,6 +1,7 @@
 import 'package:einlogica_hr/Models/locationModel.dart';
 import 'package:einlogica_hr/services/apiServices.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../Widgets/loadingWidget.dart';
 import '../../style/colors.dart';
 
@@ -30,6 +31,7 @@ class _collectionSumaryPageState extends State<collectionSumaryPage> {
   List<Map<String, dynamic>> billerData = [];
   List<Map<String, dynamic>> cashData = [];
   bool _loading=true;
+  DateTime? _selected=DateTime.now();
 
   @override
   void initState() {
@@ -41,9 +43,9 @@ class _collectionSumaryPageState extends State<collectionSumaryPage> {
 
   Future fetchData()async{
 
-    materialData = await apiServices().getMaterialSummary(widget.mobile);
-    billerData = await apiServices().getBillerSummary(widget.mobile);
-    cashData = await apiServices().getCashSummary(widget.mobile);
+    materialData = await apiServices().getMaterialSummary(widget.mobile,_selected!);
+    billerData = await apiServices().getBillerSummary(widget.mobile,_selected!);
+    cashData = await apiServices().getCashSummary(widget.mobile,_selected!);
     print(materialData);
     print(billerData);
     setState(() {
@@ -100,8 +102,35 @@ class _collectionSumaryPageState extends State<collectionSumaryPage> {
                               ),
                             ),
                             const Text("Collection Summary",style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),),
-                            const SizedBox(
-                              width: 60,
+                            InkWell(
+                              onTap: ()async{
+                                setState(() {
+                                  _loading=true;
+                                });
+
+                                _selected = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(), //get today's date
+                                    firstDate:DateTime(2022), //DateTime.now() - not to allow to choose before today.
+                                    lastDate: DateTime(2030)
+                                );
+                                // print(_selected);
+                                if(_selected!=null){
+                                  await fetchData();
+                                  // print(DateFormat('yyyy-MM-dd').format(_selected!));
+                                }
+                                else{
+                                  setState(() {
+                                    _loading=false;
+                                  });
+                                }
+
+                              },
+                              child: const SizedBox(
+                                width: 60,
+                                height: 40,
+                                child: Icon(Icons.calendar_month,color: Colors.white,),
+                              ),
                             )
                           ],
                         ),
@@ -111,11 +140,11 @@ class _collectionSumaryPageState extends State<collectionSumaryPage> {
                   ),
                 ),
                 Expanded(
-                  child: SingleChildScrollView(
+                  child: (materialData.isEmpty && billerData.isEmpty && cashData.isEmpty)?const Center(child: Text("Nothing to Display"),):SingleChildScrollView(
                     child: Column(
                       children: [
                         materialData.isEmpty?const SizedBox():const SizedBox(height: 20,),
-                        materialData.isEmpty?const SizedBox():const Text("Today's Material Collection"),
+                        materialData.isEmpty?const SizedBox():const Text("Material Collection"),
                         materialData.isEmpty?const SizedBox():const SizedBox(height: 10,),
                         materialData.isEmpty?const SizedBox():SizedBox(
                           // height: expenseData.length*50,
@@ -149,7 +178,7 @@ class _collectionSumaryPageState extends State<collectionSumaryPage> {
                           ),
                         ),
                         billerData.isEmpty?const SizedBox():const SizedBox(height: 40,),
-                        billerData.isEmpty?const SizedBox():const Text("Today's Site Visits"),
+                        billerData.isEmpty?const SizedBox():const Text("Site Visits"),
                         billerData.isEmpty?const SizedBox():const SizedBox(height: 10,),
                         billerData.isEmpty?const SizedBox():Align(
                           alignment: Alignment.centerLeft,
@@ -180,7 +209,7 @@ class _collectionSumaryPageState extends State<collectionSumaryPage> {
                           ),
                         ),
                         cashData.isEmpty?const SizedBox():const SizedBox(height: 40,),
-                        cashData.isEmpty?const SizedBox():const Text("Today's Cash Collection"),
+                        cashData.isEmpty?const SizedBox():const Text("Cash Collection"),
                         cashData.isEmpty?const SizedBox():const SizedBox(height: 10,),
                         cashData.isEmpty?const SizedBox():Align(
                           alignment: Alignment.centerLeft,

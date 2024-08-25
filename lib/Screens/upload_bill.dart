@@ -511,14 +511,21 @@ class _upload_billState extends State<upload_bill> {
 
                                         bool validate = validateInputs();
 
-                                        if(!validate){
-                                          return;
-                                        }
-
                                         String location = dropdownsite;
                                         if(dropdownsite=="Other"){
                                           location=_siteCtrl.text;
                                         }
+
+                                        if(location=="Select"){
+                                          validate=false;
+                                        }
+
+                                        if(!validate){
+                                          showMessage("Invaid Inputs");
+                                          return;
+                                        }
+
+
 
                                         String status="";
                                         double amt=0;
@@ -762,12 +769,10 @@ class _upload_billState extends State<upload_bill> {
     // print(dropdownvalue);
 
     if(dropdownsite=='Other' && _siteCtrl.text==""){
-      showMessage("Invalid Inputs");
       return false;
     }
     if(dropdownvalue=='Vehicle'){
       if(_siteCtrl.text=="" || _kmCtrl.text=="" || dateController.text=="" || _amountCtrl.text==""){
-        showMessage("Invalid Inputs");
         return false;
       }
       else{
@@ -785,8 +790,6 @@ class _upload_billState extends State<upload_bill> {
     }
     else if(dropdownvalue=='Purchase'){
       if(_amountCtrl.text=="" || dateController.text=="" || (selectedBiller.name=="" && _shopNameController.text=="")){
-        // print(selectedBiller.name);
-        showMessage("Invalid Inputs");
         return false;
       }
       else{
@@ -794,7 +797,6 @@ class _upload_billState extends State<upload_bill> {
       }
     }
     else{
-      showMessage("Invalid Inputs");
       return false;
     }
     // return false;
