@@ -68,7 +68,7 @@ class _billPageState extends State<billPage> {
     userExpenseList = await apiServices().getUserExpenses(widget.mobile,_sel!.month.toString(),_sel.year.toString(),"EMP");
     cleared=0;pending=0;rejected=0;advance=0;salary=0;
     double bal = await apiServices().getPreExpenses(widget.mobile,_sel.month.toString(),_sel.year.toString(),"EMP");
-    // print("Balance = $bal");
+    print("Balance = $bal");
     for (var d in userExpenseList){
       // if(d.Status=="Approved" && d.Type!='Advance' && d.Type!='Salary Advance'){
       //   cleared=cleared+double.parse(d.Amount);
@@ -547,6 +547,7 @@ class _billPageState extends State<billPage> {
 
   Widget expenseCard(){
     userExpenseModel item=userItem;
+    // print(item.Type);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -609,7 +610,7 @@ class _billPageState extends State<billPage> {
                           children: [
                           billText("Type", item.Type),
                           item.Item==""?const SizedBox():billText("Specify", item.Item),
-                          item.Site==""?const SizedBox():billText("Location", item.Site),
+                          item.Site==""?const SizedBox():billText(item.Type=="Advance" || item.Type=="Salary Advance"?"Via":"Location", item.Site),
                           item.Type=="Purchase"?Column(
                             children: [
                               item.ShopName==""?const SizedBox():billText("Shop", item.ShopName),
@@ -617,7 +618,7 @@ class _billPageState extends State<billPage> {
                               item.ShopDist==""?const SizedBox():billText("GST", item.ShopGst),
                               item.ShopPhone==""?const SizedBox():billText("Phone", item.ShopPhone),
                             ],
-                          ):billText("Description", item.Site),
+                          ):SizedBox(),
                           // item.FromLoc==""?Container():SizedBox(height: 5,),
                           item.LabourName==""?const SizedBox():billText("Labour Name", item.LabourName),
                           item.Duration==""?const SizedBox():billText("Duration", item.Duration),
@@ -654,7 +655,7 @@ class _billPageState extends State<billPage> {
                     // mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      item.Status=="Applied" || widget.HLP=='Admin'?InkWell(
+                      (item.Status=="Applied" || widget.HLP=='Admin') && item.Type!="Salary Advance"?InkWell(
                         onTap:(){
                           // print(widget.HLP);
                           setState(() {
@@ -679,50 +680,6 @@ class _billPageState extends State<billPage> {
                           child: const Icon(Icons.delete_outline,color: Colors.white,),
                         ),
                       ):const SizedBox(),
-                      // SizedBox(height: 20,),
-                      // SizedBox(
-                      //   width:100,
-                      //   height: 40,
-                      //   // color: Colors.green,
-                      //   child: item.Filename.length>10?Container(
-                      //     width: 50,
-                      //     height: 50,
-                      //     decoration: BoxDecoration(
-                      //         borderRadius: BorderRadius.circular(10),
-                      //         color: AppColors.buttonColorDark,
-                      //         boxShadow: const [BoxShadow(
-                      //           color: Colors.black26,
-                      //           blurRadius: 0.2,
-                      //           spreadRadius: 0.2,
-                      //           offset: Offset(0.0, 4.0,),
-                      //         ),
-                      //         ]
-                      //     ),
-                      //     child: InkWell(
-                      //       onTap: ()async{
-                      //         setState(() {
-                      //           refresh=true;
-                      //         });
-                      //
-                      //         newImage=await apiServices().getBill(item.Filename,"Bill");
-                      //
-                      //         setState(() {
-                      //           refresh=false;
-                      //           imageDownloaded=true;
-                      //         });
-                      //
-                      //       },
-                      //       child: const SizedBox(
-                      //         width: 40,
-                      //         height: 80,
-                      //         child: Icon(Icons.receipt_long,color: Colors.white,),
-                      //       ),
-                      //     ),
-                      //   ):const SizedBox(
-                      //     width: 40,
-                      //     height: 80,
-                      //   ),
-                      // ),
                       InkWell(
                         onTap:(){
                           setState(() {

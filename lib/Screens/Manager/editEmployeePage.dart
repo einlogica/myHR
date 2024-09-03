@@ -39,9 +39,9 @@ class _editEmployeePageState extends State<editEmployeePage> {
   bool showBasic = false;
   bool showPersonal = false;
   bool showSalary = false;
-  bool showAdvance = false;
+  // bool showAdvance = false;
 
-  advanceModel advanceData = advanceModel(mobile: "", name: "", amount: "", date: "", emi: "", startdate: "", balance: "", status: "");
+  // advanceModel advanceData = advanceModel(mobile: "", name: "", amount: "", date: "", emi: "", startdate: "", balance: "", status: "");
   userModel currentUser = userModel(Mobile: "", Name: "", EmployeeID: "", Employer: "",Department: "", Position: "", Permission: "", Manager: "", ManagerID: "", DOJ: "", LeaveCount: 0, Status: "", ImageFile: "");
   payRollModel paySlip = payRollModel(Mobile: "", Name: "",Month: 0,Year: 0, Days: 0, WorkingDays: 0, LeaveDays: 0, LOP: 0, PresentDays: 0,TotalLOP: 0, Basic: 0, Allowance: 0, HRA: 0, TA: 0, DA: 0, Incentive: 0, GrossIncome: 0, PF: 0, ESIC: 0, ProTax: 0, Advance: 0, GrossDeduction: 0, NetPay: 0);
   personalInfoModel personalInfo = personalInfoModel(ID: 0, Name: "", Mobile: "", Sex: "", DOB: "", AddL1: "", AddL2: "", AddL3: "", Zip: "", BloodGroup: "", EmContactName: "", EmContactNum: "", BankName: "", AccNum: "",UAN: "",PAN: "",ESICNo: "");
@@ -88,9 +88,9 @@ class _editEmployeePageState extends State<editEmployeePage> {
   final TextEditingController _esicCtrl = TextEditingController();
   final TextEditingController _proTaxCtrl = TextEditingController();
 
-  final TextEditingController _amountCtrl = TextEditingController();
-  final TextEditingController _emiCtrl = TextEditingController();
-  final TextEditingController _startdateCtrl = TextEditingController();
+  // final TextEditingController _amountCtrl = TextEditingController();
+  // final TextEditingController _emiCtrl = TextEditingController();
+  // final TextEditingController _startdateCtrl = TextEditingController();
 
 
   List<userModel> managerList =[];
@@ -121,9 +121,9 @@ class _editEmployeePageState extends State<editEmployeePage> {
     _pfCtrl.dispose();
     _esicCtrl.dispose();
     _proTaxCtrl.dispose();
-    _amountCtrl.dispose();
-    _emiCtrl.dispose();
-    _startdateCtrl.dispose();
+    // _amountCtrl.dispose();
+    // _emiCtrl.dispose();
+    // _startdateCtrl.dispose();
 
     dobCtrl.dispose();
     sexCtrl.dispose();
@@ -217,15 +217,15 @@ class _editEmployeePageState extends State<editEmployeePage> {
   }
 
 
-  fetchAdvance()async{
-    // if(advanceData.name==""){
-    //   advanceData = await apiServices().getAdvanceDetails(widget.User.Mobile);
-    // }
-    advanceData = await apiServices().getAdvanceDetails(widget.User.Mobile);
-    setState(() {
-
-    });
-  }
+  // fetchAdvance()async{
+  //   // if(advanceData.name==""){
+  //   //   advanceData = await apiServices().getAdvanceDetails(widget.User.Mobile);
+  //   // }
+  //   advanceData = await apiServices().getAdvanceDetails(widget.User.Mobile);
+  //   setState(() {
+  //
+  //   });
+  // }
 
   setDefault(){
     // print("Setting all defaults");
@@ -274,9 +274,9 @@ class _editEmployeePageState extends State<editEmployeePage> {
     _esicCtrl.text=paySlip.ESIC.toString();
     _proTaxCtrl.text=paySlip.ProTax.toString();
 
-    _amountCtrl.clear();
-    _emiCtrl.clear();
-    _startdateCtrl.clear();
+    // _amountCtrl.clear();
+    // _emiCtrl.clear();
+    // _startdateCtrl.clear();
   }
 
   updateDropDown(String title,String value){
@@ -411,7 +411,7 @@ class _editEmployeePageState extends State<editEmployeePage> {
                                     showBasic=true;
                                     showPersonal=false;
                                     showSalary=false;
-                                    showAdvance=false;
+                                    // showAdvance=false;
                                   });
 
 
@@ -525,7 +525,7 @@ class _editEmployeePageState extends State<editEmployeePage> {
                                     showBasic=false;
                                     showPersonal=true;
                                     showSalary=false;
-                                    showAdvance=false;
+                                    // showAdvance=false;
                                   });
 
 
@@ -646,7 +646,7 @@ class _editEmployeePageState extends State<editEmployeePage> {
                                     showBasic=false;
                                     showPersonal=false;
                                     showSalary=true;
-                                    showAdvance=false;
+                                    // showAdvance=false;
                                   });
 
 
@@ -718,114 +718,114 @@ class _editEmployeePageState extends State<editEmployeePage> {
                           ),
                         ):const SizedBox(),
 
-                        const SizedBox(height: 20,),
-                        Container(
-                          width: w,
-                          height: 40,
-                          color: AppColors.appBarColor,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(width: 80,),
-                              const Text("Salary Advance",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                              showAdvance?InkWell(
-                                onTap: (){
-                                  setState(() {
-                                    basicEdit=false;
-                                    salaryEdit=false;
-                                    advanceEdit=true;
-                                    personalEdit=false;
-                                  });
-                                },
-                                child: const SizedBox(
-                                  width: 80,
-                                  height: 40,
-                                  child: Icon(Icons.add,color: AppColors.buttonColorDark,size: 20,),
-                                ),
-                              ):InkWell(
-                                onTap: ()async{
-
-                                  setState((){
-                                    progressIndicator=true;
-                                  });
-
-                                  await fetchAdvance();
-                                  await setDefault();
-
-                                  setState((){
-                                    progressIndicator=false;
-                                    showBasic=false;
-                                    showPersonal=false;
-                                    showSalary=false;
-                                    showAdvance=true;
-                                  });
-
-
-                                },
-                                child: const SizedBox(
-                                  width: 80,
-                                  height: 40,
-                                  child: Icon(Icons.arrow_drop_down_circle_outlined,color: AppColors.buttonColorDark,size: 20,),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        showAdvance?SizedBox(
-                          child: Column(
-                            children: [
-                              buildText("Advance", advanceData.amount.toString()),
-                              buildText("EMI", advanceData.emi.toString()),
-                              buildText("Start Date", advanceData.startdate.toString()),
-                              advanceEdit?FieldArea(title: "Advance",ctrl: _amountCtrl,type: TextInputType.number,len:6):const SizedBox(),
-                              advanceEdit?FieldArea(title: "EMI",ctrl: _emiCtrl,type: TextInputType.number,len:6):const SizedBox(),
-                              advanceEdit?FieldAreaWithCalendar(title: "Start Date", ctrl: _startdateCtrl, type: TextInputType.datetime,days: 60,):const SizedBox(),
-
-                              const SizedBox(height: 20,),
-                              advanceEdit?SizedBox(
-                                width: w,
-                                // height: 40,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Container(
-                                      width:w/2-5,
-                                      height: 60,
-                                      color: Colors.blue.shade100,
-                                      child: TextButton(onPressed: ()async{
-                                        setState(() {
-                                          progressIndicator=true;
-                                        });
-                                        String status = await apiServices().addAdvance(widget.User.Name, widget.User.Mobile, _amountCtrl.text, _emiCtrl.text, _startdateCtrl.text);
-                                        // print(status);
-                                        showMessage(status);
-
-                                        await fetchAdvance();
-                                        await setDefault();
-                                        setState(() {
-                                          progressIndicator=false;
-                                        });
-                                      }, child: const Text("Save")),
-                                    ),
-
-                                    Container(
-                                      width: w/2-5,
-                                      height: 60,
-                                      color: Colors.blue.shade100,
-                                      child: TextButton(onPressed: (){
-                                        setDefault();
-                                        setState(() {
-                                          advanceEdit=false;
-                                        });
-                                      }, child: const Text("Cancel")),
-                                    ),
-
-                                  ],
-                                ),
-                              ):Container(),
-                            ],
-                          ),
-                        ):const SizedBox(),
+                        // const SizedBox(height: 20,),
+                        // Container(
+                        //   width: w,
+                        //   height: 40,
+                        //   color: AppColors.appBarColor,
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       Container(width: 80,),
+                        //       const Text("Salary Advance",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                        //       showAdvance?InkWell(
+                        //         onTap: (){
+                        //           setState(() {
+                        //             basicEdit=false;
+                        //             salaryEdit=false;
+                        //             advanceEdit=true;
+                        //             personalEdit=false;
+                        //           });
+                        //         },
+                        //         child: const SizedBox(
+                        //           width: 80,
+                        //           height: 40,
+                        //           child: Icon(Icons.add,color: AppColors.buttonColorDark,size: 20,),
+                        //         ),
+                        //       ):InkWell(
+                        //         onTap: ()async{
+                        //
+                        //           setState((){
+                        //             progressIndicator=true;
+                        //           });
+                        //
+                        //           await fetchAdvance();
+                        //           await setDefault();
+                        //
+                        //           setState((){
+                        //             progressIndicator=false;
+                        //             showBasic=false;
+                        //             showPersonal=false;
+                        //             showSalary=false;
+                        //             showAdvance=true;
+                        //           });
+                        //
+                        //
+                        //         },
+                        //         child: const SizedBox(
+                        //           width: 80,
+                        //           height: 40,
+                        //           child: Icon(Icons.arrow_drop_down_circle_outlined,color: AppColors.buttonColorDark,size: 20,),
+                        //         ),
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
+                        // showAdvance?SizedBox(
+                        //   child: Column(
+                        //     children: [
+                        //       buildText("Advance", advanceData.amount.toString()),
+                        //       buildText("EMI", advanceData.emi.toString()),
+                        //       buildText("Start Date", advanceData.startdate.toString()),
+                        //       advanceEdit?FieldArea(title: "Advance",ctrl: _amountCtrl,type: TextInputType.number,len:6):const SizedBox(),
+                        //       advanceEdit?FieldArea(title: "EMI",ctrl: _emiCtrl,type: TextInputType.number,len:6):const SizedBox(),
+                        //       advanceEdit?FieldAreaWithCalendar(title: "Start Date", ctrl: _startdateCtrl, type: TextInputType.datetime,days: 60,):const SizedBox(),
+                        //
+                        //       const SizedBox(height: 20,),
+                        //       advanceEdit?SizedBox(
+                        //         width: w,
+                        //         // height: 40,
+                        //         child: Row(
+                        //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        //           children: [
+                        //             Container(
+                        //               width:w/2-5,
+                        //               height: 60,
+                        //               color: Colors.blue.shade100,
+                        //               child: TextButton(onPressed: ()async{
+                        //                 setState(() {
+                        //                   progressIndicator=true;
+                        //                 });
+                        //                 String status = await apiServices().addAdvance(widget.User.Name, widget.User.Mobile, _amountCtrl.text, _emiCtrl.text, _startdateCtrl.text);
+                        //                 // print(status);
+                        //                 showMessage(status);
+                        //
+                        //                 await fetchAdvance();
+                        //                 await setDefault();
+                        //                 setState(() {
+                        //                   progressIndicator=false;
+                        //                 });
+                        //               }, child: const Text("Save")),
+                        //             ),
+                        //
+                        //             Container(
+                        //               width: w/2-5,
+                        //               height: 60,
+                        //               color: Colors.blue.shade100,
+                        //               child: TextButton(onPressed: (){
+                        //                 setDefault();
+                        //                 setState(() {
+                        //                   advanceEdit=false;
+                        //                 });
+                        //               }, child: const Text("Cancel")),
+                        //             ),
+                        //
+                        //           ],
+                        //         ),
+                        //       ):Container(),
+                        //     ],
+                        //   ),
+                        // ):const SizedBox(),
 
                         const SizedBox(height: 40,),
                       ],

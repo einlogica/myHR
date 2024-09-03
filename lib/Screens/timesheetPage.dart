@@ -328,7 +328,9 @@ class _timesheetPageState extends State<timesheetPage> {
                                                 filteredactList[index].cust!=""?Text("Customer: ${filteredactList[index].cust}",style: const TextStyle(color: Colors.black,fontSize: 14),):const SizedBox(),
                                                 filteredactList[index].site!=""?Text("Location: ${filteredactList[index].site}",style: const TextStyle(color: Colors.black,fontSize: 14),):const SizedBox(),
 
-                                                filteredactList[index].drive==true?Text("${filteredactList[index].sKM} to ${filteredactList[index].eKM} KM",style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 14),):const SizedBox(),
+                                                // filteredactList[index].drive==true?Text("${filteredactList[index].sKM} to ${filteredactList[index].eKM} KM",style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 14),):const SizedBox(),
+                                                filteredactList[index].sKM!=0?Text("Start: ${filteredactList[index].sKM}KM",style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 14),):const SizedBox(),
+                                                filteredactList[index].eKM!=0?Text("End: ${filteredactList[index].eKM} KM",style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 14),):const SizedBox(),
                                                 filteredactList[index].remarks!=""?Text("Remarks: ${filteredactList[index].remarks}",style: const TextStyle(color: Colors.black,fontSize: 12),):const SizedBox(),
                                                 // Row(
                                                 //   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -529,7 +531,7 @@ class _timesheetPageState extends State<timesheetPage> {
                                   SizedBox(
                                     width: w*.2,
                                     // color: Colors.green,
-                                    child: const Text("Drive:",style: TextStyle(fontWeight: FontWeight.bold),),
+                                    child: const Text("Track KM:",style: TextStyle(fontWeight: FontWeight.bold),),
                                   ),
                                   SizedBox(
                                     width: w*.6,
@@ -554,7 +556,7 @@ class _timesheetPageState extends State<timesheetPage> {
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 20,),
+                            const SizedBox(height: 10,),
                             _drive?FieldArea(title: "Start KM:", ctrl: _startCtrl, type: TextInputType.number, len: 10):SizedBox(),
                             _drive?FieldArea(title: "End KM:", ctrl: _endCtrl, type: TextInputType.number, len: 10):SizedBox(),
                       

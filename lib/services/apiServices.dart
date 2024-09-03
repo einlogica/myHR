@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:einlogica_hr/Models/collectionModel.dart';
 import 'package:einlogica_hr/Models/employerModel.dart';
+import 'package:einlogica_hr/Models/paymentModel.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -41,8 +42,9 @@ class apiServices{
 
   //test
   // var url = "https://testingcontainerapp--5zu536l.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
+  // var url = "https://testingcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
 
-  var appVersion ="V1.0.5+11";
+  var appVersion ="V1.0.6+12";
   // var emp = "";
 
 //================================================================================================================================================= USERS
@@ -60,7 +62,7 @@ class apiServices{
     var data;
 
     final response = await apiRequest("login.php", {"usermobile": mobile,"userpass": password,"app": appVersion});
-    // print(response.body);
+    print(response.body);
     if (response.statusCode == 200) {
       status = response.body.trim();
       data = jsonDecode(response.body);
@@ -818,7 +820,7 @@ class apiServices{
     String date = DateFormat('yyyy-MM-dd').format(Date);
     List<Map<String,dynamic>> att = [];
     final response = await apiRequest("jilariapi.php", {"action":"getMaterialSummary","usermobile": mobile,"emp":emp,"date":date});
-    print("response= ${response.body.trim()}");
+    // print("response= ${response.body.trim()}");
     if(response.body.trim().isNotEmpty){
       var data = jsonDecode(response.body.trim());
       for(var d in data){
@@ -835,7 +837,7 @@ class apiServices{
     String date = DateFormat('yyyy-MM-dd').format(Date);
     List<Map<String,dynamic>> att = [];
     final response = await apiRequest("jilariapi.php", {"action":"getBillerSummary","usermobile": mobile,"emp":emp,"date":date});
-    print("response= ${response.body.trim()}");
+    // print("response= ${response.body.trim()}");
     if(response.body.trim().isNotEmpty){
       var data = jsonDecode(response.body.trim());
       for(var d in data){
@@ -852,7 +854,7 @@ class apiServices{
     String date = DateFormat('yyyy-MM-dd').format(Date);
     List<Map<String,dynamic>> att = [];
     final response = await apiRequest("jilariapi.php", {"action":"getCashSummary","usermobile": mobile,"emp":emp,"date":date});
-    print("response= ${response.body.trim()}");
+    // print("response= ${response.body.trim()}");
     if(response.body.trim().isNotEmpty){
       var data = jsonDecode(response.body.trim());
       for(var d in data){
@@ -864,12 +866,12 @@ class apiServices{
   }
 
 
-  Future<String> uploadCollection(String usermobile,String username, String shopid,String shopname, String date, String dry,String cloth, String amt, String image, double lat, double long,String item)async{
+  Future<String> uploadCollection(String usermobile,String username, String shopid,String shopname,String veh, String date, String dry,String cloth, String amt, String image, double lat, double long,String item)async{
     print("Executing upload collection method");
     String status="";
-
-    final response = await apiRequest("jilariapi.php", {"action":"uploadCollection","usermobile":usermobile,"username":username,"shopid":shopid,"shopname":shopname,"date":date,"dry":dry==''?'0':dry,"cloth":cloth==''?'0':cloth,"amt":amt==''?'0':amt,"image":image,"emp":emp,"lat":lat.toString(),"long":long.toString(),"item":item});
-
+    print(shopname);
+    final response = await apiRequest("jilariapi.php", {"action":"uploadCollection","usermobile":usermobile,"username":username,"shopid":shopid,"shopname":shopname,"vehicle":veh,"date":date,"dry":dry==''?'0':dry,"cloth":cloth==''?'0':cloth,"amt":amt==''?'0':amt,"image":image,"emp":emp,"lat":lat.toString(),"long":long.toString(),"item":item});
+    print(response.body);
     if (response.statusCode == 200) {
       status = response.body.trim();
     }
@@ -890,7 +892,7 @@ class apiServices{
       var data = jsonDecode(response.body);
 
       for (var d in data){
-        collectionList.add(collectionModel(id: d['ID'], mobile: d['Mobile'], name: d['Name'], shopid: d['ShopID'], shopname: d['ShopName'],l1: d['AddressL1'],l2:d['AddressL2'],l3:d['AddressL3'],dist: d['District'],phone: d['Phone'],gst: d['GST'],div: d['Division'],type: d['Type'], date: d['Date'], time: d['Time'], item: d['Item'],dry: d['DryWeight'], dryPrice: d['DryPrice'], cloth: d['ClothWeight'], clothPrice: d['ClothPrice'],amt: d['Amount'],file: d['Filename'],lat: d['Lat'], long: d['Long'], tot: d['Total']));
+        collectionList.add(collectionModel(id: d['ID'], mobile: d['Mobile'], name: d['Name'], shopid: d['ShopID']??"", shopname: d['ShopName']??"",vehicle: d['Vehicle']??"",l1: d['AddressL1']??"",l2:d['AddressL2']??"",l3:d['AddressL3']??"",dist: d['District']??"",phone: d['Phone']??"",gst: d['GST']??"",div: d['Division']??"",type: d['Type']??"", date: d['Date'], time: d['Time'], item: d['Item'],dry: d['DryWeight']??"", dryPrice: d['DryPrice']??"", cloth: d['ClothWeight']??"", clothPrice: d['ClothPrice']??"",amt: d['Amount']??"",file: d['Filename']??"",lat: d['Lat'], long: d['Long'], tot: d['Total']??""));
       }
     }
 
@@ -1087,10 +1089,10 @@ class apiServices{
   }
 
   //Add advances to employye account
-  Future<String> addAdvance(String name,String mobile,String amount,String emi,String startdate)async{
+  Future<String> addAdvance(String account,String mobile,String amount,String emi,String startdate)async{
     print("Executing add advance details method");
     String status ="";
-    final response = await apiRequest("jilariapi.php",{"action":"addAdvance","username":name,"usermobile":mobile,"amount":amount,"emi":emi,"startdate":startdate,"emp":emp});
+    final response = await apiRequest("jilariapi.php",{"action":"addAdvance","account":account,"usermobile":mobile,"amount":amount,"emi":emi,"startdate":startdate,"emp":emp});
     if(response.statusCode==200){
       status = response.body.trim();
     }
@@ -1396,7 +1398,77 @@ class apiServices{
     return status;
   }
 
+  //========================================================================================================================== PAYMENT
 
+  Future<List<Map<String,dynamic>>> getSubscription(String mobile)async{
+    print("Executing get subscription metghod");
+    List<Map<String,dynamic>> subList =[];
+
+    final response = await apiRequest("jilariapi.php", {"action":"getSubscription","usermobile": mobile,"emp":emp});
+    // print("response= ${response.body.trim()}");
+    if(response.body.trim()!="Failed"){
+      var data = jsonDecode(response.body.trim());
+      for(var d in data){
+        subList.add({'Employer':d['Employer'],'Amount':int.parse(d['Amount']),'Expiry':d['Expiry']});
+      }
+    }
+    return subList;
+
+  }
+
+  Future<String> updatePayment(String mobile,int amount,int qty,String id,String order)async{
+    String status ="";
+    final response = await apiRequest("jilariapi.php", {"action":"updatePayment","usermobile": mobile,"emp":emp,"amount":amount.toString(),"qty":qty.toString(),"id":id,"order":order});
+    // print("response= ${response.body.trim()}");
+    if(response.body.trim()!="Failed"){
+      return "Success";
+    }
+    else{
+      return "Failed";
+    }
+  }
+
+  Future<String> getOrderid(String mobile,String amount)async{
+    print("Executing get order id method");
+
+    final response = await apiRequest("jilariapi.php", {"action":"getOrderid","usermobile": mobile,"emp":emp,"amount":amount});
+
+    if(response.body.trim()!="Failed"){
+      return response.body.trim();
+    }
+    else{
+      return "Failed";
+    }
+  }
+
+  Future<bool> validateSignature(String razorpay_signature,String razorpay_payment_id,String razorpay_order_id)async{
+    print("Executing get order id method");
+
+    final response = await apiRequest("jilariapi.php", {"action":"validateSignature","razorpay_signature": razorpay_signature,"razorpay_payment_id":razorpay_payment_id,"razorpay_order_id":razorpay_order_id});
+    if(response.body.trim()=="Signature is valid"){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  Future<List<paymentModel>> getPaymentList(String usermobile)async{
+
+    List<paymentModel> paymentList = [];
+
+    final response = await apiRequest("jilariapi.php", {"action":"getPaymentList","usermobile": usermobile,"emp":emp});
+    // print(response.body);
+    if(response.body.trim()!="Failed"){
+      var data = jsonDecode(response.body.trim());
+      for( var d in data){
+        paymentList.add(paymentModel(ID: d['ID'], Employer: d['Employer'], Amount: d['Amount'], Unit: d['Unit'], Total: d['Total'], FromDate: d['FromDate'], ToDate: d['ToDate'], TransactionID: d['TransactionID'], OrderID: d['OrderID'], Date: d['Date'], Time: d['Time']));
+      }
+    }
+
+    return paymentList;
+
+  }
 
 
   //========================================================================================================================== OTHER

@@ -467,6 +467,7 @@ class _downloadsPageState extends State<downloadsPage> {
         columns: const [
           DataColumn(label: Text('Name')),
           DataColumn(label: Text('Shop')),
+          DataColumn(label: Text('Method')),
           DataColumn(label: Text('Date')),
           DataColumn(label: Text('Time')),
           // DataColumn(label: Text('Rej Price')),
@@ -477,6 +478,7 @@ class _downloadsPageState extends State<downloadsPage> {
             cells: [
               DataCell(Text(model.name)),
               DataCell(Text(model.shopname)),
+              DataCell(Text(model.item)),
               DataCell(Text(model.date)),
               DataCell(Text(model.time)),
               // DataCell(Text(model.amt)),
@@ -602,7 +604,7 @@ class _downloadsPageState extends State<downloadsPage> {
           activityList.add(activityModel(id: d['ID'], mobile: d['Mobile'], name: d['Name'],type: d['Type'], site: d['Site'], drive: bool.parse(d['Drive']), sKM: int.parse(d['StartKM']), eKM: int.parse(d['EndKM']), lat: d['PosLat'], long: d['PosLong'], date: d['Date'], time: d['Time'], cust: d['Customer'],remarks: d['Remarks']));
         }
         else if (item=='Material' || item=='Cash'){
-          collectionList.add(collectionModel(id: d['ID'], mobile: d['Mobile'], name: d['Name'], shopid: d['ShopID'], shopname: d['ShopName'],l1: d['AddressL1'],l2:d['AddressL2'],l3:d['AddressL3'],dist: d['District'],phone: d['Phone'],gst: d['GST'],div: d['Division'],type: d['Type'], date: d['Date'],time: d['Time'], item: d['Item'],dry: d['DryWeight'],dryPrice: d['DryPrice'], cloth: d['ClothWeight'],clothPrice: d['ClothPrice'], amt: d['Amount'], file: d['Filename'],lat: d['Lat'],long: d['Long'],tot: d['Total']));
+          collectionList.add(collectionModel(id: d['ID'], mobile: d['Mobile'], name: d['Name'], shopid: d['ShopID'], shopname: d['ShopName'],vehicle: d['Vehicle'],l1: d['AddressL1'],l2:d['AddressL2'],l3:d['AddressL3'],dist: d['District'],phone: d['Phone'],gst: d['GST'],div: d['Division'],type: d['Type'], date: d['Date'],time: d['Time'], item: d['Item'],dry: d['DryWeight'],dryPrice: d['DryPrice'], cloth: d['ClothWeight'],clothPrice: d['ClothPrice'], amt: d['Amount'], file: d['Filename'],lat: d['Lat'],long: d['Long'],tot: d['Total']));
         }
         else if(item=='Locations'){
           billerList.add(billerModel(id: d['ShopID'], name: d['ShopName'], addressl1: d['AddressL1'], addressl2: d['AddressL2'], addressl3: d['AddressL3'], district: d['District'], mobile: d['Phone'], gst: d['GST'],division: d['Division'],type: d['Type'],createDate: d['CreateDate'],createTime: d['CreateTime'],createUser: d['CreateUser'],createMobile: d['CreateMobile']));
@@ -721,7 +723,6 @@ class _downloadsPageState extends State<downloadsPage> {
       rows.add(["Mobile","Name","Division","Type","BuildingName","AddressL1","AddressL2","AddressL3","District","Phone","GST","Date","DryWeight","DryPrice","ClothWeight","ClothPrice",'Amount(Rejected)','Total','FileName']);
 
       collectionList.forEach((element) async{
-        if(element.item=="Material"){
           List<dynamic> row = [];//List<dynamic>();
           row.add(element.mobile);
           row.add(element.name);
@@ -743,19 +744,17 @@ class _downloadsPageState extends State<downloadsPage> {
           row.add(element.tot);
           row.add(element.file);
           rows.add(row);
-        }
-
       });
     }
     else if(item=="Cash"){
-      rows.add(["Mobile","Name","Division","Type","BuildingName","AddressL1","AddressL2","AddressL3","District","Phone","GST","Date",'Amount','FileName']);
+      rows.add(["Mobile","Name","Division","Method","Type","BuildingName","AddressL1","AddressL2","AddressL3","District","Phone","GST","Date",'Amount','FileName']);
 
       collectionList.forEach((element) async{
-        if(element.item=="Cash"){
           List<dynamic> row = [];//List<dynamic>();
           row.add(element.mobile);
           row.add(element.name);
           row.add(element.div);
+          row.add(element.item);
           row.add(element.type);
           row.add(element.shopname);
           row.add(element.l1);
@@ -768,8 +767,6 @@ class _downloadsPageState extends State<downloadsPage> {
           row.add(element.tot);
           row.add(element.file);
           rows.add(row);
-        }
-
       });
     }
     else if(item=="Locations"){

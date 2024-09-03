@@ -56,6 +56,8 @@ class _collectMaterialState extends State<collectMaterial> {
   bool imgFromCamera=false;
   bool imageLoaded = false;
   late File? imageFile;
+  List<String>vehicleList=['Other'];
+  final TextEditingController _specifyCtrl = TextEditingController();
 
 
   var w = 0.00, h = 0.00, t = 0.00;
@@ -86,12 +88,13 @@ class _collectMaterialState extends State<collectMaterial> {
   // List<String> typeList = ["Select", "Bank","Flat", "Hospital", "Office", "Shop"];
   List<String> typeList = ["Select"];
   List<String> divList = ["Select"];
-  List<String> itemList = ["Material","Cash","UPI","GST"];
+  List<String> itemList = ["Material","Yard","Cash","UPI","GST"];
   List<String> districtList = ["Select"];
   String dropDownDiv = "Select";
   String dropDownType = "Select";
   String distDropDown = "Select";
   String itemDropDown = "Material";
+  String selectedVehicle="Other";
 
 
   String selectedDate ="";
@@ -102,6 +105,7 @@ class _collectMaterialState extends State<collectMaterial> {
     // TODO: implement dispose
     // _divisionCtrl.dispose();
     // _typeCtrl.dispose();
+    _specifyCtrl.dispose();
     _shopNameController.dispose();
     _L1Controller.dispose();
     _L2Controller.dispose();
@@ -129,6 +133,7 @@ class _collectMaterialState extends State<collectMaterial> {
 
       });
     });
+    fetchCollection(selectedDate);
     super.initState();
   }
 
@@ -139,8 +144,16 @@ class _collectMaterialState extends State<collectMaterial> {
     // print(divList);
     typeList.addAll(await apiServices().fetchSettingsList("Customer",widget.mobile));
     // print(typeList);
+    var response =await apiServices().fetchVehicle(widget.mobile);
+    // print(response);
+    if(response!="Failed" && response.isNotEmpty){
+      var data = jsonDecode(response);
+      for(var d in data){
+        vehicleList.add("${d['Type']}");
+      }
+    }
 
-    await fetchCollection(selectedDate);
+    // await fetchCollection(selectedDate);
     setState(() {
       _loading=false;
     });
@@ -152,6 +165,9 @@ class _collectMaterialState extends State<collectMaterial> {
     collectionList = await apiServices().getCollection(widget.mobile,widget.permission,date);
 
     filteredcollectionList.addAll(collectionList);
+    setState(() {
+      _loading=false;
+    });
 
   }
 
@@ -187,6 +203,10 @@ class _collectMaterialState extends State<collectMaterial> {
       _amountCtrl.clear();
       itemDropDown = selected;
     }
+    else if(title == "Vehicle"){
+      selectedVehicle=selected;
+      print(selectedVehicle);
+    }
     setState(() {});
   }
 
@@ -220,7 +240,7 @@ class _collectMaterialState extends State<collectMaterial> {
             child: Column(
               children: [
                 Container(
-                  height: 80 + t,
+                  height: 60 + t,
                   decoration: const BoxDecoration(
                       gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
@@ -235,7 +255,7 @@ class _collectMaterialState extends State<collectMaterial> {
                         height: t,
                       ),
                       SizedBox(
-                        height: 80,
+                        height: 60,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -307,599 +327,171 @@ class _collectMaterialState extends State<collectMaterial> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 5,),
-                _addData || imageDownloaded?SizedBox():FieldArea(title: "Search Name/Shop", ctrl: searchCtrl, type: TextInputType.text, len: 20),
-                const SizedBox(height: 5,),
+
+
                 Expanded(
-                  child: SizedBox(
-                    child: Stack(
+                  child: _addData?addShop():SizedBox(
+                    child: Column(
                       children: [
-
-                        filteredcollectionList.isEmpty?Center(child:Text("Nothing to display")):SizedBox(
-                          child: ListView.builder(
-                              padding: EdgeInsets.only(bottom: 80),
-                              itemCount: filteredcollectionList.length,
-                              itemBuilder: (context,int index){
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.3),
-                                          spreadRadius: 2,
-                                          blurRadius: 2,
-                                          offset: const Offset(0, 4),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Padding(
+                        const SizedBox(height: 5,),
+                        _addData || imageDownloaded?SizedBox():FieldArea(title: "Search Name/Shop", ctrl: searchCtrl, type: TextInputType.text, len: 20),
+                        const SizedBox(height: 5,),
+                        Expanded(
+                          child: SizedBox(
+                            child: filteredcollectionList.isEmpty?Center(child:Text("Nothing to display")):SizedBox(
+                              child: ListView.builder(
+                                  padding: EdgeInsets.only(bottom: 80),
+                                  itemCount: filteredcollectionList.length,
+                                  itemBuilder: (context,int index){
+                                    return Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: SizedBox(
-                                        width: w-20,
-                                        child: Row(
-                                          children: [
-                                            InkWell(
-                                              onTap:()async{
-                                                if(filteredcollectionList[index].file=="NONE"){
-                                                  return;
-                                                }
-                                                else{
-                                                  setState(() {
-                                                    _loading=true;
-                                                  });
-                                                  // print(collectionList[index].file);
-                                                  pickedImage = await apiServices().getBill(filteredcollectionList[index].file,"Collection");
-                                                  // print(pickedImage.toString());
-                                                  setState(() {
-                                                    _loading=false;
-                                                  });
-                                                  Navigator.push(context, MaterialPageRoute(builder: (context){
-                                                    return imageViewer(imagefile: pickedImage, mobile: widget.mobile,download: true,);
-                                                  }));
-
-                                                }
-                                              },
-                                              child: SizedBox(
-                                                width: 50,
-                                                height: 50,
-                                                child: Center(
-                                                  child: filteredcollectionList[index].file=="NONE"?SizedBox():Icon(Icons.image,color: Colors.green,),
-                                                ),
-                                              ),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(20),
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withOpacity(0.3),
+                                              spreadRadius: 2,
+                                              blurRadius: 2,
+                                              offset: const Offset(0, 4),
                                             ),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                // SizedBox(
-                                                //   width: w-150,
-                                                //   child: Row(
-                                                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                //     children: [
-                                                //       Text("${collectionList[index].shopname}",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),),
-                                                //       Text("${collectionList[index].date}",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),),
-                                                //
-                                                //     ],
-                                                //   ),
-                                                // ),
-                                                SizedBox(
-                                                    width:w/2,
-                                                    child: SingleChildScrollView(
-                                                        scrollDirection:Axis.horizontal,
-                                                        child: Text("${filteredcollectionList[index].shopname}",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),))),
-                                                SizedBox(height: 10,),
-                                                SizedBox(
-                                                  width: w-150,
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Text("${filteredcollectionList[index].date}",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-                                                      Text("${filteredcollectionList[index].time}",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-
-                                                    ],
-                                                  ),
-                                                ),
-                                                Text("${filteredcollectionList[index].name}"),
-
-                                                SizedBox(height: 10,),
-                                                // Text("${collectionList[index].name}"),
-                                                filteredcollectionList[index].item=="Cash"?SizedBox():SizedBox(
-                                                  // width: w/2,
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Text("Dry : ${filteredcollectionList[index].dry} Kg"),
-                                                      Text("Cloth : ${filteredcollectionList[index].cloth} Kg"),
-
-                                                    ],
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: w-150,
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      filteredcollectionList[index].item=="Cash"?Text("CASH",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),):Text("Amount : ${filteredcollectionList[index].amt} /-"),
-                                                      Text("Total : ${filteredcollectionList[index].tot} /-",style: TextStyle(fontWeight: FontWeight.bold),),
-
-                                                    ],
-                                                  ),
-                                                ),
-
-
-                                              ],
-                                            ),
-                                            Spacer(),
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          ],
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SizedBox(
+                                            width: w-20,
+                                            child: Row(
                                               children: [
                                                 InkWell(
-                                                  onTap: (){
-                                                    showMessage("Long press to delete");
+                                                  onTap:()async{
+                                                    if(filteredcollectionList[index].file=="NONE"){
+                                                      return;
+                                                    }
+                                                    else{
+                                                      setState(() {
+                                                        _loading=true;
+                                                      });
+                                                      // print(collectionList[index].file);
+                                                      pickedImage = await apiServices().getBill(filteredcollectionList[index].file,"Collection");
+                                                      // print(pickedImage.toString());
+                                                      setState(() {
+                                                        _loading=false;
+                                                      });
+                                                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                                                        return imageViewer(imagefile: pickedImage, mobile: widget.mobile,download: true,);
+                                                      }));
+                    
+                                                    }
                                                   },
-                                                  onLongPress: ()async{
-                                                    setState(() {
-                                                      _loading=true;
-                                                    });
-                                                    String status = await apiServices().deleteCollection(filteredcollectionList[index].id,widget.mobile);
-                                                    showMessage(status);
-                                                    await fetchCollection(selectedDate);
-                                                    setState(() {
-                                                      _loading=false;
-                                                    });
-                                                  },
-                                                  child: const SizedBox(
-                                                    width: 40,
+                                                  child: SizedBox(
+                                                    width: 50,
                                                     height: 50,
                                                     child: Center(
-                                                      child: Icon(Icons.delete),
+                                                      child: filteredcollectionList[index].file=="NONE"?SizedBox():Icon(Icons.image,color: Colors.green,),
                                                     ),
                                                   ),
                                                 ),
-                                                SizedBox(height: 20,),
-
-                                                InkWell(
-                                                  onTap: ()async{
-                                                    await locationServices().openMap(double.parse(filteredcollectionList[index].lat), double.parse(filteredcollectionList[index].long));
-                                                  },
-                                                  child: Icon(Icons.location_on,color: Colors.green,),
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                        width:w/2,
+                                                        child: SingleChildScrollView(
+                                                            scrollDirection:Axis.horizontal,
+                                                            child: Text("${filteredcollectionList[index].shopname}",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),))),
+                                                    SizedBox(height: 10,),
+                                                    SizedBox(
+                                                      width: w-150,
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          Text("${filteredcollectionList[index].date}",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                                                          Text("${filteredcollectionList[index].time}",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                    
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Text(filteredcollectionList[index].name),
+                    
+                                                    const SizedBox(height: 10,),
+                                                    // Text("${collectionList[index].name}"),
+                                                    filteredcollectionList[index].item=="Cash"?SizedBox():SizedBox(
+                                                      // width: w/2,
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          filteredcollectionList[index].vehicle=="NA"?SizedBox():Text("Vehicle : ${filteredcollectionList[index].vehicle} Kg"),
+                                                          filteredcollectionList[index].dry=="0"?SizedBox():Text("Dry : ${filteredcollectionList[index].dry} Kg"),
+                                                          filteredcollectionList[index].cloth=="0"?SizedBox():Text("Cloth : ${filteredcollectionList[index].cloth} Kg"),
+                    
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: w-150,
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          filteredcollectionList[index].item=="Cash"?Text("CASH",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),):filteredcollectionList[index].amt=="0"?SizedBox():Text("Amount : ${filteredcollectionList[index].amt} /-"),
+                                                          filteredcollectionList[index].tot=="0"?SizedBox():Text("Total : ${filteredcollectionList[index].tot} /-",style: TextStyle(fontWeight: FontWeight.bold),),
+                    
+                                                        ],
+                                                      ),
+                                                    ),
+                    
+                    
+                                                  ],
+                                                ),
+                                                Spacer(),
+                                                Column(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: (){
+                                                        showMessage("Long press to delete");
+                                                      },
+                                                      onLongPress: ()async{
+                                                        setState(() {
+                                                          _loading=true;
+                                                        });
+                                                        String status = await apiServices().deleteCollection(filteredcollectionList[index].id,widget.mobile);
+                                                        showMessage(status);
+                                                        await fetchCollection(selectedDate);
+                                                        setState(() {
+                                                          _loading=false;
+                                                        });
+                                                      },
+                                                      child: const SizedBox(
+                                                        width: 40,
+                                                        height: 50,
+                                                        child: Center(
+                                                          child: Icon(Icons.delete),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 20,),
+                    
+                                                    InkWell(
+                                                      onTap: ()async{
+                                                        await locationServices().openMap(double.parse(filteredcollectionList[index].lat), double.parse(filteredcollectionList[index].long));
+                                                      },
+                                                      child: Icon(Icons.location_on,color: Colors.green,),
+                                                    )
+                                                  ],
                                                 )
                                               ],
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ),
-                                );
-                              }),
-                        ),
-
-                        _addData
-                            ? Container(
-                          width: w,
-                          color: Colors.white,
-                          // height: h-100,
-                          child: SingleChildScrollView(
-
-                            child: Column(
-                              children: [
-                                // FieldArea(title: "Division", ctrl: _divisionCtrl, type: TextInputType.number, len: 3),
-                                FieldAreaWithDropDown(
-                                    title: "Division",
-                                    dropList: divList,
-                                    dropdownValue: dropDownDiv,
-                                    callback: dropDownCallback),
-                                FieldAreaWithDropDown(
-                                    title: "Type",
-                                    dropList: typeList,
-                                    dropdownValue: dropDownType,
-                                    callback: dropDownCallback),
-                                SizedBox(
-                                  width: w - 20,
-                                  height: 50,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      SizedBox(
-                                        width: w / 3,
-                                        // color: Colors.green,
-                                        child: const Text(
-                                          "Add new location:",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: w / 2,
-                                        // color: Colors.grey,
-                                        child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Checkbox(
-                                            value: addNewShop,
-                                            onChanged: (value) {
-                                              clearShop();
-                                              shopSelected = false;
-                                              addNewShop = !addNewShop;
-                                              setState(() {});
-                                            },
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                !addNewShop
-                                    ? Column(
-                                  children: [
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    SizedBox(
-                                      width: w - 50,
-                                      height: 60,
-                                      // color: Colors.grey,
-                                      child: SizedBox(
-                                          child:TypeAheadField(
-                                            suggestionsCallback: (pattern) async {
-                                              // Call a method to fetch shop name suggestions from the database
-                                              // print("AAA");
-                                              if(pattern.length>2){
-                                                shopSelected=false;
-                                                return await apiServices().getBiller(pattern,"NONE");
-                                              }
-                                              else{
-                                                return [];
-                                              }
-
-                                            },
-                                            builder: (context, controller, focusNode) {
-                                              return TextField(
-                                                  controller: controller,
-                                                  focusNode: focusNode,
-                                                  autofocus: false,
-                                                  decoration: const InputDecoration(
-                                                    border: OutlineInputBorder(),
-                                                    labelText: 'Search',
-                                                  )
-                                              );
-                                            },
-                                            itemBuilder: (context, suggestion) {
-                                              return ListTile(
-                                                title: Text("${suggestion.name}, Div: ${suggestion.division}"),
-                                              );
-                                            },
-                                            onSelected: (suggestion) {
-                                              // Handle the selection of a suggestion
-                                              selectedBiller=suggestion;
-                                              shopSelected=true;
-                                              _shopNameController.text = suggestion.name;
-                                              setState(() {
-
-                                              });
-                                            },
-                                          )
-
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    shopSelected
-                                        ? Container(
-                                        width: w - 50,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.black),
-                                          color: Colors.grey
-                                              .withOpacity(.2),
-                                        ),
-                                        child: Padding(
-                                          padding:
-                                          const EdgeInsets.all(
-                                              8.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment
-                                                .start,
-                                            children: [
-                                              Text(selectedBiller
-                                                  .name),
-                                              Text(selectedBiller
-                                                  .addressl1),
-                                              Text(selectedBiller
-                                                  .addressl2),
-                                              Text(selectedBiller
-                                                  .addressl3),
-                                              Text(selectedBiller
-                                                  .district),
-                                              Text(selectedBiller
-                                                  .mobile),
-                                              Text(
-                                                  selectedBiller.gst),
-                                              const SizedBox(
-                                                height: 5,
-                                              )
-                                            ],
-                                          ),
-                                        ))
-                                        : const SizedBox(),
-                                  ],
-                                )
-                                    : SizedBox(),
-
-                                addNewShop
-                                    ? Column(
-                                  children: [
-                                    FieldArea(
-                                        title: "Building/Shop Name",
-                                        ctrl: _shopNameController,
-                                        type: TextInputType.text,
-                                        len: 20),
-                                    FieldArea(
-                                        title: "Address L1",
-                                        ctrl: _L1Controller,
-                                        type: TextInputType.text,
-                                        len: 50),
-                                    FieldArea(
-                                        title: "Address L2",
-                                        ctrl: _L2Controller,
-                                        type: TextInputType.text,
-                                        len: 50),
-                                    FieldArea(
-                                        title: "Address L3",
-                                        ctrl: _L3Controller,
-                                        type: TextInputType.text,
-                                        len: 50),
-                                    FieldAreaWithDropDown(title: "District", dropList: districtList, dropdownValue: distDropDown, callback: dropDownCallback),
-                                    FieldArea(
-                                        title: "Phone",
-                                        ctrl: _phoneController,
-                                        type: TextInputType.text,
-                                        len: 15),
-                                    FieldArea(
-                                        title: "GST",
-                                        ctrl: _gstController,
-                                        type: TextInputType.text,
-                                        len: 20),
-                                  ],
-                                ):Column(
-                                  children: [
-                                    FieldAreaWithCalendar(title: "Date", ctrl: _dateController, type: TextInputType.datetime,days: 365,),
-                                    FieldAreaWithDropDown(title: "Item", dropList: itemList, dropdownValue: itemDropDown, callback: dropDownCallback),
-                                    itemDropDown!='Material'?const SizedBox():FieldArea(title: "Dry Weight (KG)", ctrl: _dryController, type: TextInputType.number, len: 8),
-                                    itemDropDown!='Material'?const SizedBox():FieldArea(title: "Cloth Weight (KG)", ctrl: _clothController, type: TextInputType.number, len: 8),
-                                    FieldArea(title: "Collected Amount", ctrl: _amountCtrl, type: TextInputType.number, len: 5),
-                                    SizedBox(height: 5,),
-                                    SizedBox(
-                                      width: w-20,
-                                      height: 50,
-                                      // color: Colors.grey,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          SizedBox(
-                                            width: w/4,
-                                            // color: Colors.green,
-                                            child: const Text("Uploads:",style: TextStyle(fontWeight: FontWeight.bold),),
-                                          ),
-                                          SizedBox(
-                                            width: w/2,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                ElevatedButton(
-                                                  style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
-                                                  onPressed: (){
-                                                    imgFromCamera=true;
-                                                    getImage();
-                                                  },
-                                                  child: const Icon(Icons.camera,color: Colors.white,),
-                                                ),
-                                                ElevatedButton(
-                                                  style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
-                                                  onPressed: (){
-                                                    imgFromCamera=false;
-                                                    getImage();
-                                                  },
-                                                  child: const Icon(Icons.image,color: Colors.white,),
-                                                ),
-                                              ],
-                                            ),
-
-                                          ),
-
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10,),
-                                    imageLoaded?SizedBox(
-                                      width: w,
-
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-
-                                          InkWell(
-                                            onTap:(){
-                                              // setState(() {
-                                              //   imageDownloaded=true;
-                                              // });
-                                              Navigator.push(context, MaterialPageRoute(builder: (context){
-                                                return imageViewer(imagefile: imageFile!.readAsBytesSync(), mobile: widget.mobile,download: false,);
-                                              }));
-                                            },
-                                            child: Container(
-                                              width: w/4,
-                                              height: w/4,
-                                              // decoration: BoxDecoration(
-                                              //   borderRadius: BorderRadius.circular(w/2),
-                                              //   border: Border.all(color: Colors.grey,width: 2),
-                                              //   color: Colors.white,
-                                              // ),
-
-                                              child: Image.file(File(imageFile!.path),fit: BoxFit.cover,),
-
                                             ),
                                           ),
-                                          Text("${(imageFile!.lengthSync()/1024).toStringAsFixed(0)} Kb"),
-                                          InkWell(
-                                            onTap: (){
-                                              setState(() {
-                                                imageLoaded=false;
-                                              });
-                                            },
-                                            child: const SizedBox(
-                                              width: 80,
-                                              height: 80,
-                                              child: Icon(Icons.delete),
-                                            ),
-                                          )
-                                        ],
+                                        )
                                       ),
-                                    ):const SizedBox(),
-                                  ],
-                                ),
-
-                                SizedBox(
-                                  height: 40,
-                                ),
-                                SizedBox(
-                                    width: w - 20,
-                                    height: 50,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        SizedBox(
-                                          width: w / 4,
-                                          height: 50,
-                                          child: ElevatedButton(
-                                            style: ButtonStyle(
-                                                backgroundColor:
-                                                WidgetStateProperty.all(
-                                                    AppColors
-                                                        .buttonColorDark)),
-                                            onPressed: () {
-                                              setState(() {
-                                                _addData=false;
-                                                clearCollection();
-                                                clearShop();
-                                              });
-                                            },
-                                            child: const Text(
-                                              "Back",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: w / 4,
-                                          height: 50,
-                                          child: ElevatedButton(
-                                            style: ButtonStyle(
-                                                backgroundColor:
-                                                WidgetStateProperty.all(
-                                                    AppColors
-                                                        .buttonColorDark)),
-                                            onPressed: () async{
-
-                                              //to add a new shop
-                                              if(addNewShop){
-                                                if(dropDownDiv!="Select" && dropDownType!="Select" && _shopNameController.text!="" && _L1Controller.text!="" && distDropDown!="Select"){
-
-                                                  setState(() {
-                                                    _loading=true;
-                                                  });
-                                                  selectedBiller=billerModel(id: "", name: _shopNameController.text, addressl1: _L1Controller.text, addressl2: _L2Controller.text, addressl3: _L3Controller.text, district: distDropDown, mobile: _phoneController.text, gst: _gstController.text, division: dropDownDiv, type: dropDownType,createDate: "",createTime: "",createUser: "",createMobile: "");
-                                                  var status = await apiServices().addBiller(selectedBiller,widget.name,widget.mobile);
-                                                  if(status=="Success"){
-                                                    setState(() {
-                                                      _loading=false;
-                                                      clearShop();
-                                                      clearCollection();
-                                                      addNewShop=false;
-                                                    });
-                                                    showMessage("Details has been added");
-                                                  }
-                                                }
-                                                else{
-                                                  showMessage("Invalid Inputs");
-                                                }
-                                              }
-                                              //to add collection data
-                                              else{
-
-                                                if(selectedBiller.name!="" && _dateController.text!=""){
-                                                  // if(imageLoaded && imageFile!.lengthSync()/1024>200){
-                                                  //   showMessage("Image size should not be greater that 200Kb");
-                                                  //   return;
-                                                  // }
-                                                  setState(() {
-                                                    _loading=true;
-                                                  });
-                                                  bool locPer = await locationServices().checkLocationServices();
-                                                  if(!locPer){
-                                                    setState(() {
-                                                      _loading=false;
-                                                    });
-                                                    showMessage("Location permission denied");
-                                                    return;
-                                                  }
-                                                  else{
-                                                    _position = await Geolocator.getCurrentPosition();
-                                                  }
-                                                  // showMessage("Location fetch completed");
-                                                  String baseimage="";
-
-                                                  if(imageLoaded) {
-                                                    List<int> imageBytes = imageFile!.readAsBytesSync();
-                                                    baseimage = base64Encode(imageBytes);
-                                                  }
-
-                                                  var res = await apiServices().uploadCollection(widget.mobile, widget.name, selectedBiller.id, selectedBiller.name,_dateController.text, _dryController.text, _clothController.text, _amountCtrl.text,baseimage,_position.latitude,_position.longitude,itemDropDown);
-                                                  var data = jsonDecode(res);
-                                                  // print(data);
-                                                  if(data['Status']=="Success"){
-                                                    clearCollection();
-                                                    showMessage("Collection uploaded");
-                                                  }
-                                                  else{
-                                                    showMessage("Upload failed");
-                                                  }
-                                                  // print(selectedDate);
-                                                  await fetchCollection(selectedDate);
-                                                  setState(() {
-                                                    _loading=false;
-                                                  });
-
-                                                }
-                                                else{
-                                                  showMessage("Invalid Inputs");
-                                                }
-                                              }
-                                            },
-                                            child: const Text(
-                                              "Submit",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )),
-                                SizedBox(
-                                  height: 20,
-                                )
-                              ],
+                                    );
+                                  }),
                             ),
                           ),
-                        ):SizedBox(),
-
+                        ),
                       ],
                     ),
                   ),
@@ -907,52 +499,6 @@ class _collectMaterialState extends State<collectMaterial> {
               ],
             ),
           ),
-
-
-          // imageDownloaded?Container(
-          //   width: w,
-          //   height: h,
-          //
-          //   color: Colors.white,
-          //   // child: Image(image: Image.memory(profileImage).image),
-          //   child: PhotoView(
-          //     imageProvider: Image.memory(pickedImage).image,
-          //   ),
-          // ):Container(),
-          //     imageDownloaded?SafeArea(
-          //         child:Align(
-          //           alignment: Alignment.bottomCenter,
-          //           child: SizedBox(
-          //             width: w,
-          //             height: 50,
-          //             child: Row(
-          //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //               children: [
-          //                 ElevatedButton(
-          //                     style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
-          //                     onPressed: ()async{
-          //
-          //                       setState(() {
-          //                         _loading=true;
-          //                       });
-          //                       String status = await savefile().downloadImage("${widget.mobile}-${DateTime.now().millisecond}.png" , pickedImage);
-          //                       showMessage(status);
-          //                       setState(() {
-          //                         _loading=false;
-          //                       });
-          //                     }, child: const Text("Download",style: TextStyle(color: Colors.white),)),
-          //                 ElevatedButton(
-          //                     style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
-          //                     onPressed: (){
-          //                       setState(() {
-          //                         imageDownloaded=false;
-          //                       });
-          //                     }, child: const Text("Close",style: TextStyle(color: Colors.white),))
-          //               ],
-          //             ),
-          //           ),
-          //         )
-          //     ):SizedBox(),
 
           _loading ? loadingWidget() : const SizedBox(),
         ]));
@@ -976,8 +522,11 @@ class _collectMaterialState extends State<collectMaterial> {
   void clearCollection(){
     addNewShop=false;
     _addData=false;
+    itemDropDown="Material";
     dropDownType="Select";
     dropDownDiv="Select";
+    selectedVehicle="Other";
+    _specifyCtrl.clear();
     _shopNameController.clear();
     shopSelected=false;
     _dateController.clear();
@@ -1055,6 +604,445 @@ class _collectMaterialState extends State<collectMaterial> {
 
   showMessage(String mess){
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(mess),duration: const Duration(seconds: 1),));
+  }
+
+  Widget addShop(){
+    return Container(
+      width: w,
+      color: Colors.white,
+      height: h,
+      child: SingleChildScrollView(
+
+        child: Column(
+          children: [
+            // FieldArea(title: "Division", ctrl: _divisionCtrl, type: TextInputType.number, len: 3),
+            FieldAreaWithDropDown(title: "Item", dropList: itemList, dropdownValue: itemDropDown, callback: dropDownCallback),
+            itemDropDown=="Yard"?SizedBox():FieldAreaWithDropDown(
+                title: "Division",
+                dropList: divList,
+                dropdownValue: dropDownDiv,
+                callback: dropDownCallback),
+            itemDropDown=="Yard"?SizedBox():FieldAreaWithDropDown(
+                title: "Type",
+                dropList: typeList,
+                dropdownValue: dropDownType,
+                callback: dropDownCallback),
+
+            itemDropDown=="Yard"?SizedBox():SizedBox(
+              width: w - 20,
+              height: 50,
+              child: Row(
+                mainAxisAlignment:
+                MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    width: w / 3,
+                    // color: Colors.green,
+                    child: const Text(
+                      "Add new location:",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
+                    width: w / 2,
+                    // color: Colors.grey,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Checkbox(
+                        value: addNewShop,
+                        onChanged: (value) {
+                          clearShop();
+                          shopSelected = false;
+                          addNewShop = !addNewShop;
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            !addNewShop
+                ? itemDropDown=="Yard"?SizedBox():Column(
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  width: w - 50,
+                  height: 60,
+                  // color: Colors.grey,
+                  child: SizedBox(
+                      child:TypeAheadField(
+                        suggestionsCallback: (pattern) async {
+                          // Call a method to fetch shop name suggestions from the database
+                          // print("AAA");
+                          if(pattern.length>2){
+                            shopSelected=false;
+                            return await apiServices().getBiller(pattern,"NONE");
+                          }
+                          else{
+                            return [];
+                          }
+
+                        },
+                        builder: (context, controller, focusNode) {
+                          return TextField(
+                              controller: controller,
+                              focusNode: focusNode,
+                              autofocus: false,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Search',
+                              )
+                          );
+                        },
+                        itemBuilder: (context, suggestion) {
+                          return ListTile(
+                            title: Text("${suggestion.name}, Div: ${suggestion.division}"),
+                          );
+                        },
+                        onSelected: (suggestion) {
+                          // Handle the selection of a suggestion
+                          selectedBiller=suggestion;
+                          shopSelected=true;
+                          _shopNameController.text = suggestion.name;
+                          setState(() {
+
+                          });
+                        },
+                      )
+
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                shopSelected
+                    ? Container(
+                    width: w - 50,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: Colors.black),
+                      color: Colors.grey
+                          .withOpacity(.2),
+                    ),
+                    child: Padding(
+                      padding:
+                      const EdgeInsets.all(
+                          8.0),
+                      child: Column(
+                        crossAxisAlignment:
+                        CrossAxisAlignment
+                            .start,
+                        children: [
+                          Text(selectedBiller
+                              .name),
+                          Text(selectedBiller
+                              .addressl1),
+                          Text(selectedBiller
+                              .addressl2),
+                          Text(selectedBiller
+                              .addressl3),
+                          Text(selectedBiller
+                              .district),
+                          Text(selectedBiller
+                              .mobile),
+                          Text(
+                              selectedBiller.gst),
+                          const SizedBox(
+                            height: 5,
+                          )
+                        ],
+                      ),
+                    ))
+                    : const SizedBox(),
+              ],
+            )
+                : SizedBox(),
+
+            addNewShop
+                ? Column(
+              children: [
+                FieldArea(
+                    title: "Building/Shop Name",
+                    ctrl: _shopNameController,
+                    type: TextInputType.text,
+                    len: 20),
+                FieldArea(
+                    title: "Address L1",
+                    ctrl: _L1Controller,
+                    type: TextInputType.text,
+                    len: 50),
+                FieldArea(
+                    title: "Address L2",
+                    ctrl: _L2Controller,
+                    type: TextInputType.text,
+                    len: 50),
+                FieldArea(
+                    title: "Address L3",
+                    ctrl: _L3Controller,
+                    type: TextInputType.text,
+                    len: 50),
+                FieldAreaWithDropDown(title: "District", dropList: districtList, dropdownValue: distDropDown, callback: dropDownCallback),
+                FieldArea(
+                    title: "Phone",
+                    ctrl: _phoneController,
+                    type: TextInputType.text,
+                    len: 15),
+                FieldArea(
+                    title: "GST",
+                    ctrl: _gstController,
+                    type: TextInputType.text,
+                    len: 20),
+              ],
+            ):Column(
+              children: [
+                FieldAreaWithCalendar(title: "Date", ctrl: _dateController, type: TextInputType.datetime,days: 365,),
+                itemDropDown=="Yard"?FieldAreaWithDropDown(title: "Vehicle", dropList: vehicleList, dropdownValue: selectedVehicle, callback: dropDownCallback):SizedBox(),
+                itemDropDown=="Yard" && selectedVehicle=="Other"?FieldArea(title: "Specify", ctrl: _specifyCtrl, type: TextInputType.text, len: 20):SizedBox(),
+                // FieldAreaWithDropDown(title: "Item", dropList: itemList, dropdownValue: itemDropDown, callback: dropDownCallback),
+                itemDropDown!='Material' && itemDropDown!="Yard"?const SizedBox():FieldArea(title: "Dry Weight (KG)", ctrl: _dryController, type: TextInputType.number, len: 8),
+                itemDropDown!='Material'?const SizedBox():FieldArea(title: "Cloth Weight (KG)", ctrl: _clothController, type: TextInputType.number, len: 8),
+                itemDropDown=="Yard"?SizedBox():FieldArea(title: "Collected Amount", ctrl: _amountCtrl, type: TextInputType.number, len: 5),
+                SizedBox(height: 5,),
+                itemDropDown=="Yard"?SizedBox():SizedBox(
+                  width: w-20,
+                  height: 50,
+                  // color: Colors.grey,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        width: w/4,
+                        // color: Colors.green,
+                        child: const Text("Uploads:",style: TextStyle(fontWeight: FontWeight.bold),),
+                      ),
+                      SizedBox(
+                        width: w/2,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
+                              onPressed: (){
+                                imgFromCamera=true;
+                                getImage();
+                              },
+                              child: const Icon(Icons.camera,color: Colors.white,),
+                            ),
+                            ElevatedButton(
+                              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
+                              onPressed: (){
+                                imgFromCamera=false;
+                                getImage();
+                              },
+                              child: const Icon(Icons.image,color: Colors.white,),
+                            ),
+                          ],
+                        ),
+
+                      ),
+
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10,),
+                imageLoaded?SizedBox(
+                  width: w,
+
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+
+                      InkWell(
+                        onTap:(){
+                          // setState(() {
+                          //   imageDownloaded=true;
+                          // });
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return imageViewer(imagefile: imageFile!.readAsBytesSync(), mobile: widget.mobile,download: false,);
+                          }));
+                        },
+                        child: Container(
+                          width: w/4,
+                          height: w/4,
+                          // decoration: BoxDecoration(
+                          //   borderRadius: BorderRadius.circular(w/2),
+                          //   border: Border.all(color: Colors.grey,width: 2),
+                          //   color: Colors.white,
+                          // ),
+
+                          child: Image.file(File(imageFile!.path),fit: BoxFit.cover,),
+
+                        ),
+                      ),
+                      Text("${(imageFile!.lengthSync()/1024).toStringAsFixed(0)} Kb"),
+                      InkWell(
+                        onTap: (){
+                          setState(() {
+                            imageLoaded=false;
+                          });
+                        },
+                        child: const SizedBox(
+                          width: 80,
+                          height: 80,
+                          child: Icon(Icons.delete),
+                        ),
+                      )
+                    ],
+                  ),
+                ):const SizedBox(),
+              ],
+            ),
+
+            SizedBox(
+              height: 40,
+            ),
+            SizedBox(
+                width: w - 20,
+                height: 50,
+                child: Row(
+                  mainAxisAlignment:
+                  MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      width: w / 4,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                            WidgetStateProperty.all(
+                                AppColors
+                                    .buttonColorDark)),
+                        onPressed: () {
+                          setState(() {
+                            _addData=false;
+                            clearCollection();
+                            clearShop();
+                          });
+                        },
+                        child: const Text(
+                          "Back",
+                          style: TextStyle(
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: w / 4,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                            WidgetStateProperty.all(
+                                AppColors
+                                    .buttonColorDark)),
+                        onPressed: () async{
+
+                          //to add a new shop
+                          if(addNewShop){
+                            if(dropDownDiv!="Select" && dropDownType!="Select" && _shopNameController.text!="" && _L1Controller.text!="" && distDropDown!="Select"){
+
+                              setState(() {
+                                _loading=true;
+                              });
+                              selectedBiller=billerModel(id: "", name: _shopNameController.text, addressl1: _L1Controller.text, addressl2: _L2Controller.text, addressl3: _L3Controller.text, district: distDropDown, mobile: _phoneController.text, gst: _gstController.text, division: dropDownDiv, type: dropDownType,createDate: "",createTime: "",createUser: "",createMobile: "");
+                              var status = await apiServices().addBiller(selectedBiller,widget.name,widget.mobile);
+                              if(status=="Success"){
+                                setState(() {
+                                  _loading=false;
+                                  clearShop();
+                                  clearCollection();
+                                  addNewShop=false;
+                                });
+                                showMessage("Details has been added");
+                              }
+                            }
+                            else{
+                              showMessage("Invalid Inputs");
+                            }
+                          }
+                          //to add collection data
+                          else{
+
+                            if(itemDropDown!="Yard" && selectedBiller.name=="" && _dateController.text==""){
+                              showMessage("Invalid Inputs");
+                              return;
+                            }
+                            else if(itemDropDown=="Yard" && selectedVehicle=="Other" && _specifyCtrl.text==""){
+                              showMessage("Invalid Inputs");
+                              return;
+                            }
+
+                              setState(() {
+                                _loading=true;
+                              });
+                              bool locPer = await locationServices().checkLocationServices();
+                              if(!locPer){
+                                setState(() {
+                                  _loading=false;
+                                });
+                                showMessage("Location permission denied");
+                                return;
+                              }
+                              else{
+                                _position = await Geolocator.getCurrentPosition();
+                              }
+                              // showMessage("Location fetch completed");
+                              String baseimage="";
+
+                              if(imageLoaded) {
+                                List<int> imageBytes = imageFile!.readAsBytesSync();
+                                baseimage = base64Encode(imageBytes);
+                              }
+                              var res="";
+                              if(itemDropDown=="Yard"){
+                                String veh = selectedVehicle;
+                                if(selectedVehicle=="Other"){
+                                  veh = _specifyCtrl.text;
+                                }
+                                res = await apiServices().uploadCollection(widget.mobile, widget.name, "2","Yard",veh,_dateController.text, _dryController.text, "0", "0","",_position.latitude,_position.longitude,itemDropDown);
+                              }
+                              else{
+                                res = await apiServices().uploadCollection(widget.mobile, widget.name, selectedBiller.id, selectedBiller.name,"NA",_dateController.text, _dryController.text, _clothController.text, _amountCtrl.text,baseimage,_position.latitude,_position.longitude,itemDropDown);
+                              }
+                              // var res = await apiServices().uploadCollection(widget.mobile, widget.name, selectedBiller.id, selectedBiller.name,_dateController.text, _dryController.text, _clothController.text, _amountCtrl.text,baseimage,_position.latitude,_position.longitude,itemDropDown);
+                              var data = jsonDecode(res);
+                              // print(data);
+                              if(data['Status']=="Success"){
+                                clearCollection();
+                                showMessage("Collection uploaded");
+                              }
+                              else{
+                                showMessage("Upload failed");
+                              }
+                              // print(selectedDate);
+                              await fetchCollection(selectedDate);
+                              setState(() {
+                                _loading=false;
+                              });
+
+                          }
+                        },
+                        child: const Text(
+                          "Submit",
+                          style: TextStyle(
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+
+            SizedBox(
+              height: 30,
+            )
+          ],
+        ),
+      ),
+    );
   }
 
 }

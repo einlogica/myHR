@@ -7,6 +7,7 @@ import 'package:einlogica_hr/Models/userModel.dart';
 import 'package:einlogica_hr/Models/userExpenseModel.dart';
 import 'package:einlogica_hr/Screens/homePage.dart';
 import 'package:einlogica_hr/services/apiServices.dart';
+// import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math' as math;
 
@@ -54,27 +55,16 @@ class _loginState extends State<login> {
     _error="";
   }
 
-  // void _setupFirebaseMessaging() {
-  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-  //     print("In-app message received");
-  //     print('Handling a foreground message: ${message.messageId}');
-  //     print('Message data: ${message.data}');
-  //     print('Message notification: ${message.notification?.title}');
-  //     print('Message notification: ${message.notification?.body}');
-  //
-  //     // Show a dialog or notification in the app
-  //     showDialog(
-  //       context: context,
-  //       builder: (context) {
-  //         return AlertDialog(
-  //           title: Text(message.notification?.title ?? 'Notification'),
-  //           content: Text(message.notification?.body ?? 'No body'),
-  //         );
-  //       },
-  //     );
-  //   });
-  //   _requestNotificationPermissions();
+  // Future<void> requestMediaPermissions() async {
+  //   print("Requesting Media Permission");
+  //   if (await Permission.mediaLibrary.request().isGranted) {
+  //     // Permission is granted
+  //   } else {
+  //     // Handle the case where the user denies the permission
+  //     print('Permission denied');
+  //   }
   // }
+
 
   void _requestNotificationPermissions() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -89,13 +79,7 @@ class _loginState extends State<login> {
       sound: true,
     );
 
-    // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    //   print('User granted permission');
-    // } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-    //   print('User granted provisional permission');
-    // } else {
-    //   print('User declined or has not accepted permission');
-    // }
+    // await requestMediaPermissions();
   }
 
   void _getPrefs()async{

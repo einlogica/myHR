@@ -4,6 +4,7 @@ class collectionModel{
   final String name;
   final String shopid;
   final String shopname;
+  final String vehicle;
   final String l1;
   final String l2;
   final String l3;
@@ -31,6 +32,7 @@ class collectionModel{
     required this.name,
     required this.shopid,
     required this.shopname,
+    required this.vehicle,
     required this.l1,
     required this.l2,
     required this.l3,

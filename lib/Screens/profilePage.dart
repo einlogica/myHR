@@ -15,6 +15,7 @@ import 'package:einlogica_hr/Widgets/loadingWidget.dart';
 import 'package:einlogica_hr/services/apiServices.dart';
 import 'package:einlogica_hr/style/colors.dart';
 
+import '../Models/advanceModel.dart';
 import '../Widgets/FieldArea.dart';
 import '../Widgets/FieldAreaWithCalendar.dart';
 import '../Widgets/FieldAreaWithDropDown.dart';
@@ -51,11 +52,13 @@ class _profilePageState extends State<profilePage> {
   List<String> Acc = [];
   String dropdownAcc = 'Select';
   userModel currentUser = userModel(Mobile: "", Name: "", EmployeeID: "", Employer: "", Department: "", Position: "", Permission: "", Manager: "", ManagerID: "", DOJ: "", LeaveCount: 0, Status: "", ImageFile: "");
+  advanceModel advanceData = advanceModel(mobile: "", name: "", amount: "", date: "", emi: "", startdate: "", balance: "", status: "");
 
   final TextEditingController _dateCtrl= TextEditingController();
   final TextEditingController _commentsCtrl= TextEditingController();
   final TextEditingController _amtCtrl= TextEditingController();
   final TextEditingController _locCtrl= TextEditingController();
+  final TextEditingController _emiCtrl= TextEditingController();
   final TextEditingController _curPin= TextEditingController();
   final TextEditingController _newPin= TextEditingController();
   final TextEditingController _rePin= TextEditingController();
@@ -67,6 +70,7 @@ class _profilePageState extends State<profilePage> {
     _commentsCtrl.dispose();
     _amtCtrl.dispose();
     _locCtrl.dispose();
+    _emiCtrl.dispose();
     super.dispose();
   }
 
@@ -343,6 +347,27 @@ class _profilePageState extends State<profilePage> {
                                       });
                                     },
                                     child: const Text("Add Daily Expense",style: TextStyle(color: Colors.white),),),
+                                ),
+                              ),
+                              widget.permission!='Admin'?const SizedBox():Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  width: w-50,
+                                  height: 40,
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
+                                    onPressed: ()async{
+                                      setState(() {
+                                        progressIndicator=true;
+                                      });
+                                      advanceData = await apiServices().getAdvanceDetails(widget.mobile);
+                                      Acc = await apiServices().getAccounts();
+                                      showSalaryAdvanceBox();
+                                      setState(() {
+                                        progressIndicator=false;
+                                      });
+                                    },
+                                    child: const Text("Add Salary Advance",style: TextStyle(color: Colors.white),),),
                                 ),
                               ),
                               Padding(
@@ -778,6 +803,82 @@ class _profilePageState extends State<profilePage> {
     dropdownAcc=value;
   }
 
+  Future showSalaryAdvanceBox(){
+    return showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        contentPadding: EdgeInsets.all(8),
+        insetPadding: EdgeInsets.all(8),
+        // backgroundColor: AppColors.boxColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        title: const Text("Salary Advance"),
+        content: SizedBox(
+          width: w-50,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Advance:  ${advanceData.amount}"),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("EMI:  ${advanceData.emi}"),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Start Date:  ${advanceData.startdate}"),
+                ),
+                FieldAreaWithDropDown(title: "Account", dropList: Acc, dropdownValue: dropdownAcc, callback: updateDropDown),
+                FieldArea(title: "EMI", ctrl: _emiCtrl, type: TextInputType.number, len: 3),
+                FieldAreaWithCalendar(title: "Start Date", ctrl: _dateCtrl, type: TextInputType.text,days:365),
+                FieldArea(title: "Amount", ctrl: _amtCtrl, type: TextInputType.number, len: 6),
+                // FieldAreaWithDropDown("Account", Acc, dropdownAcc,),
+                // FieldArea("Location", _locCtrl,TextInputType.text),
+                // FieldAreaWithCalendar("Date", _dateCtrl, TextInputType.text),
+                // FieldArea("Amount", _amtCtrl,TextInputType.number),
+                // FieldArea("Comments", _commentsCtrl,TextInputType.text),
+              ],
+            ),
+          ),
+        ),
+
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async{
+              Navigator.pop(context);
+              String status = await apiServices().addAdvance(dropdownAcc,widget.mobile, _amtCtrl.text, _emiCtrl.text, _dateCtrl.text);
+              // String status = await apiServices().addEmployeeAdvance(currentUser.Mobile, currentUser.Name, dropdownAcc, _locCtrl.text, _dateCtrl.text, _amtCtrl.text);
+              clearFields();
+              showMessage(status);
+
+            },
+            child: Container(
+              color: AppColors.buttonColor,
+              padding: const EdgeInsets.all(14),
+              child: const Text("Submit",style: TextStyle(color: Colors.white),),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              clearFields();
+              Navigator.pop(context);
+            },
+            child: Container(
+              color: AppColors.buttonColor,
+              padding: const EdgeInsets.all(14),
+              child: const Text("Close",style: TextStyle(color: Colors.white),),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   Future showDialogBox(){
     return showDialog(
@@ -789,7 +890,7 @@ class _profilePageState extends State<profilePage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
-        title: const Text("Employee Advance"),
+        title: const Text("Daily Expense"),
         content: SizedBox(
           width: w-50,
           child: SingleChildScrollView(
@@ -851,7 +952,7 @@ class _profilePageState extends State<profilePage> {
     _curPin.clear();
     _newPin.clear();
     _rePin.clear();
-
+    _emiCtrl.clear();
   }
 
 

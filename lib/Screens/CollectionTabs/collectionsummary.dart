@@ -1,7 +1,6 @@
-import 'package:einlogica_hr/Models/locationModel.dart';
+
 import 'package:einlogica_hr/services/apiServices.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../../Widgets/loadingWidget.dart';
 import '../../style/colors.dart';
 
@@ -46,8 +45,8 @@ class _collectionSumaryPageState extends State<collectionSumaryPage> {
     materialData = await apiServices().getMaterialSummary(widget.mobile,_selected!);
     billerData = await apiServices().getBillerSummary(widget.mobile,_selected!);
     cashData = await apiServices().getCashSummary(widget.mobile,_selected!);
-    print(materialData);
-    print(billerData);
+    // print(materialData);
+    // print(billerData);
     setState(() {
     _loading=false;
     });

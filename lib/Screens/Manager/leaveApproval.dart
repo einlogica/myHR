@@ -342,8 +342,9 @@ class _leaveApprovalPageState extends State<leaveApprovalPage> {
                         child: Container(
                           width: w-20,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: !approved?pendingId.contains(pendingList[index].Id)?Colors.green.shade100:Colors.white:Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            // color: !approved?pendingId.contains(pendingList[index].Id)?Colors.green.shade100:Colors.white:Colors.white,
+                            color: DateTime.parse(item.LeaveDate).isBefore(DateTime.now())?Colors.red.shade50:Colors.white,
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withOpacity(0.3),

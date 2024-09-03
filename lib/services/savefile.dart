@@ -1,9 +1,14 @@
 
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'dart:html' as html;
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
 
 class savefile{
 
@@ -26,11 +31,14 @@ class savefile{
     // }
     // else
     if (Platform.isAndroid) {
+      // final directory = await getExternalStorageDirectory();
+      // filePath = '$directory/$fileName';
       filePath = '/storage/emulated/0/Download/$fileName';
       // print(filePath);
       file = File(filePath);
       await file.writeAsString(data).whenComplete((){
         status = "File has been downloaded";
+        downloadAndNotify(filePath);
       });
     } else if (Platform.isIOS) {
       directoryPath = (await getApplicationDocumentsDirectory()).path;
@@ -38,6 +46,7 @@ class savefile{
       file = File(filePath);
       await file.writeAsString(data).whenComplete((){
         status = "File has been downloaded";
+        downloadAndNotify(filePath);
       });
     }
     else {
@@ -70,10 +79,13 @@ class savefile{
     // }
     // else
     if (Platform.isAndroid) {
+      // final directory = await getExternalStorageDirectory();
+      // filePath = '$directory/$fileName';
       filePath = '/storage/emulated/0/Download/$fileName';
       file = File(filePath);
       await file.writeAsBytes(data).whenComplete((){
         status = "File downloaded to InternalStorage/downloads";
+        downloadAndNotify(filePath);
       });
 
     } else if (Platform.isIOS) {
@@ -82,6 +94,7 @@ class savefile{
       file = File(filePath);
       await file.writeAsBytes(data).whenComplete((){
         status = "File downloaded to InternalStorage/downloads";
+        downloadAndNotify(filePath);
       });
     }
     else {
@@ -90,6 +103,42 @@ class savefile{
 
     return status;
 
+  }
+
+
+  Future<void> downloadAndNotify(String filePath) async {
+    print("Showing notification");
+    // final response = await HttpClient().getUrl(Uri.parse(url));
+    // final bytes = await response.close().then((r) => r.fold<List<int>>([], (b, data) => b..addAll(data)));
+    //
+    // final directory = await getApplicationDocumentsDirectory();
+    // final filePath = '${directory.path}/downloaded_file.ext';
+    // final file = File(filePath);
+    // await file.writeAsBytes(bytes);
+
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+      'download_channel',
+      'Downloads',
+      importance: Importance.high,
+      priority: Priority.high,
+    );
+
+    const DarwinNotificationDetails iOSPlatformChannelSpecifics =
+    DarwinNotificationDetails();
+
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics,
+    );
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Download Complete',
+      'Tap to open the file',
+      platformChannelSpecifics,
+      payload: filePath,
+    );
   }
 
 }
