@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:einlogica_hr/Models/advanceModel.dart';
 import 'package:einlogica_hr/Models/payRollModel.dart';
 import 'package:einlogica_hr/Models/personalInfoModel.dart';
 import 'package:einlogica_hr/Models/userModel.dart';

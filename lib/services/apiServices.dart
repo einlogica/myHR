@@ -1417,7 +1417,7 @@ class apiServices{
   }
 
   Future<String> updatePayment(String mobile,int amount,int qty,String id,String order)async{
-    String status ="";
+    // String status ="";
     final response = await apiRequest("jilariapi.php", {"action":"updatePayment","usermobile": mobile,"emp":emp,"amount":amount.toString(),"qty":qty.toString(),"id":id,"order":order});
     // print("response= ${response.body.trim()}");
     if(response.body.trim()!="Failed"){
