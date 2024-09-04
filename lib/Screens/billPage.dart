@@ -177,7 +177,7 @@ class _billPageState extends State<billPage> {
 
                       child: Center(
                         child: Container(
-                          width: w*.8,
+                          width: w-30,
                           height: 60,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
@@ -205,12 +205,12 @@ class _billPageState extends State<billPage> {
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
                                     SizedBox(
-                                      width: w/3,
+                                      // width: w/3,
                                       height: 20,
                                       child: Center(child: Text("Advance: $advance",style: const TextStyle(fontWeight: FontWeight.bold),),),
                                     ),
                                     SizedBox(
-                                      width: w/3,
+                                      // width: w/3,
                                       height: 20,
                                       child: Center(child: Text("Salary Adv: $salary",style: const TextStyle(fontWeight: FontWeight.bold),),),
                                     )
@@ -224,12 +224,12 @@ class _billPageState extends State<billPage> {
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
                                     SizedBox(
-                                      width: w/3,
+                                      // width: w/3,
                                       height: 20,
                                       child: Center(child: Text("Expense: $pending",style: const TextStyle(fontWeight: FontWeight.bold),),),
                                     ),
                                     SizedBox(
-                                      width: w/3,
+                                      // width: w/3,
                                       height: 20,
                                       child: Center(child: Text("Balance: ${pending-advance}",style: const TextStyle(fontWeight: FontWeight.bold),),),
                                     )
