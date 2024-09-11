@@ -147,7 +147,7 @@ class _leavePageState extends State<leavePage> {
                               ),
                             ),
                             const Text("Leave Management",style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),),
-                            InkWell(
+                            leavePressed?SizedBox(width: 60,):InkWell(
                               onTap: ()async{
 
                                 if(leaveStr=="YEARLY"){
@@ -166,6 +166,10 @@ class _leavePageState extends State<leavePage> {
                                     setState(() {
                                       _loading=true;
                                     });
+                                    _selected=_currentDate=_selectedMY!;
+                                    _sel=_selectedMY!.year.toString();
+                                    _selMonth=_selectedMY!.month.toString();
+
                                     await fetchData(_selectedMY!.year.toString(),_selectedMY!.month.toString());
                                   }
                                 }
@@ -245,7 +249,13 @@ class _leavePageState extends State<leavePage> {
                     ],
                   ),
                 ):const SizedBox(),
-                const SizedBox(height: 20,),
+                const SizedBox(height: 10,),
+                Container(
+                    width: w,
+                    color: Colors.grey.withOpacity(.3),
+                    child: Center(child: Text("${DateFormat.MMMM().format(DateTime(0, int.parse(_selMonth)))} - ${_sel}",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),))
+                ),
+                const SizedBox(height: 10,),
                 Expanded(
                   child: SizedBox(
                     width: w-20,
@@ -268,7 +278,7 @@ class _leavePageState extends State<leavePage> {
                                 width: w-20,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white,
+                                    color: DateTime.parse(leaveList[index].LeaveDate).isBefore(DateTime.now())?Colors.red.shade50:Colors.white,
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.black.withOpacity(0.3),
@@ -367,7 +377,13 @@ class _leavePageState extends State<leavePage> {
 
                                 ),
                               ),
-
+                              Container(
+                                width: w,
+                                height: 30,
+                                color: Colors.white.withOpacity(.2),
+                                child:Center(child: Text("${DateFormat.MMMM().format(DateTime(0, int.parse(_selMonth)))} - ${_sel}",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Colors.white),))
+                              ),
+                              SizedBox(height: 10,),
                               calendar(),
 
                               SizedBox(
@@ -438,7 +454,7 @@ class _leavePageState extends State<leavePage> {
                                             _commentCtrl.clear();
                                             halfDay=false;
                                             leavePressed=false;
-                                            await fetchData(DateTime.now().year.toString(),DateTime.now().month.toString());
+                                            await fetchData(_sel,_selMonth);
                                       }, child: const Text("Submit",style: TextStyle(color: Colors.white),)),
                                     ),
                                     SizedBox(
@@ -498,7 +514,7 @@ class _leavePageState extends State<leavePage> {
         child: Padding(
           padding: const EdgeInsets.only(bottom: 20.0),
           child: TableCalendar(
-            headerVisible: true,
+            headerVisible: false,
             headerStyle: HeaderStyle(formatButtonVisible: false),
             pageJumpingEnabled: false,
             firstDay: DateTime(DateTime.now().year-1,01,01),
@@ -513,6 +529,12 @@ class _leavePageState extends State<leavePage> {
               defaultTextStyle: TextStyle(color: Colors.white),
               outsideDaysVisible: false,
             ),
+            // onPageChanged: (focusedDay){
+            //   dateList.clear();
+            //   setState(() {
+            //
+            //   });
+            // },
             calendarBuilders: CalendarBuilders(
               defaultBuilder: (context, day, focusedDay) {
 
@@ -797,7 +819,7 @@ class _leavePageState extends State<leavePage> {
                             });
                             String status = await apiServices().deleteLeave(leaveList[index].Id,"EMP");
                             // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(status)));
-                            await fetchData(_selectedMY!.year.toString(),_selectedMY!.month.toString());
+                            await fetchData(_sel,_selMonth);
                             showMessage(status);
                             setState(() {
                               leaveCardPressed=false;

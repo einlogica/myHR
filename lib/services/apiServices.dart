@@ -530,7 +530,7 @@ class apiServices{
     print("Executing update leave method");
     String status = "";
     String id=jsonEncode(idList);
-    final response = await apiRequest("jilariapi.php", {"action":"updateLeave","id": id, "status":approval,"comments":comments,"per":per});
+    final response = await apiRequest("jilariapi.php", {"action":"updateLeave","id": id, "status":approval,"comments":comments,"per":per,"emp":emp});
 
     if (response.statusCode == 200 && response.body.trim()=='Success') {
       status="Success";

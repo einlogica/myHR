@@ -48,6 +48,7 @@ class _leaveApprovalPageState extends State<leaveApprovalPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     fetchLeaves(DateTime.now().year.toString());
 
     searchCtrl.addListener(() {
@@ -344,7 +345,7 @@ class _leaveApprovalPageState extends State<leaveApprovalPage> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             // color: !approved?pendingId.contains(pendingList[index].Id)?Colors.green.shade100:Colors.white:Colors.white,
-                            color: DateTime.parse(item.LeaveDate).isBefore(DateTime.now())?Colors.red.shade50:Colors.white,
+                            color: DateTime.parse(item.LeaveDate).isBefore(DateTime.now().subtract(const Duration(days: 1)))?Colors.red.shade50:Colors.white,
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withOpacity(0.3),
@@ -448,7 +449,7 @@ class _leaveApprovalPageState extends State<leaveApprovalPage> {
                                           child: InkWell(
                                             onTap: (){
                                               _id=item.Id;
-                                              showApprovalBox(item.Status=='Approved'?false:true);
+                                              showApprovalBox(item.Status);
 
                                             },
                                             child: const SizedBox(
@@ -523,7 +524,7 @@ class _leaveApprovalPageState extends State<leaveApprovalPage> {
     );
   }
 
-  Future showApprovalBox(bool approve){
+  Future showApprovalBox(String status){
     return showDialog(
       context: context,
       builder: (ctx) => Center(
@@ -552,8 +553,11 @@ class _leaveApprovalPageState extends State<leaveApprovalPage> {
             ),
           ),
           actions: <Widget>[
-            approve?TextButton(
+            status!='Approved'?TextButton(
               onPressed: () async{
+                if(commentsCtrl.text==""){
+                  return;
+                }
                 List<String> _idList = [];
                 _idList.add(_id);
                 String status = await apiServices().updateLeave(_idList, widget.currentUser.Permission, "Approved", commentsCtrl.text);
@@ -580,8 +584,11 @@ class _leaveApprovalPageState extends State<leaveApprovalPage> {
                 child: const Text("Approve",style: TextStyle(color: Colors.white),),
               ),
             ):SizedBox(),
-            TextButton(
+            status!='Rejected'?TextButton(
               onPressed: () async{
+                if(commentsCtrl.text==""){
+                  return;
+                }
                 List<String> _idList = [];
                 _idList.add(_id);
                 String status = await apiServices().updateLeave(_idList, widget.currentUser.Permission, "Rejected", commentsCtrl.text);
@@ -607,7 +614,7 @@ class _leaveApprovalPageState extends State<leaveApprovalPage> {
                 padding: const EdgeInsets.all(14),
                 child: const Text("Reject",style: TextStyle(color: Colors.white)),
               ),
-            ),
+            ):SizedBox(),
 
           ],
         ),

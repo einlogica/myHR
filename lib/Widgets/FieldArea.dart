@@ -28,6 +28,7 @@ class _FieldAreaState extends State<FieldArea> {
               textCapitalization: TextCapitalization.sentences,
               keyboardType: widget.type,
               enabled: true,
+              autofocus: false,
               controller: widget.ctrl,
               maxLength: widget.len,
               decoration: InputDecoration(
