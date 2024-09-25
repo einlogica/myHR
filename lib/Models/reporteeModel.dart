@@ -4,6 +4,7 @@ class reporteeModel {
   final String Name;
   final String Position;
   final String Status;
+  final String AttStatus;
   final String Location;
 
 
@@ -12,6 +13,7 @@ class reporteeModel {
     required this.Name,
     required this.Position,
     required this.Status,
+    required this.AttStatus,
     required this.Location,
   });
 }

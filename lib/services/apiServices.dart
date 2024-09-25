@@ -37,14 +37,13 @@ class apiServices{
 
 
 
-  //production
+  //--------------PRODUCTION
   var url = "https://phpcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
 
-  //test
-  // var url = "https://testingcontainerapp--5zu536l.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
+  //--------------TEST
   // var url = "https://testingcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
 
-  var appVersion ="V1.0.6+12";
+  var appVersion ="V1.0.7+16";
   // var emp = "";
 
 //================================================================================================================================================= USERS
@@ -62,7 +61,7 @@ class apiServices{
     var data;
 
     final response = await apiRequest("login.php", {"usermobile": mobile,"userpass": password,"app": appVersion});
-    print(response.body);
+    // print(response.body);
     if (response.statusCode == 200) {
       status = response.body.trim();
       data = jsonDecode(response.body);
@@ -189,7 +188,7 @@ class apiServices{
       var data = jsonDecode(response.body);
       userList=[];
       for (var d in data){
-        userList.add(reporteeModel(Mobile: d['Mobile'], Name: d['Name'], Position: d['Position'], Status: d['Status']??"", Location: d['Location']??""));
+        userList.add(reporteeModel(Mobile: d['Mobile'], Name: d['Name'], Position: d['Position'], Status: d['Status']??"", AttStatus: d['AttStatus']??"",Location: d['Location']??""));
       }
     }
 
@@ -349,6 +348,7 @@ class apiServices{
     String status = "";
 
     final response = await apiRequest("jilariapi.php", {"action":"get_attendanceStatus","usermobile": mobile});
+
     status = response.body.trim();
     return status;
   }
@@ -375,6 +375,7 @@ class apiServices{
     String status="";
 
     final response = await apiRequest("jilariapi.php", {"action":"post_Attendance","usermobile": mobile,"username":name,"posLat":posLat.toStringAsFixed(5),"posLong":posLong.toStringAsFixed(5),"location":location,"type":type});
+    print("response=${response.body}");
     if(response.statusCode==200){
       var data = jsonDecode(response.body);
 
@@ -405,7 +406,7 @@ class apiServices{
         outtime = DateFormat('Hms').format(sqlTimeFormat.parse(d['OutTime']));
 
         attendanceList.add(attendanceModel(Name: d['Name'], Mobile: d['Mobile'], posLat: double.parse(d['PosLat']), posLong: double.parse(d['PosLong']),
-            attDate: date, attTime: intime,posLat2: double.parse(d['PosLat2']),posLong2: double.parse(d['PosLong2']),outTime: outtime,status: d['Status'], location: d['Location'],flag: d['Flag'],comments: d['Comments']));
+            attDate: date, attTime: intime,posLat2: double.parse(d['PosLat2']),posLong2: double.parse(d['PosLong2']),outDate: d['OutDate'],outTime: outtime,status: d['Status'], location: d['Location'],duration: d['Duration'],flag: d['Flag'],comments: d['Comments']));
       }
     }
 
@@ -424,7 +425,7 @@ class apiServices{
       var data = jsonDecode(response.body.trim());
       list.clear();
       for (var d in data){
-        list.add(attendanceModel(Name: d['Name'], Mobile: d['Mobile'], posLat: 0.00, posLong: 0.00, attDate: d['Date'], attTime: d['InTime'], posLat2: 0.00, posLong2: 0.00,outTime: d['OutTime'], status: '', location: '',flag: '',comments: d['Comments']));
+        list.add(attendanceModel(Name: d['Name'], Mobile: d['Mobile'], posLat: 0.00, posLong: 0.00, attDate: d['Date'], attTime: d['InTime'], posLat2: 0.00, posLong2: 0.00,outDate: d['Date'],outTime: d['OutTime'], status: '', location: '',duration: '00:00',flag: '',comments: d['Comments']));
       }
     }
     return list;
@@ -1602,7 +1603,7 @@ class apiServices{
     print("Executing get dashboard summary method");
     String status="";
     final response = await apiRequest("jilariapi.php", {"action":"getDashboardSummary","usermobile":mobile,"permission":permission,"emp":emp});
-
+    // print(response.body);
     if(response.statusCode==200){
       status = response.body.trim();
     }

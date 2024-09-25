@@ -11,7 +11,7 @@ class locationServices{
   //Check Location Services
 
   Future<bool> checkLocationServices()async{
-
+    print("Executing check location services method");
     bool serviceEnabled;
     bool status=false;
     LocationPermission permission;

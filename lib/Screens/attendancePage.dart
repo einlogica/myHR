@@ -42,6 +42,7 @@ class _attendancePageState extends State<attendancePage> {
   // bool _loading=false;
   List<int> presentDays =[];
   List<int> leaveDays =[];
+  List<int> halfDays =[];
   List<summaryModel> summList = [];
   Map<String,double> result={};
   double leaveBal=0.0;
@@ -86,12 +87,21 @@ class _attendancePageState extends State<attendancePage> {
     presentDays.clear();
     leaveDays.clear();
     for(var d in attList){
-      if(d.status=='Absent' || d.status=='Leave'){
-        leaveDays.add(int.parse(d.attDate.substring(0,2)));
-      }
-      else{
+      if(d.status=='Present'){
         presentDays.add(int.parse(d.attDate.substring(0,2)));
       }
+      else if(d.status=='HalfDay'){
+        halfDays.add(int.parse(d.attDate.substring(0,2)));
+      }
+      else{
+        leaveDays.add(int.parse(d.attDate.substring(0,2)));
+      }
+      // if(d.status=='Absent' || d.status=='Leave'){
+      //   leaveDays.add(int.parse(d.attDate.substring(0,2)));
+      // }
+      // else{
+      //   presentDays.add(int.parse(d.attDate.substring(0,2)));
+      // }
     }
 
     // print(leaveDays.length);
@@ -102,6 +112,22 @@ class _attendancePageState extends State<attendancePage> {
       loading=false;
     });
   }
+
+
+  // String getDurationBetweenTimes(String start, String end) {
+  //   final startParts = start.split(":");
+  //   final endParts = end.split(":");
+  //
+  //   final startTime = DateTime(0, 1, 1, int.parse(startParts[0]), int.parse(startParts[1]));
+  //   print(startTime.toString());
+  //
+  //   final endTime = DateTime(0, 1, 1, int.parse(endParts[0]), int.parse(endParts[1]));
+  //   print(endTime.toString());
+  //   final dur = endTime.difference(startTime);
+  //
+  //   return "${dur.inHours.toString().padLeft(2, '0')}:${dur.inMinutes.remainder(60).toString()}";
+  //
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -218,12 +244,13 @@ class _attendancePageState extends State<attendancePage> {
                                 onTap: (){
                                   _regInCtrl.text=attList[index].attTime;
                                   _regOutCtrl.text=attList[index].outTime;
+
                                   showDialogBox(index);
                                 },
                                 leading: SizedBox(
                                     width: 20,
                                     height: 20,
-                                    child: Center(child: Icon(Icons.calendar_month_outlined,color: ['Leave','Absent'].contains(attList[index].status)?Colors.red:Colors.green,))),
+                                    child: Center(child: Icon(Icons.calendar_month_outlined,color: ['Leave','Absent'].contains(attList[index].status)?Colors.red:['HalfDay'].contains(attList[index].status)?Colors.orangeAccent:Colors.green,))),
                                 title: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -231,25 +258,15 @@ class _attendancePageState extends State<attendancePage> {
                                     Text(attList[index].status=='Present'?attList[index].location:attList[index].status, style:const TextStyle(fontWeight: FontWeight.bold),),
                                   ],
                                 ),
-                                subtitle: attList[index].status!='Present'?const SizedBox():Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                subtitle: attList[index].status=='Leave' || attList[index].status=='Absent'?const SizedBox():Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(attList[index].attTime.substring(0,5),style: const TextStyle(color: Colors.green),),
-                                    Text(attList[index].outTime.substring(0,5),style: TextStyle(color: attList[index].outTime=="00:00:00"?Colors.red:Colors.green),),
+                                    Text("In: ${attList[index].attTime.substring(0,5)}",style: const TextStyle(color: Colors.green),),
+                                    // attList[index].outTime.substring(0,5)!='00:00'?Text("( ${getDurationBetweenTimes(attList[index].attTime, attList[index].outTime)} )",):SizedBox(),
+                                    attList[index].outTime.substring(0,5)!='00:00'?Text("( ${attList[index].duration.toString().substring(0,5)} )",):SizedBox(),
+                                    Text("Out: ${attList[index].outTime.substring(0,5)}",style: TextStyle(color: attList[index].outTime=="00:00:00"?Colors.red:Colors.green),),
                                   ],
                                 ),
-                                // trailing: InkWell(
-                                //   onTap:(){
-                                //     _regInCtrl.text=attList[index].attTime;
-                                //     _regOutCtrl.text=attList[index].outTime;
-                                //     showDialogBox(index);
-                                //   },
-                                //   child: const SizedBox(
-                                //     width: 20,
-                                //     height: 50,
-                                //     child: Center(child: Icon(Icons.arrow_forward_ios_rounded),),
-                                //   ),
-                                // ),
 
                               ),
                             ),
@@ -293,63 +310,21 @@ Widget calendar(){
             ),
             calendarBuilders: CalendarBuilders(
               defaultBuilder: (context, day, focusedDay) {
-
-                if (presentDays.contains(day.day)) {
-                  return Container(
-                    margin: const EdgeInsets.all(6.0),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      shape: BoxShape.circle,
+                return Container(
+                  margin: const EdgeInsets.all(6.0),
+                  decoration: BoxDecoration(
+                    color: presentDays.contains(day.day)?Colors.green:leaveDays.contains(day.day)?Colors.red.shade300:halfDays.contains(day.day)?Colors.orangeAccent:Colors.transparent,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${day.day}',
+                      style: TextStyle(color: Colors.white),
                     ),
-                    child: Center(
-                      child: Text(
-                        '${day.day}',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  );
-                }
-                else if(leaveDays.contains(day.day)){
-                  // print(leaveDays[0]);
-                  return Container(
-                    margin: const EdgeInsets.all(6.0),
-                    decoration: BoxDecoration(
-                      color: Colors.red.shade300,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        '${day.day}',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  );
-                }
-                return null;
+                  ),
+                );
               },
             ),
-            // calendarFormat: _calendarFormat,
-            // selectedDayPredicate: (day) {
-            //   return isSameDay(_selectedDay, day);
-            // },
-            // onDaySelected: (selectedDay, focusedDay) {
-            //   if (!isSameDay(_selectedDay, selectedDay)) {
-            //     setState(() {
-            //       _selectedDay = selectedDay;
-            //       _focusedDay = focusedDay;
-            //     });
-            //   }
-            // },
-            // onFormatChanged: (format) {
-            //   if (_calendarFormat != format) {
-            //     setState(() {
-            //       _calendarFormat = format;
-            //     });
-            //   }
-            // },
-            // onPageChanged: (focusedDay) {
-            //   _focusedDay = focusedDay;
-            // },
           ),
         ),
       ),
@@ -357,100 +332,59 @@ Widget calendar(){
 
 }
 
-//   Widget calendar() {
-//     return Padding(
-//       padding: const EdgeInsets.all(10.0),
-//       child: CalendarCarousel<Event>(
-//         // onDayPressed: (DateTime date, List<Event> events) {
-//         //   this.setState(() => _currentDate = date);
-//         // },
-//         weekendTextStyle: const TextStyle(
-//           color: Colors.yellowAccent,
-//         ),
-//         daysTextStyle: const TextStyle(
-//           color: Colors.white
-//         ),
-//         weekdayTextStyle: const TextStyle(
-//           color: Colors.yellowAccent
-//         ),
-//         thisMonthDayBorderColor: Colors.black,
-//         disableDayPressed: true,
-//         showHeader: false,
-//         todayButtonColor: Colors.transparent,
-//         todayBorderColor: Colors.black,
-//         showOnlyCurrentMonthDate: true,
-//         targetDateTime: DateTime(currYear,currMonth),
-//
-//         // markedDatesMap: _markedDateMap,
-//         isScrollable: false,
-//         // pageScrollPhysics: NeverScrollableScrollPhysics(),
-//         customGridViewPhysics: const NeverScrollableScrollPhysics(),
-//         dayPadding: 5,
-//
-// //      weekDays: null, /// for pass null when you do not want to render weekDays
-// //      headerText: Container( /// Example for rendering custom header
-// //        child: Text('Custom Header'),
-// //      ),
-//         customDayBuilder: (   /// you can provide your own build function to make custom day containers
-//             bool isSelectable,
-//             int index,
-//             bool isSelectedDay,
-//             bool isToday,
-//             bool isPrevMonthDay,
-//             TextStyle textStyle,
-//             bool isNextMonthDay,
-//             bool isThisMonthDay,
-//             DateTime day,
-//             ) {
-//           /// If you return null, [CalendarCarousel] will build container for current [day] with default function.
-//           /// This way you can build custom containers for specific days only, leaving rest as default.
-//
-//           // Example: every 15th of month, we have a flight, we can place an icon in the container like that:
-//
-//           if (presentDays.contains(day.day)) {
-//             return Center(
-//               child: Container(
-//                 width: 40,
-//                 height: 40,
-//                 decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(20),
-//                   color: Colors.green.shade300,
-//                 ),
-//
-//                 child: Center(child: Text(day.day.toString(),style: const TextStyle(color: Colors.black),)),
-//               ),
-//             );
-//           } else if(leaveDays.contains(day.day)){
-//             return Center(
-//               child: Container(
-//                 width: 40,
-//                 height: 40,
-//                 decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(20),
-//                   color: Colors.red.shade300,
-//                 ),
-//                 child: Center(child: Text(day.day.toString(),style: const TextStyle(color: Colors.black),)),
-//               ),
-//             );
-//           }
-//           else{
-//             return null;
-//           }
-//
-//
-//         },
-//         weekFormat: false,
-//         // markedDatesMap: _markedDateMap,
-//         width: w*.8,
-//         height: w*.75,
-//         // selectedDateTime: _currentDate,
-//         daysHaveCircularBorder: true, /// null for not rendering any border, true for circular border, false for rectangular border
-//       ),
-//     );
-//   }
-
 
   Future showDialogBox(int _selectedIndex){
+
+    return showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        contentPadding: EdgeInsets.all(15),
+        insetPadding: EdgeInsets.all(20),
+        // backgroundColor: AppColors.boxColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(attList[_selectedIndex].status,style: const TextStyle(color: AppColors.buttonColorDark),),
+            Text(attList[_selectedIndex].attDate.toString(),style: const TextStyle(color: AppColors.buttonColorDark,fontSize: 18),),
+          ],
+        ),
+        content: SizedBox(
+          width: w-10,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+
+              ],
+            ),
+          ),
+        ),
+
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              _commentsCtrl.clear();
+              Navigator.of(ctx).pop();
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: AppColors.buttonColor,
+              ),
+              padding: const EdgeInsets.all(10),
+              child: const Text("Close",style: TextStyle(color: Colors.white),),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  Future regularizeDialogBox(int _selectedIndex){
     return showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -650,7 +584,7 @@ Widget calendar(){
               child: const Text("Modify",style: TextStyle(color: Colors.white),),
             ),
           ):const SizedBox(),
-          attList[_selectedIndex].status=='Present'?TextButton(
+          attList[_selectedIndex].attTime!='00:00:00'?TextButton(
             onPressed: (){
               showMessage("Long press to mark Absent");
             },

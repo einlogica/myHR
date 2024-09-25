@@ -199,7 +199,7 @@ class _reporteesPageState extends State<reporteesPage> {
                               children: [
                                 Text(employeeList[index].Position),
                                 Spacer(),
-                                Text(employeeList[index].Location,style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold,color: employeeList[index].Location=="Absent" || employeeList[index].Location=="Leave"?Colors.red:Colors.green),),
+                                Text(employeeList[index].AttStatus=='HalfDay'?"${employeeList[index].Location} (HL)":employeeList[index].Location,style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold,color: employeeList[index].Location=="Absent" || employeeList[index].Location=="Leave"?Colors.red:Colors.green),),
                               ],
                             ),
                             leading: const SizedBox(

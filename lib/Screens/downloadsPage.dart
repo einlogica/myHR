@@ -598,7 +598,7 @@ class _downloadsPageState extends State<downloadsPage> {
               L2Comments: d['L2Comments'],FinRemarks: d['FinRemarks']));
         }
         else if(item=="Attendance"){
-          attendanceList.add(attendanceModel(Name: d['Name'], Mobile: d['Mobile'], posLat: double.parse(d['PosLat']), posLong: double.parse(d['PosLong']), attDate: d['Date'], attTime: d['InTime'], posLat2: double.parse(d['PosLat2']),posLong2: double.parse(d['PosLong2']),outTime: d['OutTime'],flag: d['Flag'],status: d['Status'],location: d['Location'],comments: d['Comments']));
+          attendanceList.add(attendanceModel(Name: d['Name'], Mobile: d['Mobile'], posLat: double.parse(d['PosLat']), posLong: double.parse(d['PosLong']), attDate: d['Date'], attTime: d['InTime'], posLat2: double.parse(d['PosLat2']),posLong2: double.parse(d['PosLong2']),outDate: d['OutDate'],outTime: d['OutTime'],duration: d['Duration'],flag: d['Flag'],status: d['Status'],location: d['Location'],comments: d['Comments']));
         }
         else if(item=="Activity"){
           activityList.add(activityModel(id: d['ID'], mobile: d['Mobile'], name: d['Name'],type: d['Type'], site: d['Site'], drive: bool.parse(d['Drive']), sKM: int.parse(d['StartKM']), eKM: int.parse(d['EndKM']), lat: d['PosLat'], long: d['PosLong'], date: d['Date'], time: d['Time'], cust: d['Customer'],remarks: d['Remarks']));
@@ -640,7 +640,7 @@ class _downloadsPageState extends State<downloadsPage> {
 
 
     if(item=="Attendance"){
-      rows.add(["Mobile","Name","PosLat","PosLong","Date","InTime","PosLat2","PosLong2","OutTime","Status","Location","Comments"]);
+      rows.add(["Mobile","Name","PosLat","PosLong","Date","InTime","PosLat2","PosLong2","OutDate","OutTime","Status","Location","Duration","Comments"]);
 
       attendanceList.forEach((element) async{
         List<dynamic> row = [];//List<dynamic>();
@@ -652,9 +652,11 @@ class _downloadsPageState extends State<downloadsPage> {
         row.add(element.attTime);
         row.add(element.posLat2);
         row.add(element.posLong2);
+        row.add(element.outDate);
         row.add(element.outTime);
         row.add(element.status);
         row.add(element.location);
+        row.add(element.outTime);
         row.add(element.comments);
         rows.add(row);
       });

@@ -67,6 +67,9 @@ class _homePageState extends State<homePage> {
   String locationName="";
   String attTime = "";
   String outTime = "";
+  String dur = "";
+  String leaveDay = "";
+  String buttonText = "";
   // double posLat=0.00,posLong=0.00;
 
   bool updateAvailable = false;
@@ -113,6 +116,7 @@ class _homePageState extends State<homePage> {
     await fetchAttStatus();
     setState(() {
       gridAnim=true;
+      checkinWidth=false;
     });
     print("Fetch Data ended============");
   }
@@ -159,24 +163,44 @@ class _homePageState extends State<homePage> {
     // });
     // print("Running fetchAttStatus");
     String response = await apiServices().attendanceStatus(widget.currentUser.Mobile);
+    // print(response);
     if(response.trim()!="Pending"){
       var data = jsonDecode(response.trim());
       locationName=data['Location'];
       locationStatus=data['Status'];
-      // print(locationName);
+      print(locationName);
       attTime=data['InTime'].toString().substring(0,5);
-
       outTime=data['OutTime'].toString().substring(0,5);
+      // dur = getDurationBetweenTimes(data['OutTime'],data['InTime']).toString();
+      dur=data['Duration'].toString().substring(0,5);
+      // print(dur);
+      leaveDay = data['Days']??'0';
       // posLat=double.parse(data['PosLat']);
       // posLong=double.parse(data['PosLong']);
+      // Text((locationName=="" || (attTime=="00:00" && locationStatus!='Absent'))?"Check in":outTime!='00:00' || locationStatus=='Absent'?locationStatus:"Check out",style: TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
+      buttonText=(locationName=="" || (attTime=="00:00" && locationStatus!='Absent'))?"Check In":outTime!='00:00' || locationStatus=='Absent'?locationStatus:"Check Out";
       checkinWidth=true;
     }
     else{
+      buttonText="Check In";
       checkinWidth=false;
     }
     checkOutPressed=false;
     // gridAnim=true;
   }
+
+  // String getDurationBetweenTimes(String start, String end) {
+  //   final startParts = start.split(":");
+  //   final endParts = end.split(":");
+  //
+  //   final startTime = DateTime(0, 1, 1, int.parse(startParts[0]), int.parse(startParts[1]));
+  //   // print(startTime.toString());
+  //
+  //   final endTime = DateTime(0, 1, 1, int.parse(endParts[0]), int.parse(endParts[1]));
+  //   // print(endTime.toString());
+  //   final dur = startTime.difference(endTime);
+  //   return "${dur.inHours.toString().padLeft(2, '0')}:${dur.inMinutes.remainder(60).toString().padLeft(2, '0')}";
+  // }
 
 
   @override
@@ -412,7 +436,8 @@ class _homePageState extends State<homePage> {
                                         padding: const EdgeInsets.only(right: 20.0),
                                         child: InkWell(
                                           onTap: ()async{
-                                            if(locationName!=""){
+                                            print(buttonText);
+                                            if(buttonText!="Check In" && buttonText!="Check Out"){
                                               return;
                                             }
                                             // print("checkin pressed");
@@ -428,23 +453,20 @@ class _homePageState extends State<homePage> {
                                               return;
                                             }
 
+                                            setState(() {
+                                              // _refresh=true;
+                                              checkinWidth=true;
+                                              // print(checkinWidth);
+                                            });
 
-                                            if(locationName==""){
-                                              setState(() {
-                                                // _refresh=true;
-                                                checkinWidth=true;
-                                                // print(checkinWidth);
-                                              });
-                                              // showMessage("Checking Location Services");
-                                              bool status=await locationServices().checkLocationServices();
-                                              // showMessage("$status");
-                                              if(status==true){
-                                                // showMessage("preparing model");
-                                                currLocation=await locationServices().prepareModel();
-                                                await showDialogBox("CheckIn").then((value) => null);
-                                              }
-                                              fetchAttStatus();
+                                            bool status=await locationServices().checkLocationServices();
+                                            if(status==true){
+                                              // showMessage("preparing model");
+                                              currLocation=await locationServices().prepareModel();
+                                              await showDialogBox(attTime=='00:00' || attTime==''?"CheckIn":"CheckOut").then((value) => null);
                                             }
+                                            fetchAttStatus();
+
 
                                           },
                                           child: AnimatedContainer(
@@ -469,62 +491,140 @@ class _homePageState extends State<homePage> {
                                                 ),
                                               ],
                                             ),
-                                            child: Center(
-                                                child: locationName==""?Row(
-                                                  mainAxisAlignment: checkinWidth?MainAxisAlignment.spaceEvenly:MainAxisAlignment.center,
-                                                  children: [
-                                                    const Text("Check in",style: TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
-                                                    checkinWidth?const SizedBox(
-                                                        width: 20,
-                                                        height: 20,
-                                                        child: CircularProgressIndicator(color: Colors.white,)):const SizedBox(),
-
-                                                  ],
-                                                ):
-                                                Padding(
-                                                  padding: const EdgeInsets.only(left:12.0,right:2.0),
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            child: Row(
+                                                    mainAxisAlignment: checkinWidth?MainAxisAlignment.spaceEvenly:MainAxisAlignment.center,
                                                     children: [
-                                                      SizedBox(width: 5,),
-                                                      // const Icon(Icons.work,color: Colors.white,),
-                                                      Text(locationStatus,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white),),
-                                                      locationStatus=='Present' && outTime=='00:00'?InkWell(
-                                                          onTap: ()async{
-                                                            // await locationServices().openMap(posLat, posLong);
-                                                            setState(() {
-                                                              checkOutPressed=true;
-                                                            });
-                                                            bool status=await locationServices().checkLocationServices();
-                                                            if(status==true){
-                                                              currLocation=await locationServices().prepareModel();
-                                                              await showDialogBox("CheckOut").then((value) => null);
-                                                            }
-                                                            fetchAttStatus();
+                                                      Text(buttonText,style: TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
+                                                      checkinWidth?const SizedBox(
+                                                          width: 20,
+                                                          height: 20,
+                                                          child: CircularProgressIndicator(color: Colors.white,)):const SizedBox(),
 
-                                                          },
-                                                          child: Container(
-                                                              width: 80,
-                                                              height: 40,
-                                                              decoration: BoxDecoration(
-                                                                  borderRadius: BorderRadius.circular(20),
-                                                                  color: Colors.white
-                                                              ),
-                                                              child: Center(child: checkOutPressed?const SizedBox(width: 20,height: 20,child: CircularProgressIndicator()):const Text("CheckOut")))):const SizedBox(),
-                                                      // SizedBox(width: 10,),
                                                     ],
-                                                  ),
-                                                )
-                                            ),
+                                                  )
                                           ),
                                         )
                                     )
                                 ),
+                                // kIsWeb?SizedBox():Align(
+                                //     alignment: Alignment.topRight,
+                                //     child: Padding(
+                                //         padding: const EdgeInsets.only(right: 20.0),
+                                //         child: InkWell(
+                                //           onTap: ()async{
+                                //             if(locationName!=""){
+                                //               return;
+                                //             }
+                                //             // print("checkin pressed");
+                                //             bool location = await locationServices().checkLocationServices();
+                                //             if(!location){
+                                //               showMessage("Please enable location services");
+                                //               return;
+                                //             }
+                                //
+                                //             bool device = await apiServices().checkDevice();
+                                //             if(!device){
+                                //               showMessage("Unknown Device");
+                                //               return;
+                                //             }
+                                //
+                                //
+                                //             if(locationName==""){
+                                //               setState(() {
+                                //                 // _refresh=true;
+                                //                 checkinWidth=true;
+                                //                 // print(checkinWidth);
+                                //               });
+                                //               // showMessage("Checking Location Services");
+                                //               bool status=await locationServices().checkLocationServices();
+                                //               // showMessage("$status");
+                                //               if(status==true){
+                                //                 // showMessage("preparing model");
+                                //                 currLocation=await locationServices().prepareModel();
+                                //                 await showDialogBox("CheckIn").then((value) => null);
+                                //               }
+                                //               fetchAttStatus();
+                                //             }
+                                //
+                                //           },
+                                //           child: AnimatedContainer(
+                                //             duration: const Duration(seconds: 1),
+                                //             curve: Curves.fastOutSlowIn,
+                                //             width: checkinWidth?w-w/2:w/3,
+                                //             height: 50,
+                                //             // height: checkinWidth?w/2:50,
+                                //             decoration: BoxDecoration(
+                                //               borderRadius: BorderRadius.circular(25),
+                                //               gradient: const LinearGradient(
+                                //                   begin: Alignment.bottomLeft,
+                                //                   end: Alignment.topRight,
+                                //                   colors: [AppColors.themeStart,AppColors.themeStop]
+                                //               ),
+                                //               boxShadow: const [
+                                //                 BoxShadow(
+                                //                   color: Colors.grey,
+                                //                   spreadRadius: 1,
+                                //                   blurRadius: 2,
+                                //                   offset: Offset(2, 2),
+                                //                 ),
+                                //               ],
+                                //             ),
+                                //             child: Center(
+                                //                 child: locationName==""?Row(
+                                //                   mainAxisAlignment: checkinWidth?MainAxisAlignment.spaceEvenly:MainAxisAlignment.center,
+                                //                   children: [
+                                //                     const Text("Check in",style: TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
+                                //                     checkinWidth?const SizedBox(
+                                //                         width: 20,
+                                //                         height: 20,
+                                //                         child: CircularProgressIndicator(color: Colors.white,)):const SizedBox(),
+                                //
+                                //                   ],
+                                //                 ):
+                                //                 Padding(
+                                //                   padding: const EdgeInsets.only(left:12.0,right:2.0),
+                                //                   child: Row(
+                                //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //                     children: [
+                                //                       SizedBox(width: 5,),
+                                //                       // const Icon(Icons.work,color: Colors.white,),
+                                //                       Text(leaveDay=='0.5'?"Half Day":locationStatus,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white),),
+                                //                       (locationStatus=='Present' || leaveDay=='0.5') ?InkWell(
+                                //                           onTap: ()async{
+                                //                             // await locationServices().openMap(posLat, posLong);
+                                //                             setState(() {
+                                //                               checkOutPressed=true;
+                                //                             });
+                                //                             bool status=await locationServices().checkLocationServices();
+                                //                             if(status==true){
+                                //                               currLocation=await locationServices().prepareModel();
+                                //                               await showDialogBox(attTime=='00:00'?"CheckIn":"CheckOut").then((value) => null);
+                                //                             }
+                                //                             fetchAttStatus();
+                                //
+                                //                           },
+                                //                           child: Container(
+                                //                               width: 80,
+                                //                               height: 40,
+                                //                               decoration: BoxDecoration(
+                                //                                   borderRadius: BorderRadius.circular(20),
+                                //                                   color: Colors.white
+                                //                               ),
+                                //                               child: Center(child: checkOutPressed?const SizedBox(width: 20,height: 20,child: CircularProgressIndicator()):Text(attTime=='00:00'?"CheckIn":"CheckOut")))):const SizedBox(),
+                                //                       // SizedBox(width: 10,),
+                                //                     ],
+                                //                   ),
+                                //                 )
+                                //             ),
+                                //           ),
+                                //         )
+                                //     )
+                                // ),
                               ],
                             ),
                           ),
                           const SizedBox(height: 10,),
-                          locationStatus=='Present'? Container(
+                          locationStatus!=''? Container(
                             width: w-20,
                             decoration: BoxDecoration(
                               color: Colors.blue.shade50
@@ -533,9 +633,9 @@ class _homePageState extends State<homePage> {
                               // crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const SizedBox(height: 5,),
-                                Text("Work location : $locationName",style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.blue,fontSize: 18),),
+                                Text(locationStatus=='HalfDay'?"$locationName (HalfDay)":"$locationName",style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.blue,fontSize: 18),),
                                 const SizedBox(height: 5,),
-                                locationStatus=='Present'?SizedBox(
+                                attTime!='00:00'?SizedBox(
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
@@ -543,6 +643,10 @@ class _homePageState extends State<homePage> {
                                       const Icon(Icons.input,color: Colors.green,size: 16,),
                                       const SizedBox(width: 10,),
                                       Text(attTime,style: const TextStyle(color: Colors.black),),
+                                      const Spacer(),
+                                      outTime=='00:00'?const SizedBox():const Icon(Icons.access_time,color: Colors.purple,size: 16,),
+                                      outTime=='00:00'?const SizedBox():const SizedBox(width: 10,),
+                                      outTime=='00:00'?const SizedBox():Text(dur,style: const TextStyle(color: Colors.black)),
                                       const Spacer(),
                                       outTime=='00:00'?const SizedBox():Text(outTime,style: const TextStyle(color: Colors.black)),
                                       outTime=='00:00'?const SizedBox():const SizedBox(width: 10,),
@@ -704,8 +808,8 @@ class _homePageState extends State<homePage> {
                               ],
                             ),
                           ):const SizedBox(),
-                          widget.currentUser.Permission!="User"?const SizedBox(height: 30,):const SizedBox(),
-                          widget.currentUser.Permission!="User"?gridContainer3('assets/setting.png', "Account Settings", (){
+                          widget.currentUser.Permission=="Admin" || widget.currentUser.Permission=="Manager"?const SizedBox(height: 30,):const SizedBox(),
+                          widget.currentUser.Permission=="Admin" || widget.currentUser.Permission=="Manager"?gridContainer3('assets/setting.png', "Account Settings", (){
                             Navigator.push(context, MaterialPageRoute(builder: (context){
                               return settingsPage(currentUser: widget.currentUser,);
                             }));
@@ -764,16 +868,16 @@ class _homePageState extends State<homePage> {
                             width: w,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  const Text("Powered by Einlogica",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12,color: Colors.grey),),
-                                  Text(version,style: TextStyle(fontSize: 9,color: Colors.grey)),
+                                  const Text("Powered by Einlogica",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 10,color: Colors.grey),),
+                                  Text(version,style: const TextStyle(fontSize: 9,color: Colors.grey)),
                                 ],
                               ),
                             ),
                           ),
-                          const SizedBox(height: 20,),
+                          // const SizedBox(height: 1,),
                         ],
                       ),
                     ),
@@ -906,7 +1010,7 @@ class _homePageState extends State<homePage> {
                           String status = await apiServices().postAttendance(widget.currentUser.Name, widget.currentUser.Mobile, currLocation.posLat, currLocation.posLong, currLocation.locationName, type);
                           await fetchAttStatus();
                           setState(() {
-
+                            checkinWidth=false;
                           });
                           showMessage(status);
 
@@ -925,7 +1029,8 @@ class _homePageState extends State<homePage> {
                         onPressed: () {
 
                           setState(() {
-                            type=="CheckIn"?checkinWidth = false:checkOutPressed=false;
+                            type=="CheckIn" && locationStatus!='Leave'?checkinWidth = false:checkOutPressed=false;
+                            checkinWidth=false;
                           });
                           Navigator.of(ctx).pop();
                         },
