@@ -244,8 +244,8 @@ class _attendancePageState extends State<attendancePage> {
                                 onTap: (){
                                   _regInCtrl.text=attList[index].attTime;
                                   _regOutCtrl.text=attList[index].outTime;
+                                  regularizeDialogBox(index);
 
-                                  showDialogBox(index);
                                 },
                                 leading: SizedBox(
                                     width: 20,
@@ -333,55 +333,55 @@ Widget calendar(){
 }
 
 
-  Future showDialogBox(int _selectedIndex){
-
-    return showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        contentPadding: EdgeInsets.all(15),
-        insetPadding: EdgeInsets.all(20),
-        // backgroundColor: AppColors.boxColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(attList[_selectedIndex].status,style: const TextStyle(color: AppColors.buttonColorDark),),
-            Text(attList[_selectedIndex].attDate.toString(),style: const TextStyle(color: AppColors.buttonColorDark,fontSize: 18),),
-          ],
-        ),
-        content: SizedBox(
-          width: w-10,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-
-              ],
-            ),
-          ),
-        ),
-
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              _commentsCtrl.clear();
-              Navigator.of(ctx).pop();
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: AppColors.buttonColor,
-              ),
-              padding: const EdgeInsets.all(10),
-              child: const Text("Close",style: TextStyle(color: Colors.white),),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Future showDialogBox(int _selectedIndex){
+  //
+  //   return showDialog(
+  //     context: context,
+  //     builder: (ctx) => AlertDialog(
+  //       contentPadding: EdgeInsets.all(15),
+  //       insetPadding: EdgeInsets.all(20),
+  //       // backgroundColor: AppColors.boxColor,
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(15.0),
+  //       ),
+  //       title: Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //         children: [
+  //           Text(attList[_selectedIndex].status,style: const TextStyle(color: AppColors.buttonColorDark),),
+  //           Text(attList[_selectedIndex].attDate.toString(),style: const TextStyle(color: AppColors.buttonColorDark,fontSize: 18),),
+  //         ],
+  //       ),
+  //       content: SizedBox(
+  //         width: w-10,
+  //         child: SingleChildScrollView(
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //
+  //       actions: <Widget>[
+  //         TextButton(
+  //           onPressed: () {
+  //             _commentsCtrl.clear();
+  //             Navigator.of(ctx).pop();
+  //           },
+  //           child: Container(
+  //             decoration: BoxDecoration(
+  //               borderRadius: BorderRadius.circular(20),
+  //               color: AppColors.buttonColor,
+  //             ),
+  //             padding: const EdgeInsets.all(10),
+  //             child: const Text("Close",style: TextStyle(color: Colors.white),),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
 
   Future regularizeDialogBox(int _selectedIndex){
