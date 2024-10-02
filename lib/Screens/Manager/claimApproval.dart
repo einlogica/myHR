@@ -767,31 +767,13 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
               //Approval if status is pending
               item.Status=="Applied"?const SizedBox(height: 10,):const SizedBox(),
               (widget.currentUser.Permission=='Admin' || widget.currentUser.Permission=='Manager')?SizedBox(
-                  child: Column(
+                  child: (widget.currentUser.Permission=='Manager' && (item.Status=='L1 Approved' || item.Status=='Approved'))?SizedBox():Column(
                     children: [
                       FieldArea(title: "Comments",type: TextInputType.text,ctrl: commentsCtrl,len: 50,),
-                      // TextFormField(
-                      //   enabled: true,
-                      //   controller: commentsCtrl,
-                      //   // keyboardType: TextInputType.number,
-                      //   decoration: InputDecoration(
-                      //     // prefixIcon: Icon(Icons.phone),
-                      //     fillColor: Colors.white,
-                      //     filled: true,
-                      //     hintText: "Comments",
-                      //     enabled: true,
-                      //     // border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                      //     border: OutlineInputBorder(
-                      //       borderRadius: BorderRadius.circular(8.0),
-                      //       borderSide: BorderSide(color: Colors.blue.shade900),
-                      //     ),
-                      //
-                      //   ),
-                      // ),
-                      // const SizedBox(height: 10,),
+
                       Row(
                         children: [
-                          item.Status=='Applied' || item.Status=='Rejected'?TextButton(
+                          TextButton(
                             onPressed: () async{
                               setState(() {
                                 refresh=true;
@@ -825,8 +807,8 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
                               // padding: const EdgeInsets.all(14),
                               child: const Center(child: Text("Approve",style: TextStyle(color: Colors.white),)),
                             ),
-                          ):SizedBox(),
-                          item.Status=='Applied' || item.Status=='Approved'?TextButton(
+                          ),
+                          TextButton(
                             onPressed: () async{
 
                               String status = await apiServices().updateBill(item.ID, widget.currentUser.Permission, "Rejected", commentsCtrl.text);
@@ -852,7 +834,7 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
                               // padding: const EdgeInsets.all(14),
                               child: Center(child: const Text("Reject",style: TextStyle(color: Colors.white))),
                             ),
-                          ):SizedBox(),
+                          ),
                         ],
                       )
                     ],
