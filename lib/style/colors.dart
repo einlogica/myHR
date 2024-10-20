@@ -17,6 +17,7 @@ class AppColors {
   static const themeStart = Color(0xFF4169E1);
   static const themeStop = Color(0xFFb394f4);
 
+
   //Teal
   // static const themeStart = Color(0xFF008080);
   // static const themeStop = Color(0xFFAFEEEE);

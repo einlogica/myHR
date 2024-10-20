@@ -459,8 +459,8 @@ class _homePageState extends State<homePage> {
                                               // print(checkinWidth);
                                             });
 
-                                            bool status=await locationServices().checkLocationServices();
-                                            if(status==true){
+                                            // bool status=await locationServices().checkLocationServices();
+                                            if(location==true){
                                               // showMessage("preparing model");
                                               currLocation=await locationServices().prepareModel();
                                               await showDialogBox(attTime=='00:00' || attTime==''?"CheckIn":"CheckOut").then((value) => null);

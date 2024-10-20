@@ -773,7 +773,7 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
 
                       Row(
                         children: [
-                          TextButton(
+                          item.Status=='Approved'?SizedBox():TextButton(
                             onPressed: () async{
                               setState(() {
                                 refresh=true;

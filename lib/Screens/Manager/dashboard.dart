@@ -63,12 +63,18 @@ class _dashboardState extends State<dashboard> {
   fetchMonthlyData()async{
     //Attendance
     fetchedAttendanceData = await apiServices().getMonthlyAttendance(widget.currentUser.Mobile,currDate.month.toString(),currDate.year.toString());
-    // print(fetchedAttendanceData);
     attendanceData=fetchedAttendanceData.sublist(fetchedAttendanceData.length-8,fetchedAttendanceData.length-1);
     employeeCount=attendanceData[0]['Total'];
-    presentCount=fetchedAttendanceData.last['PresentCount'];
-    leaveCount=fetchedAttendanceData.last['LeaveCount'];
-    absentCount=employeeCount-presentCount-leaveCount;
+    // print(fetchedAttendanceData.last['Day']);
+    if(fetchedAttendanceData.last['Day']==DateTime.now().day){
+      presentCount=fetchedAttendanceData.last['PresentCount'];
+      leaveCount=fetchedAttendanceData.last['LeaveCount'];
+      absentCount=employeeCount-presentCount-leaveCount;
+    }
+    else{
+      attendanceData=fetchedAttendanceData.sublist(fetchedAttendanceData.length-7,fetchedAttendanceData.length);
+    }
+
     //Expense
     expenseData = await apiServices().getMonthlyExpense(widget.currentUser.Mobile,currDate.month.toString(),currDate.year.toString());
     // print(expenseData);
@@ -399,7 +405,7 @@ class _dashboardState extends State<dashboard> {
                           SizedBox(
                             width: w-10,
                             height: 200,
-                            child: pieChartWidget(),
+                            child: (presentCount+leaveCount+absentCount==0)?Center(child: Text("No Attendance yet")):pieChartWidget(),
                           ),
                           const SizedBox(height: 40,),
                           const Padding(

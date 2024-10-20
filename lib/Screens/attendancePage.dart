@@ -36,6 +36,12 @@ class _attendancePageState extends State<attendancePage> {
   DateTime? _selected;
   TimeOfDay _selTime = TimeOfDay.now();
   String regIn ="",regOut="";
+  Map<String,Color> attColorMap = {
+    "Leave": Colors.red,
+    "Absent": Colors.red,
+    "Holiday": Colors.purple,
+    "Present": Colors.green,
+  };
 
 
   //For summary view
@@ -43,6 +49,7 @@ class _attendancePageState extends State<attendancePage> {
   List<int> presentDays =[];
   List<int> leaveDays =[];
   List<int> halfDays =[];
+  List<int> offDays =[];
   List<summaryModel> summList = [];
   Map<String,double> result={};
   double leaveBal=0.0;
@@ -89,6 +96,9 @@ class _attendancePageState extends State<attendancePage> {
     for(var d in attList){
       if(d.status=='Present'){
         presentDays.add(int.parse(d.attDate.substring(0,2)));
+      }
+      else if(d.status=='Holiday'){
+        offDays.add(int.parse(d.attDate.substring(0,2)));
       }
       else if(d.status=='HalfDay'){
         halfDays.add(int.parse(d.attDate.substring(0,2)));
@@ -250,7 +260,8 @@ class _attendancePageState extends State<attendancePage> {
                                 leading: SizedBox(
                                     width: 20,
                                     height: 20,
-                                    child: Center(child: Icon(Icons.calendar_month_outlined,color: ['Leave','Absent'].contains(attList[index].status)?Colors.red:['HalfDay'].contains(attList[index].status)?Colors.orangeAccent:Colors.green,))),
+                                    // child: Center(child: Icon(Icons.calendar_month_outlined,color: ['Leave','Absent'].contains(attList[index].status)?Colors.red:['HalfDay'].contains(attList[index].status)?Colors.orangeAccent:Colors.green,))),
+                                    child: Center(child: Icon(Icons.calendar_month_outlined,color: attColorMap[attList[index].status]??Colors.grey))),
                                 title: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -258,12 +269,12 @@ class _attendancePageState extends State<attendancePage> {
                                     Text(attList[index].status=='Present'?attList[index].location:attList[index].status, style:const TextStyle(fontWeight: FontWeight.bold),),
                                   ],
                                 ),
-                                subtitle: attList[index].status=='Leave' || attList[index].status=='Absent'?const SizedBox():Row(
+                                subtitle: attList[index].status=='Leave' || attList[index].status=='Absent' || attList[index].status=='Holiday'?const SizedBox():Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("In: ${attList[index].attTime.substring(0,5)}",style: const TextStyle(color: Colors.green),),
                                     // attList[index].outTime.substring(0,5)!='00:00'?Text("( ${getDurationBetweenTimes(attList[index].attTime, attList[index].outTime)} )",):SizedBox(),
-                                    attList[index].outTime.substring(0,5)!='00:00'?Text("( ${attList[index].duration.toString().substring(0,5)} )",):SizedBox(),
+                                    attList[index].outTime.substring(0,5)!='00:00'?Text("( ${attList[index].duration.toString().substring(0,5)} )",):const SizedBox(),
                                     Text("Out: ${attList[index].outTime.substring(0,5)}",style: TextStyle(color: attList[index].outTime=="00:00:00"?Colors.red:Colors.green),),
                                   ],
                                 ),
@@ -313,7 +324,7 @@ Widget calendar(){
                 return Container(
                   margin: const EdgeInsets.all(6.0),
                   decoration: BoxDecoration(
-                    color: presentDays.contains(day.day)?Colors.green:leaveDays.contains(day.day)?Colors.red.shade300:halfDays.contains(day.day)?Colors.orangeAccent:Colors.transparent,
+                    color: presentDays.contains(day.day)?Colors.green:leaveDays.contains(day.day)?Colors.red.shade300:halfDays.contains(day.day)?Colors.orangeAccent:offDays.contains(day.day)?Colors.purple:Colors.transparent,
                     shape: BoxShape.circle,
                   ),
                   child: Center(
