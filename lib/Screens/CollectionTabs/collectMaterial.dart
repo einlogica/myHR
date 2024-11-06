@@ -799,7 +799,7 @@ class _collectMaterialState extends State<collectMaterial> {
               ],
             ):Column(
               children: [
-                FieldAreaWithCalendar(title: "Date", ctrl: _dateController, type: TextInputType.datetime,days: 365,),
+                FieldAreaWithCalendar(title: "Date", ctrl: _dateController, type: TextInputType.datetime,days: 365,fdays: 0,),
                 itemDropDown=="Yard"?FieldAreaWithDropDown(title: "Vehicle", dropList: vehicleList, dropdownValue: selectedVehicle, callback: dropDownCallback):SizedBox(),
                 itemDropDown=="Yard" && selectedVehicle=="Other"?FieldArea(title: "Specify", ctrl: _specifyCtrl, type: TextInputType.text, len: 20):SizedBox(),
                 // FieldAreaWithDropDown(title: "Item", dropList: itemList, dropdownValue: itemDropDown, callback: dropDownCallback),

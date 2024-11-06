@@ -181,8 +181,8 @@ class _downloadsPageState extends State<downloadsPage> {
                 ),
                 SizedBox(height: 20,),
                 FieldAreaWithDropDown(title: "Reports", dropList: ReportList, dropdownValue: reportDropDown, callback: dropdownCallback),
-                FieldAreaWithCalendar(title: "From Date", ctrl: fromController, type: TextInputType.text,days:800),
-                FieldAreaWithCalendar(title: "To Date", ctrl: toController, type: TextInputType.text,days:800),
+                FieldAreaWithCalendar(title: "From Date", ctrl: fromController, type: TextInputType.text,days:800,fdays: 0,),
+                FieldAreaWithCalendar(title: "To Date", ctrl: toController, type: TextInputType.text,days:800,fdays: 0,),
                 const SizedBox(height: 40,),
                 SizedBox(
                   width: w-50,

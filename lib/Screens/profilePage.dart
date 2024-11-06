@@ -55,6 +55,7 @@ class _profilePageState extends State<profilePage> {
   advanceModel advanceData = advanceModel(mobile: "", name: "", amount: "", date: "", emi: "", startdate: "", balance: "", status: "");
 
   final TextEditingController _dateCtrl= TextEditingController();
+  final TextEditingController _dateEntry= TextEditingController();
   final TextEditingController _commentsCtrl= TextEditingController();
   final TextEditingController _amtCtrl= TextEditingController();
   final TextEditingController _locCtrl= TextEditingController();
@@ -835,7 +836,8 @@ class _profilePageState extends State<profilePage> {
                 ),
                 FieldAreaWithDropDown(title: "Account", dropList: Acc, dropdownValue: dropdownAcc, callback: updateDropDown),
                 FieldArea(title: "EMI", ctrl: _emiCtrl, type: TextInputType.number, len: 3),
-                FieldAreaWithCalendar(title: "Start Date", ctrl: _dateCtrl, type: TextInputType.text,days:365),
+                FieldAreaWithCalendar(title: "Entry Date", ctrl: _dateEntry, type: TextInputType.text,days:365,fdays: 0,),
+                FieldAreaWithCalendar(title: "Start Date", ctrl: _dateCtrl, type: TextInputType.text,days:365,fdays: 60,),
                 FieldArea(title: "Amount", ctrl: _amtCtrl, type: TextInputType.number, len: 6),
                 // FieldAreaWithDropDown("Account", Acc, dropdownAcc,),
                 // FieldArea("Location", _locCtrl,TextInputType.text),
@@ -851,7 +853,7 @@ class _profilePageState extends State<profilePage> {
           TextButton(
             onPressed: () async{
               Navigator.pop(context);
-              String status = await apiServices().addAdvance(dropdownAcc,widget.mobile, _amtCtrl.text, _emiCtrl.text, _dateCtrl.text);
+              String status = await apiServices().addAdvance(dropdownAcc,widget.mobile, _amtCtrl.text, _emiCtrl.text, _dateCtrl.text,_dateEntry.text);
               // String status = await apiServices().addEmployeeAdvance(currentUser.Mobile, currentUser.Name, dropdownAcc, _locCtrl.text, _dateCtrl.text, _amtCtrl.text);
               clearFields();
               showMessage(status);
@@ -899,7 +901,7 @@ class _profilePageState extends State<profilePage> {
               children: [
                 FieldAreaWithDropDown(title: "Account", dropList: Acc, dropdownValue: dropdownAcc, callback: updateDropDown),
                 FieldArea(title: "Description", ctrl: _locCtrl, type: TextInputType.text, len: 20),
-                FieldAreaWithCalendar(title: "Date", ctrl: _dateCtrl, type: TextInputType.text,days:365),
+                FieldAreaWithCalendar(title: "Date", ctrl: _dateCtrl, type: TextInputType.text,days:365,fdays: 0,),
                 FieldArea(title: "Amount", ctrl: _amtCtrl, type: TextInputType.number, len: 6),
                 // FieldAreaWithDropDown("Account", Acc, dropdownAcc,),
                 // FieldArea("Location", _locCtrl,TextInputType.text),
@@ -953,6 +955,7 @@ class _profilePageState extends State<profilePage> {
     _newPin.clear();
     _rePin.clear();
     _emiCtrl.clear();
+    _dateEntry.clear();
   }
 
 

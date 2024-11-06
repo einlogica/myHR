@@ -6,8 +6,9 @@ class FieldAreaWithCalendar extends StatefulWidget {
   final String title;
   final TextEditingController ctrl;
   final TextInputType type;
+  final int fdays;
   final int days;
-  const FieldAreaWithCalendar({super.key,required this.title,required this.ctrl,required this.type,required this.days});
+  const FieldAreaWithCalendar({super.key,required this.title,required this.ctrl,required this.type,required this.days,required this.fdays});
 
   @override
   State<FieldAreaWithCalendar> createState() => _FieldAreaWithCalendarState();
@@ -33,7 +34,7 @@ class _FieldAreaWithCalendarState extends State<FieldAreaWithCalendar> {
               context: context,
               initialDate: DateTime.now(), //get today's date
               firstDate:DateTime.now().subtract(Duration(days: widget.days)),
-              lastDate: DateTime.now(),
+              lastDate: DateTime.now().add(Duration(days: widget.fdays)),
             );
             if(pickedDate != null ){
               // print(pickedDate);  //get the picked date in the format => 2022-07-04 00:00:00.000

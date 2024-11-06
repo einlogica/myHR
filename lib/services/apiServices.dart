@@ -43,7 +43,7 @@ class apiServices{
   //--------------TEST
   // var url = "https://testingcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
 
-  var appVersion ="V1.1.0+22";
+  var appVersion ="V1.1.0+23";
   // var emp = "";
 
 //================================================================================================================================================= USERS
@@ -1090,10 +1090,10 @@ class apiServices{
   }
 
   //Add advances to employye account
-  Future<String> addAdvance(String account,String mobile,String amount,String emi,String startdate)async{
+  Future<String> addAdvance(String account,String mobile,String amount,String emi,String startdate,String entrydate)async{
     print("Executing add advance details method");
     String status ="";
-    final response = await apiRequest("jilariapi.php",{"action":"addAdvance","account":account,"usermobile":mobile,"amount":amount,"emi":emi,"startdate":startdate,"emp":emp});
+    final response = await apiRequest("jilariapi.php",{"action":"addAdvance","account":account,"usermobile":mobile,"amount":amount,"emi":emi,"startdate":startdate,"entrydate":entrydate,"emp":emp});
     if(response.statusCode==200){
       status = response.body.trim();
     }

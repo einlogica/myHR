@@ -437,7 +437,7 @@ class _editEmployeePageState extends State<editEmployeePage> {
                               // basicEdit?FieldArea(title: "Department",ctrl: _departmentCtrl,type: TextInputType.text,len:20):buildText("Department", currentUser.Department),
                               basicEdit?FieldAreaWithDropDown(title: "Position", dropList: positionList, dropdownValue: dropdownPosition, callback: updateDropDown):buildText("Position", currentUser.Position,),
                               basicEdit?FieldAreaWithDropDown(title: "Permission", dropList: users, dropdownValue: dropdownUser,callback: updateDropDown):buildText("Permission", currentUser.Permission),
-                              basicEdit?FieldAreaWithCalendar(title: "DOJ",ctrl: _dojCtrl,type: TextInputType.datetime,days:24000):buildText("DOJ", currentUser.DOJ),
+                              basicEdit?FieldAreaWithCalendar(title: "DOJ",ctrl: _dojCtrl,type: TextInputType.datetime,days:24000,fdays: 0,):buildText("DOJ", currentUser.DOJ),
                               basicEdit?FieldArea(title: "Leave Count",ctrl: _leaveCtrl,type: TextInputType.number,len:5):buildText("Leave Count", currentUser.LeaveCount.toString()),
 
                               const SizedBox(height: 10,),
@@ -542,7 +542,7 @@ class _editEmployeePageState extends State<editEmployeePage> {
                         showPersonal?SizedBox(
                           child: Column(
                             children: [
-                              personalEdit?FieldAreaWithCalendar(title:"DOB",ctrl:dobCtrl,type:TextInputType.datetime,days:24000):buildText("DOB", personalInfo.DOB.toString()),
+                              personalEdit?FieldAreaWithCalendar(title:"DOB",ctrl:dobCtrl,type:TextInputType.datetime,days:24000,fdays: 0,):buildText("DOB", personalInfo.DOB.toString()),
                               personalEdit?FieldAreaWithDropDown(title: "Sex",dropList: sex,dropdownValue: dropdownSex,callback: updateDropDown):buildText("Sex", personalInfo.Sex.toString()),
                               personalEdit?FieldAreaWithDropDown(title: "Blood Group",dropList: blood,dropdownValue: dropdownblood,callback: updateDropDown):buildText("Blood Group", personalInfo.BloodGroup.toString()),
                               personalEdit?FieldArea(title: "Address Line 1", ctrl: adl1Ctrl, type: TextInputType.text,len:50):buildText("Address", personalInfo.AddL1.toString()),

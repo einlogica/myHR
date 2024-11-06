@@ -517,7 +517,7 @@ class _timesheetPageState extends State<timesheetPage> {
                             // FieldArea(title: "Location", ctrl: _siteCtrl, type: TextInputType.text, len: 40),
                             FieldAreaWithDropDown(title: "Location", dropList: siteList, dropdownValue: dropdownsite, callback: dropdowncallback),
                             dropdownsite=="Other"?FieldArea(title: "Specify Location", ctrl: _siteCtrl, type: TextInputType.text, len: 40):SizedBox(),
-                            FieldAreaWithCalendar(title: "Date", ctrl: dateController, type: TextInputType.datetime,days:365),
+                            FieldAreaWithCalendar(title: "Date", ctrl: dateController, type: TextInputType.datetime,days:365,fdays: 0,),
                             // FieldArea(title: "Activity", ctrl: _activityCtrl, type: TextInputType.text, len: 200),
                             // FieldArea(title: "Customer Name", ctrl: custCtrl, type: TextInputType.text, len: 20),
                             FieldArea(title: "Remarks", ctrl: remarksCtrl, type: TextInputType.text, len: 50),

@@ -237,7 +237,7 @@ class _addEmployeePageState extends State<addEmployeePage> {
                               // FieldArea(title: "Position",ctrl: _positionCtrl,type: TextInputType.text,len:20),
                               // FieldArea(title: "Department",ctrl: _departmentCtrl,type: TextInputType.text,len:20),
                               FieldArea(title: "Leave Count",ctrl: _leaveCtrl,type: TextInputType.number,len:5),
-                              FieldAreaWithCalendar(title: "Date of Joining",ctrl: _dojCtrl,type: TextInputType.datetime,days:24000),
+                              FieldAreaWithCalendar(title: "Date of Joining",ctrl: _dojCtrl,type: TextInputType.datetime,days:24000,fdays: 0,),
                               FieldAreaWithDropDown(title: "Department",dropList: departments,dropdownValue: dropdownDep,callback: updateDropDown,),
                               FieldAreaWithDropDown(title: "Position",dropList: positions,dropdownValue: dropdownPos,callback: updateDropDown,),
                               FieldAreaWithDropDown(title: "Manager",dropList: manageridList,dropdownValue: dropdownvalue,callback: updateDropDown,),
@@ -272,7 +272,7 @@ class _addEmployeePageState extends State<addEmployeePage> {
                             children: [
                               FieldAreaWithDropDown(title: "Sex",dropList: sex,dropdownValue: dropdownSex,callback: updateDropDown,),
                               FieldAreaWithDropDown(title: "Blood Group",dropList: blood,dropdownValue: dropdownblood,callback: updateDropDown,),
-                              FieldAreaWithCalendar(title: "Date of Birth",ctrl: dobCtrl,type: TextInputType.datetime,days:24000),
+                              FieldAreaWithCalendar(title: "Date of Birth",ctrl: dobCtrl,type: TextInputType.datetime,days:24000,fdays: 0,),
                               FieldArea(title: "Address Line 1",ctrl: adl1Ctrl,type: TextInputType.text,len:50),
                               FieldArea(title: "Address Line 2",ctrl: adl2Ctrl,type: TextInputType.text,len:50),
                               FieldArea(title: "Address Line 3",ctrl: adl3Ctrl,type: TextInputType.text,len:50),

@@ -382,7 +382,7 @@ class _upload_billState extends State<upload_bill> {
                           // FieldArea(title: "Location", ctrl: _siteCtrl, type: TextInputType.text, len: 30),
                           FieldAreaWithDropDown(title: "Location", dropList: siteList, dropdownValue: dropdownsite, callback: dropDownCallback),
                           dropdownsite=="Other"?FieldArea(title: "Specify Location", ctrl: _siteCtrl, type: TextInputType.text, len: 40):SizedBox(),
-                          FieldAreaWithCalendar(title: "Expense Date", ctrl: dateController, type: TextInputType.datetime,days:2),
+                          FieldAreaWithCalendar(title: "Expense Date", ctrl: dateController, type: TextInputType.datetime,days:2,fdays: 0,),
                           travel.contains(dropdownvalue)?FieldArea(title: "From", ctrl: _fromCtrl, type: TextInputType.text, len: 20):const SizedBox(),
                           travel.contains(dropdownvalue)?FieldArea(title: "To", ctrl: _toCtrl, type: TextInputType.text, len: 20):const SizedBox(),
                           dropdownvalue=='Daily-Wage'?FieldArea(title: "Labour Name", ctrl: _labourCtrl, type: TextInputType.text, len: 20):const SizedBox(),
