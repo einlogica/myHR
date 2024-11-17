@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:einlogica_hr/Screens/registration.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -9,9 +10,11 @@ import 'package:einlogica_hr/Screens/homePage.dart';
 import 'package:einlogica_hr/services/apiServices.dart';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math' as math;
+// import 'dart:math' as math;
 
 import 'package:upgrader/upgrader.dart';
+
+import '../style/patternPainter.dart';
 
 
 
@@ -230,7 +233,34 @@ class _loginState extends State<login> {
                                 child: const Text("Login",style: TextStyle(color: Colors.white),)),
                           ),
 
-                          const SizedBox(height: 5,),
+                          const SizedBox(height: 20,),
+                          SizedBox(
+                            child: Row(
+                              children: [
+                                Spacer(),
+                                Text("New Registration? "),
+                                SizedBox(width: 5,),
+                                InkWell(
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                                      return registration();
+                                    }));
+                                  },
+                                  child: Container(
+                                    width: 30,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.blue
+                                    ),
+                                    child: Icon(Icons.arrow_forward,color: Colors.white,),
+                                  ),
+                                ),
+                                // SizedBox(width: 20,),
+                                Spacer(),
+                              ],
+                            ),
+                          )
                           // Container(
                           //   width: w-100,
                           //   height: 20,
@@ -468,7 +498,7 @@ class _loginState extends State<login> {
 
       // var id = data['Tocken'];
 
-      userModel currentUser = userModel(Mobile: data['Mobile'], Name: data['Name'], EmployeeID: data['EmployeeID'], Employer: data['Employer'],Department: data['Department'], Position: data['Position'],
+      userModel currentUser = userModel(Mobile: data['Mobile'], Name: data['Name'], Email: data['Email']??"",EmployeeID: data['EmployeeID'], Employer: data['Employer'],Department: data['Department'], Position: data['Position'],
           Permission: data['Permission'], Manager: data['Manager'], ManagerID: data['ManagerID'],DOJ: data['DOJ'], LeaveCount: double.parse(data['LeaveCount']), Status: data['Status'], ImageFile: data['ImageFile']);
 
       // print("Image file:");
@@ -523,85 +553,85 @@ class _loginState extends State<login> {
 
 
 
-class PatternPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    // Define starting and ending points
-    Offset startPointTop = Offset(0, 0);
-    Offset endPointTop = Offset(size.width, 0);
-    Offset controlPointTop = Offset(size.width / 2, 80);
-
-    Offset startPointBottom = Offset(size.width, size.height);
-    Offset endPointBottom = Offset(0, size.height);
-    // Offset controlPointBottom = Offset(size.width / 2, size.height - 80);
-
-    Paint gradientPaintBottom = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.bottomRight,
-        end: Alignment.topLeft,
-        colors: [Colors.green, Colors.blue],
-      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
-
-    Paint gradientPaintBottom1 = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.bottomRight,
-        end: Alignment.topLeft,
-        colors: [Colors.blue, Colors.green],
-      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
-
-    // Define gradients
-
-    Paint gradientPaintTop = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [Colors.blue, Colors.green],
-      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
-
-
-    // Draw pattern at the top
-    Path topPatternPath = Path()
-      ..moveTo(startPointTop.dx, startPointTop.dy)
-      ..lineTo(endPointTop.dx, endPointTop.dy)
-      ..quadraticBezierTo(controlPointTop.dx, controlPointTop.dy, startPointTop.dx, startPointTop.dy + 80)
-      ..close();
-
-    canvas.drawPath(topPatternPath, gradientPaintTop);
-
-
-
-    //Draw pattern at the bottom
-    Path bottomPatternPath = Path()
-      ..moveTo(startPointBottom.dx, startPointBottom.dy)
-      ..lineTo(endPointBottom.dx, endPointBottom.dy);
-    for (double x = 0; x <= size.width; x += 10) {
-      double y = 40 * math.sin(x / size.width * 2 * math.pi);
-      bottomPatternPath.lineTo(x, size.height - y - size.height / 8);
-    }
-    bottomPatternPath.lineTo(size.width, size.height / 2);
-    bottomPatternPath.close();
-
-    canvas.drawPath(bottomPatternPath, gradientPaintBottom);
-
-
-    // Draw pattern at the bottom
-    Path bottomPatternPath1 = Path()
-      ..moveTo(startPointBottom.dx, startPointBottom.dy)
-      ..lineTo(endPointBottom.dx, endPointBottom.dy);
-    for (double x = 0; x <= size.width; x += 10) {
-      double y = 20 * math.sin(x / size.width * 2 * math.pi);
-      bottomPatternPath1.lineTo(x, size.height - y - size.height / 18);
-    }
-    bottomPatternPath1.lineTo(size.width, size.height / 2);
-    bottomPatternPath1.close();
-
-    canvas.drawPath(bottomPatternPath1, gradientPaintBottom1);
-
-
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
-}
+// class PatternPainter extends CustomPainter {
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     // Define starting and ending points
+//     Offset startPointTop = Offset(0, 0);
+//     Offset endPointTop = Offset(size.width, 0);
+//     Offset controlPointTop = Offset(size.width / 2, 80);
+//
+//     Offset startPointBottom = Offset(size.width, size.height);
+//     Offset endPointBottom = Offset(0, size.height);
+//     // Offset controlPointBottom = Offset(size.width / 2, size.height - 80);
+//
+//     Paint gradientPaintBottom = Paint()
+//       ..shader = LinearGradient(
+//         begin: Alignment.bottomRight,
+//         end: Alignment.topLeft,
+//         colors: [Colors.green, Colors.blue],
+//       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+//
+//     Paint gradientPaintBottom1 = Paint()
+//       ..shader = LinearGradient(
+//         begin: Alignment.bottomRight,
+//         end: Alignment.topLeft,
+//         colors: [Colors.blue, Colors.green],
+//       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+//
+//     // Define gradients
+//
+//     Paint gradientPaintTop = Paint()
+//       ..shader = LinearGradient(
+//         begin: Alignment.topLeft,
+//         end: Alignment.bottomRight,
+//         colors: [Colors.blue, Colors.green],
+//       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+//
+//
+//     // Draw pattern at the top
+//     Path topPatternPath = Path()
+//       ..moveTo(startPointTop.dx, startPointTop.dy)
+//       ..lineTo(endPointTop.dx, endPointTop.dy)
+//       ..quadraticBezierTo(controlPointTop.dx, controlPointTop.dy, startPointTop.dx, startPointTop.dy + 80)
+//       ..close();
+//
+//     canvas.drawPath(topPatternPath, gradientPaintTop);
+//
+//
+//
+//     //Draw pattern at the bottom
+//     Path bottomPatternPath = Path()
+//       ..moveTo(startPointBottom.dx, startPointBottom.dy)
+//       ..lineTo(endPointBottom.dx, endPointBottom.dy);
+//     for (double x = 0; x <= size.width; x += 10) {
+//       double y = 40 * math.sin(x / size.width * 2 * math.pi);
+//       bottomPatternPath.lineTo(x, size.height - y - size.height / 8);
+//     }
+//     bottomPatternPath.lineTo(size.width, size.height / 2);
+//     bottomPatternPath.close();
+//
+//     canvas.drawPath(bottomPatternPath, gradientPaintBottom);
+//
+//
+//     // Draw pattern at the bottom
+//     Path bottomPatternPath1 = Path()
+//       ..moveTo(startPointBottom.dx, startPointBottom.dy)
+//       ..lineTo(endPointBottom.dx, endPointBottom.dy);
+//     for (double x = 0; x <= size.width; x += 10) {
+//       double y = 20 * math.sin(x / size.width * 2 * math.pi);
+//       bottomPatternPath1.lineTo(x, size.height - y - size.height / 18);
+//     }
+//     bottomPatternPath1.lineTo(size.width, size.height / 2);
+//     bottomPatternPath1.close();
+//
+//     canvas.drawPath(bottomPatternPath1, gradientPaintBottom1);
+//
+//
+//   }
+//
+//   @override
+//   bool shouldRepaint(CustomPainter oldDelegate) {
+//     return false;
+//   }
+// }

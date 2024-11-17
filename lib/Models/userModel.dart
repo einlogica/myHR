@@ -5,6 +5,7 @@ class userModel{
 
   final String Mobile;
   final String Name;
+  final String Email;
   final String EmployeeID;
   final String Employer;
   final String Department;
@@ -21,6 +22,7 @@ class userModel{
   userModel({
     required this.Mobile,
     required this.Name,
+    required this.Email,
     required this.EmployeeID,
     required this.Employer,
     required this.Department,

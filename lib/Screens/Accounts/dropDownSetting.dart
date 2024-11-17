@@ -251,6 +251,9 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
                             height: 60,
                             color: Colors.blue.shade100,
                             child: TextButton(onPressed: ()async{
+                              // if(selectedList.isEmpty){
+                              //   return;
+                              // }
                               setState(() {
                                 _loading=true;
                               });
@@ -320,6 +323,9 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
         actions: <Widget>[
           TextButton(
             onPressed: () async{
+              // if(selectedList.isEmpty){
+              //   return;
+              // }
               Navigator.pop(context);
               changeFlag=false;
               setState(() {

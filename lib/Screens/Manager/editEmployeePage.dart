@@ -41,7 +41,7 @@ class _editEmployeePageState extends State<editEmployeePage> {
   // bool showAdvance = false;
 
   // advanceModel advanceData = advanceModel(mobile: "", name: "", amount: "", date: "", emi: "", startdate: "", balance: "", status: "");
-  userModel currentUser = userModel(Mobile: "", Name: "", EmployeeID: "", Employer: "",Department: "", Position: "", Permission: "", Manager: "", ManagerID: "", DOJ: "", LeaveCount: 0, Status: "", ImageFile: "");
+  userModel currentUser = userModel(Mobile: "", Name: "",Email: "", EmployeeID: "", Employer: "",Department: "", Position: "", Permission: "", Manager: "", ManagerID: "", DOJ: "", LeaveCount: 0, Status: "", ImageFile: "");
   payRollModel paySlip = payRollModel(Mobile: "", Name: "",Month: 0,Year: 0, Days: 0, WorkingDays: 0, LeaveDays: 0, LOP: 0, PresentDays: 0,TotalLOP: 0, Basic: 0, Allowance: 0, HRA: 0, TA: 0, DA: 0, Incentive: 0, GrossIncome: 0, PF: 0, ESIC: 0, ProTax: 0, Advance: 0, GrossDeduction: 0, NetPay: 0);
   personalInfoModel personalInfo = personalInfoModel(ID: 0, Name: "", Mobile: "", Sex: "", DOB: "", AddL1: "", AddL2: "", AddL3: "", Zip: "", BloodGroup: "", EmContactName: "", EmContactNum: "", BankName: "", AccNum: "",UAN: "",PAN: "",ESICNo: "");
 
@@ -55,6 +55,7 @@ class _editEmployeePageState extends State<editEmployeePage> {
   // TextEditingController _nameCtrl = TextEditingController();
   // TextEditingController _mobileCtrl = TextEditingController();
   // TextEditingController _empIdCtrl = TextEditingController();
+  final TextEditingController _emailCtrl = TextEditingController();
   final TextEditingController _managerCtrl = TextEditingController();
   final TextEditingController _positionCtrl = TextEditingController();
   final TextEditingController _departmentCtrl = TextEditingController();
@@ -105,6 +106,7 @@ class _editEmployeePageState extends State<editEmployeePage> {
 
   @override
   void dispose() {
+    _emailCtrl.dispose();
     _managerCtrl.dispose();
     _positionCtrl.dispose();
     _departmentCtrl.dispose();
@@ -233,6 +235,7 @@ class _editEmployeePageState extends State<editEmployeePage> {
     advanceEdit=false;
     personalEdit=false;
 
+    _emailCtrl.text=currentUser.Email;
     _managerCtrl.text=currentUser.Manager;
     _positionCtrl.text=currentUser.Position;
     _departmentCtrl.text=currentUser.Department;
@@ -431,6 +434,7 @@ class _editEmployeePageState extends State<editEmployeePage> {
                               buildText("Mobile",currentUser.Mobile),
                               buildText("Employee ID",currentUser.EmployeeID),
                               //basic edit
+                              basicEdit?FieldArea(title: "Email",ctrl: _emailCtrl,type: TextInputType.text,len:48):buildText("Email", currentUser.Email.toString()),
                               basicEdit?FieldAreaWithDropDown(title: "Manager", dropList: manageridList, dropdownValue: dropdownvalue,callback: updateDropDown,):buildText("Manager", currentUser.Manager),
                               // basicEdit?FieldArea(title: "Position",ctrl: _positionCtrl,type: TextInputType.text,len:20):buildText("Position", currentUser.Position,),
                               basicEdit?FieldAreaWithDropDown(title: "Department", dropList: departmentList, dropdownValue: dropdownDepartment, callback: updateDropDown):buildText("Department", currentUser.Department,),
@@ -456,7 +460,7 @@ class _editEmployeePageState extends State<editEmployeePage> {
                                         setState(() {
                                           progressIndicator=true;
                                         });
-                                        String status = await apiServices().updateBasicDetails(managerList[dropIndex-1].Name, managerList[dropIndex-1].EmployeeID, dropdownPosition, dropdownDepartment, dropdownUser,widget.User.Mobile,_dojCtrl.text,_leaveCtrl.text);
+                                        String status = await apiServices().updateBasicDetails(_emailCtrl.text,managerList[dropIndex-1].Name, managerList[dropIndex-1].EmployeeID, dropdownPosition, dropdownDepartment, dropdownUser,widget.User.Mobile,_dojCtrl.text,_leaveCtrl.text);
                                         await fetchUser(widget.User.Mobile);
                                         showMessage(status);
                                         await setDefault();

@@ -3,6 +3,7 @@ import 'package:einlogica_hr/Screens/Accounts/privacyPage.dart';
 import 'package:einlogica_hr/Screens/Accounts/refundPage.dart';
 import 'package:einlogica_hr/Screens/Accounts/terms.dart';
 import 'package:einlogica_hr/Screens/Accounts/transactions.dart';
+import 'package:einlogica_hr/Widgets/FieldArea.dart';
 import 'package:einlogica_hr/services/apiServices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,6 +33,8 @@ class _settingsPageState extends State<settingsPage> {
   bool optionSelected=false;
   bool _loading=true;
   bool _payment=false;
+  bool _upgrade=false;
+  bool _quoteSend=false;
   int _quantity =1;
   int _amount = 0;
   String orderID="";
@@ -40,6 +43,7 @@ class _settingsPageState extends State<settingsPage> {
   Uint8List empIcon= Uint8List(0);
   List<employerModel> empDetails = [];
   List<Map<String,dynamic>> subList = [];
+  TextEditingController _empCtrl= TextEditingController();
 
   // List<String> settingsImage = ['assets/Drop Down.png','assets/Locations.png'];
   // List<String> selectedList = [];
@@ -52,6 +56,12 @@ class _settingsPageState extends State<settingsPage> {
   //   optionSelected=true;
   // }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _empCtrl.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -74,6 +84,7 @@ class _settingsPageState extends State<settingsPage> {
 
   fetchSubscription()async{
     subList = await apiServices().getSubscription(widget.currentUser.Mobile);
+    print(subList[0]);
   }
 
   menuFunction(String name){
@@ -106,7 +117,7 @@ class _settingsPageState extends State<settingsPage> {
       resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          SizedBox(
+          Container(
             width: w,
             height: h,
             // color: Colors.grey,
@@ -139,7 +150,7 @@ class _settingsPageState extends State<settingsPage> {
                               child: const SizedBox(
                                 width: 60,
                                 height: 40,
-
+          
                                 // color: Colors.grey,
                                 child: Center(child: Icon(Icons.arrow_back,size: 20,color: Colors.white,)),
                               ),
@@ -154,142 +165,307 @@ class _settingsPageState extends State<settingsPage> {
                     ],
                   ),
                 ),
+          
+                SizedBox(
+                  width: w,
+                  // color: Colors.blue,
+                  height: h-60-t-50,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 10,),
+                        subList.isEmpty?SizedBox():Center(
+                          child: Container(
+                            width: w,
+                            // height: 130,
+                            color: Colors.blue.withOpacity(.2),
+                            child: Column(
+                              children: [
+                                Container(
+                                    width: w,
+                                    color: Colors.blue.shade300,
+                                    child: Center(child: Text("Subscription",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),))
+                                ),
 
-                SizedBox(height: 10,),
-                subList.isEmpty?SizedBox():Center(
-                  child: Container(
-                    width: w,
-                    // height: 80,
-                    color: Colors.blue.withOpacity(.2),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        // color: Colors.grey,
+                                        width: w/2,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            // const Text("Subscription : Active",style: TextStyle(fontSize: 16),),
+                                            Text(subList[0]['Amount']==0?"Plan : Free":"Plan : ${subList[0]['Amount']}",style: TextStyle(fontSize: 16),),
+                                            Text("Employees : ${subList[0]['EmpCount']}",style: TextStyle(fontSize: 16),),
+                                            Text("Expiry: ${subList[0]['Expiry']}",style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                                            // SizedBox(height: 10,),
+                                            //
+                                            // SizedBox(height: 10,),
+                                          ],
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Container(
+                                        width: w/3,
+                                        // color: Colors.grey,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            subList[0]['Amount']==0?SizedBox():SizedBox(
+                                              width: 100,
+                                              height: 40,
+                                              child: ElevatedButton(
+
+                                                  style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark.withOpacity(.5))),
+                                                  onPressed: (){
+                                                    setState(() {
+                                                      _payment=true;
+                                                    });
+                                                  },
+                                                  child: const Text("Pay",style: TextStyle(color: Colors.white),)),
+                                            ),
+                                            SizedBox(height: 10,),
+                                            InkWell(
+                                              onTap: (){
+                                                setState(() {
+                                                  _upgrade=true;
+                                                });
+                                              },
+                                              child: Container(
+                                                  width: 100,
+                                                  height: 30,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(15),
+                                                      color: Colors.blue
+                                                  ),
+                                                  child: Center(child: Text("Upgrade",style: TextStyle(fontSize: 12,color: Colors.white),))
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // SizedBox(height: 20,),
+                        Stack(
+                          children: [
+                            Center(
+                              child: SizedBox(
+                                width: w>h?w/5:w/3,
+                                height: w>h?w/5:w/3,
+                                // decoration: BoxDecoration(
+                                //   borderRadius: BorderRadius.circular(w/4),
+                                //   // border: Border.all(color: Colors.black,width: 2),
+                                //   color: Colors.white,
+                                // ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: empIcon.isNotEmpty?Image.memory(empIcon,fit: BoxFit.contain,):Image.asset('assets/profile.png'),
+                                ),
+                              ),
+                            ),
+                            // SizedBox(
+                            //   height: w/3,
+                            //   child: Align(
+                            //     alignment: Alignment.bottomRight,
+                            //     child: Padding(
+                            //       padding: EdgeInsets.all(8.0),
+                            //       child: SizedBox(
+                            //         // child: ElevatedButton(
+                            //         //     style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.white.withOpacity(.5))),
+                            //         //     onPressed: (){
+                            //         //
+                            //         //     },
+                            //         //     child: const Icon(Icons.edit,color: Colors.black,)
+                            //         // ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                        // SizedBox(height: 20,),
+                        empDetails.length!=0?SizedBox(
+                          child: Column(
                             children: [
-                              const Text("Subscription : Active",style: TextStyle(fontSize: 16),),
-                              Text("Expiry: ${subList[0]['Expiry']}",style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                              Text(empDetails[0].name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                              Text(empDetails[0].addl1),
+                              Text(empDetails[0].addl2),
                             ],
                           ),
-                          Spacer(),
-                          SizedBox(
-                            width: 100,
-                            child: ElevatedButton(
-                                style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark.withOpacity(.5))),
-                                onPressed: (){
-                                  setState(() {
-                                    _payment=true;
-                                  });
-                                },
-                                child: const Text("Pay",style: TextStyle(color: Colors.white),)),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20,),
-                Container(
-                  width: w>h?w/5:w/3,
-                  height: w>h?w/5:w/3,
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: w>h?w/5:w/3,
-                        height: w>h?w/5:w/3,
-                        // decoration: BoxDecoration(
-                        //   borderRadius: BorderRadius.circular(w/4),
-                        //   // border: Border.all(color: Colors.black,width: 2),
-                        //   color: Colors.white,
-                        // ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: empIcon.isNotEmpty?Image.memory(empIcon,fit: BoxFit.contain,):Image.asset('assets/profile.png'),
+                        ):SizedBox(),
+
+                        SizedBox(height: 20,),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            menuButton("Drop Down",menuFunction),
+                            menuButton("Locations",menuFunction),
+                            menuButton("Transactions",menuFunction),
+                          ],
                         ),
-                      ),
-
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-                // SizedBox(height: 20,),
-                empDetails.length!=0?SizedBox(
-                  child: Column(
-                    children: [
-                      Text(empDetails[0].name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
-                      Text(empDetails[0].addl1),
-                      Text(empDetails[0].addl2),
-                    ],
+                
+
+                // const SizedBox(height: 10,),
+                SizedBox(
+                  // color: Colors.green,
+                  width: w,
+                  height: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        InkWell(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return termsPage();
+                            }));
+                          },
+                          child: SizedBox(
+                            width: w/4,
+                            child: Center(child: Text("T&C",style: TextStyle(fontSize: 11),)),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return privacyPage();
+                            }));
+                          },
+                          child: SizedBox(
+                            width: w/4,
+                            child: Center(child: Text("Privacy",style: TextStyle(fontSize: 11),)),
+                          ),
+                        ),
+
+                        InkWell(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return refundPage();
+                            }));
+                          },
+                          child: SizedBox(
+                            width: w/4,
+                            child: Center(child: Text("Refund",style: TextStyle(fontSize: 11),)),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ):SizedBox(),
-
-                SizedBox(height: 20,),
-                Expanded(
-                  child: Column(
-                    children: [
-                      menuButton("Drop Down",menuFunction),
-                      menuButton("Locations",menuFunction),
-                      menuButton("Transactions",menuFunction),
-                    ],
-                  ),
-                  // child: Container(
-                  //   child: ListView.builder(
-                  //       itemCount: settings.length,
-                  //       padding: EdgeInsets.zero,
-                  //       itemBuilder: (context,index){
-                  //         return menuButton(settings[index].toString(),menuFunction);
-                  //
-                  //       }),
-                  // ),
                 ),
-
-                const SizedBox(height: 10,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return termsPage();
-                        }));
-                      },
-                      child: SizedBox(
-                        width: w/4,
-                        child: Center(child: Text("T&C",style: TextStyle(fontSize: 11),)),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return privacyPage();
-                        }));
-                      },
-                      child: SizedBox(
-                        width: w/4,
-                        child: Center(child: Text("Privacy",style: TextStyle(fontSize: 11),)),
-                      ),
-                    ),
-
-                    InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return refundPage();
-                        }));
-                      },
-                      child: SizedBox(
-                        width: w/4,
-                        child: Center(child: Text("Refund",style: TextStyle(fontSize: 11),)),
-                      ),
-                    ),
-                  ],
-                ),
-
-
-                SizedBox(height: 10,),
+          
+          
+                // SizedBox(height: 10,),
               ],
             ),
           ),
+          _upgrade?Container(
+            width: w,
+            height: h,
+            color: Colors.black.withOpacity(.7),
+            child: Center(
+              child: Container(
+                width: w-50,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white
+                ),
+                child: _quoteSend?Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 10,),
+                      Text("Quote request has been send",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.blue),),
+                      SizedBox(height: 20,),
+                      Text("Thanks for your query, Our team will be contacting you soon.."),
+                      // SizedBox(height: 10,),
+                      // Align(
+                      //     alignment: Alignment.centerLeft,
+                      //     child: Text("Regards")),
+                      // Align(
+                      //     alignment: Alignment.centerLeft,
+                      //     child: Text("myHR Team")),
+                      SizedBox(height: 20,),
+                      ElevatedButton(
+                        style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
+                        onPressed: (){
+                          setState(() {
+                            _loading=false;
+                            _quoteSend=false;
+                            _upgrade=false;
+                          });
+                        },
+                        child: Text("OK",style: TextStyle(color: Colors.white),),
+                      ),
+                    ],
+                  ),
+                ):Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 10,),
+                    Text("Upgrade plan",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.blue),),
 
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: FieldArea(title: "Expected Employee Count", ctrl: _empCtrl, type: TextInputType.number, len: 3),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                            style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
+                            onPressed: ()async{
+                              setState(() {
+                                _loading=true;
+                              });
+                              String status = await apiServices().getQuote(widget.currentUser.Mobile, _empCtrl.text);
+                              _empCtrl.clear();
+                              print(status);
+                              _loading=false;
+                              if(status=="Success"){
+                                _quoteSend=true;
+                              }
+                              setState(() {
+
+                              });
+
+                            },
+                            child: Text("Get Quote",style: TextStyle(color: Colors.white),),
+                        ),
+                        ElevatedButton(
+                          style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
+                          onPressed: ()async{
+                            setState(() {
+                              _upgrade=false;
+                            });
+                          },
+                          child: Text("Cancel",style: TextStyle(color: Colors.white),),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10,)
+                  ],
+                ),
+              ),
+            ),
+
+          ):SizedBox(),
           _payment?Container(
             width: w,
             height: h,

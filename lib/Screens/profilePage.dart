@@ -51,7 +51,7 @@ class _profilePageState extends State<profilePage> {
   personalInfoModel personalInfo = personalInfoModel(ID: 0, Name: "", Mobile: "", Sex: "", DOB: "", AddL1: "", AddL2: "", AddL3: "", Zip: "", BloodGroup: "", EmContactName: "", EmContactNum: "", BankName: "", AccNum: "",UAN: "",PAN: "",ESICNo: "");
   List<String> Acc = [];
   String dropdownAcc = 'Select';
-  userModel currentUser = userModel(Mobile: "", Name: "", EmployeeID: "", Employer: "", Department: "", Position: "", Permission: "", Manager: "", ManagerID: "", DOJ: "", LeaveCount: 0, Status: "", ImageFile: "");
+  userModel currentUser = userModel(Mobile: "", Name: "", Email: "", EmployeeID: "", Employer: "", Department: "", Position: "", Permission: "", Manager: "", ManagerID: "", DOJ: "", LeaveCount: 0, Status: "", ImageFile: "");
   advanceModel advanceData = advanceModel(mobile: "", name: "", amount: "", date: "", emi: "", startdate: "", balance: "", status: "");
 
   final TextEditingController _dateCtrl= TextEditingController();
@@ -255,6 +255,7 @@ class _profilePageState extends State<profilePage> {
 
                           buildTextField("Name", currentUser.Name),
                           buildTextField("Mobile", currentUser.Mobile),
+                          buildTextField("Email", currentUser.Email),
                           buildTextField("Employee ID", currentUser.EmployeeID),
                           buildTextField("Position", currentUser.Position),
                           buildTextField("Department", currentUser.Department),
@@ -447,7 +448,8 @@ class _profilePageState extends State<profilePage> {
                                       setState(() {
                                         progressIndicator=true;
                                       });
-                                      showPasswordBox(true);
+                                      // showPasswordBox(true);
+                                      showResetPassword();
                                       setState(() {
                                         progressIndicator=false;
                                       });
@@ -491,7 +493,7 @@ class _profilePageState extends State<profilePage> {
                                                   Navigator.pop(context);
                                                 },
                                                 child: Container(
-                                                  color: AppColors.buttonColor,
+                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: AppColors.buttonColorDark,),
                                                   padding: const EdgeInsets.all(14),
                                                   child: const Text("Deactivate",style: TextStyle(color: Colors.white),),
                                                 ),
@@ -502,7 +504,7 @@ class _profilePageState extends State<profilePage> {
                                                   Navigator.pop(context);
                                                 },
                                                 child: Container(
-                                                  color: AppColors.buttonColor,
+                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: AppColors.buttonColorDark,),
                                                   padding: const EdgeInsets.all(14),
                                                   child: const Text("Close",style: TextStyle(color: Colors.white),),
                                                 ),
@@ -661,6 +663,58 @@ class _profilePageState extends State<profilePage> {
 
   }
 
+
+  Future showResetPassword(){
+    return showDialog(
+      context: context,
+      builder: (ctx) => Container(
+        width: w-50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: AlertDialog(
+          // backgroundColor: AppColors.boxColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          title: const Text("Reset Pin"),
+          content: const Text("Confirm to reset pin for this user"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async{
+                  setState(() {
+                    progressIndicator=true;
+                  });
+                  Navigator.pop(context);
+                  String status = await apiServices().resetPassword(currentUser.Mobile,currentUser.Email,currentUser.Name);
+                  // print(status);
+                  setState(() {
+                    progressIndicator=false;
+                  });
+                  showLongMessage(status);
+              },
+              child: Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: AppColors.buttonColorDark,),
+                padding: const EdgeInsets.all(14),
+                child: const Text("Confirm",style: TextStyle(color: Colors.white),),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                clearFields();
+                Navigator.pop(context);
+              },
+              child: Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: AppColors.buttonColorDark,),
+                padding: const EdgeInsets.all(14),
+                child: const Text("Close",style: TextStyle(color: Colors.white),),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
 
   Future showPasswordBox(bool reset){
@@ -860,7 +914,7 @@ class _profilePageState extends State<profilePage> {
 
             },
             child: Container(
-              color: AppColors.buttonColor,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: AppColors.buttonColorDark,),
               padding: const EdgeInsets.all(14),
               child: const Text("Submit",style: TextStyle(color: Colors.white),),
             ),
@@ -871,7 +925,7 @@ class _profilePageState extends State<profilePage> {
               Navigator.pop(context);
             },
             child: Container(
-              color: AppColors.buttonColor,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: AppColors.buttonColorDark,),
               padding: const EdgeInsets.all(14),
               child: const Text("Close",style: TextStyle(color: Colors.white),),
             ),
@@ -923,7 +977,7 @@ class _profilePageState extends State<profilePage> {
 
             },
             child: Container(
-              color: AppColors.buttonColor,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: AppColors.buttonColorDark,),
               padding: const EdgeInsets.all(14),
               child: const Text("Submit",style: TextStyle(color: Colors.white),),
             ),
@@ -934,7 +988,7 @@ class _profilePageState extends State<profilePage> {
               Navigator.pop(context);
             },
             child: Container(
-              color: AppColors.buttonColor,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: AppColors.buttonColorDark,),
               padding: const EdgeInsets.all(14),
               child: const Text("Close",style: TextStyle(color: Colors.white),),
             ),
@@ -962,6 +1016,10 @@ class _profilePageState extends State<profilePage> {
 
   showMessage(String mess){
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(mess),duration: const Duration(seconds: 1),));
+  }
+
+  showLongMessage(String mess){
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(mess),duration: const Duration(seconds: 3),));
   }
 
 }

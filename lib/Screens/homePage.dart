@@ -281,6 +281,10 @@ class _homePageState extends State<homePage> {
                                         padding: const EdgeInsets.only(left:5.0),
                                         child: Text(widget.currentUser.Mobile,style: const TextStyle(color: Colors.white),),
                                       ),
+                                      // Padding(
+                                      //   padding: const EdgeInsets.only(left:5.0),
+                                      //   child: Text(widget.currentUser.Email,style: const TextStyle(color: Colors.white),),
+                                      // ),
                                     ],
                                   ),
                                 ),

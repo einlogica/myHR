@@ -30,6 +30,7 @@ import 'package:unique_identifier/unique_identifier.dart';
 
 var token;
 var _identifier;
+var _mobileidentifier;
 var emp;
 
 
@@ -38,10 +39,10 @@ class apiServices{
 
 
   //--------------PRODUCTION
-  var url = "https://phpcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
+  // var url = "https://phpcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
 
   //--------------TEST
-  // var url = "https://testingcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
+  var url = "https://testingcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
 
   var appVersion ="V1.1.0+23";
   // var emp = "";
@@ -52,6 +53,24 @@ class apiServices{
   String getVersion(){
     return appVersion;
   }
+
+  //New Registration
+  Future<String> registration(String name,String mobile, String email, String id, String employer, String l1, String l2)async{
+    String status="Failed";
+
+    final response = await apiRequest("register.php", {"usermobile": mobile,"username":name,"useremail":email,"id":id,"employer":employer,"l1":l1,"l2":l2});
+    // print(response.body);
+    if (response.statusCode == 200) {
+      status = response.body.trim();
+    }
+    else{
+      status="http Error";
+    }
+
+    return status;
+  }
+
+
 
   //Login function
   Future<String> checkLogin(String mobile,String password)async{
@@ -68,6 +87,7 @@ class apiServices{
       if(data['Status']!="Failed"){
         token= data['Token'];
         _identifier=data['Data']['Tocken'];
+        _mobileidentifier=mobile;
         emp=data['Data']['Employer'];
       }
     }
@@ -156,7 +176,7 @@ class apiServices{
       var data = jsonDecode(response.body);
       userList=[];
       for (var d in data){
-        userList.add(userModel(Mobile: d['Mobile'], Name: d['Name'], EmployeeID: d['EmployeeID'],Employer: d['Employer'], Department: d['Department'], Position: d['Position'],Permission: d['Permission'],Manager: d['Manager'],ManagerID: d['ManagerID'], DOJ: d['DOJ'],LeaveCount: double.parse(d['LeaveCount']), Status: d['Status'], ImageFile: d['ImageFile']));
+        userList.add(userModel(Mobile: d['Mobile'], Name: d['Name'],Email: d['Email']??"", EmployeeID: d['EmployeeID'],Employer: d['Employer'], Department: d['Department'], Position: d['Position'],Permission: d['Permission'],Manager: d['Manager'],ManagerID: d['ManagerID'], DOJ: d['DOJ'],LeaveCount: double.parse(d['LeaveCount']), Status: d['Status'], ImageFile: d['ImageFile']));
       }
     }
 
@@ -166,12 +186,12 @@ class apiServices{
   Future<userModel> getProfile(String mobile)async{
     print("Executing get profile method");
 
-    userModel currentUser = userModel(Mobile: "", Name: "", EmployeeID: "", Employer: "", Department: "", Position: "", Permission: "", Manager: "", ManagerID: "", DOJ: "", LeaveCount: 0, Status: "", ImageFile: "");
+    userModel currentUser = userModel(Mobile: "", Name: "",Email: "", EmployeeID: "", Employer: "", Department: "", Position: "", Permission: "", Manager: "", ManagerID: "", DOJ: "", LeaveCount: 0, Status: "", ImageFile: "");
 
     final response = await apiRequest("jilariapi.php", {"action":"getProfile","mobile":mobile,"device":_identifier,"emp":emp});
     if(response.body.trim()!="Failed"){
       var d = jsonDecode(response.body);
-      currentUser = userModel(Mobile: d[0]['Mobile'], Name: d[0]['Name'], EmployeeID: d[0]['EmployeeID'],Employer: d[0]['Employer'], Department: d[0]['Department'], Position: d[0]['Position'],Permission: d[0]['Permission'],Manager: d[0]['Manager'],ManagerID: d[0]['ManagerID'], DOJ: d[0]['DOJ'],LeaveCount: double.parse(d[0]['LeaveCount']), Status: d[0]['Status'], ImageFile: d[0]['ImageFile']);
+      currentUser = userModel(Mobile: d[0]['Mobile'], Name: d[0]['Name'],Email: d[0]['Email']??"", EmployeeID: d[0]['EmployeeID'],Employer: d[0]['Employer'], Department: d[0]['Department'], Position: d[0]['Position'],Permission: d[0]['Permission'],Manager: d[0]['Manager'],ManagerID: d[0]['ManagerID'], DOJ: d[0]['DOJ'],LeaveCount: double.parse(d[0]['LeaveCount']), Status: d[0]['Status'], ImageFile: d[0]['ImageFile']);
     }
 
     return currentUser;
@@ -215,6 +235,22 @@ class apiServices{
     return status;
   }
 
+
+  //Reset Password
+  Future<String> resetPassword(String mob,String email,String name)async{
+    String status="Failed";
+
+    final response = await apiRequest("jilariapi.php", {"action":"resetPassword","usermobile": mob,"useremail":email,"username":name,"adminmobile":_mobileidentifier,"emp":emp});
+
+    if(response.statusCode==200){
+      status=response.body.trim();
+    }
+
+    return status;
+  }
+
+
+
   //Add user
   Future<String> addUser(Map<String,dynamic> user)async{
     print("Executing add user method");
@@ -245,11 +281,11 @@ class apiServices{
   }
 
   //Update Basic Information
-  Future<String>updateBasicDetails(String Manager, String ManagerID, String Position, String Department, String Permission,String Mobile,String DOJ,String Leave)async{
+  Future<String>updateBasicDetails(String Email,String Manager, String ManagerID, String Position, String Department, String Permission,String Mobile,String DOJ,String Leave)async{
     print("Executing update basic details method");
     String status="";
 
-    final response = await apiRequest("jilariapi.php", {"action":"updateBasicDetails","manager":Manager,"managerid":ManagerID,"position":Position,"department":Department,"permission":Permission,"mobile":Mobile,"doj":DOJ,"leave":Leave});
+    final response = await apiRequest("jilariapi.php", {"action":"updateBasicDetails","email":Email,"manager":Manager,"managerid":ManagerID,"position":Position,"department":Department,"permission":Permission,"mobile":Mobile,"doj":DOJ,"leave":Leave});
     if (response.statusCode == 200) {
       status = response.body.trim();
     }
@@ -1399,6 +1435,19 @@ class apiServices{
     return status;
   }
 
+  Future<String> getQuote(String usermobile,String empCount)async{
+    print("Executing update settings list method");
+    String status="Invalid";
+    final response = await apiRequest("jilariapi.php", {"action":"getQuote","usermobile":usermobile,"emp":emp,"empCount":empCount});
+
+    if(response.statusCode==200){
+      status = response.body.trim();
+    }
+
+    return status;
+  }
+
+
   //========================================================================================================================== PAYMENT
 
   Future<List<Map<String,dynamic>>> getSubscription(String mobile)async{
@@ -1410,7 +1459,7 @@ class apiServices{
     if(response.body.trim()!="Failed"){
       var data = jsonDecode(response.body.trim());
       for(var d in data){
-        subList.add({'Employer':d['Employer'],'Amount':int.parse(d['Amount']),'Expiry':d['Expiry']});
+        subList.add({'Employer':d['Employer'],'Amount':int.parse(d['Amount']),'Expiry':d['Expiry'],'EmpCount':d['EmpCount']});
       }
     }
     return subList;
