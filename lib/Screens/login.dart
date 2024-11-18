@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:einlogica_hr/Screens/registration.dart';
+import 'package:einlogica_hr/Screens/superuser.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -237,13 +238,13 @@ class _loginState extends State<login> {
                           SizedBox(
                             child: Row(
                               children: [
-                                Spacer(),
-                                Text("New Registration? "),
-                                SizedBox(width: 5,),
+                                const Spacer(),
+                                const Text("New Registration? "),
+                                const SizedBox(width: 5,),
                                 InkWell(
                                   onTap: (){
                                     Navigator.push(context, MaterialPageRoute(builder: (context){
-                                      return registration();
+                                      return const registration();
                                     }));
                                   },
                                   child: Container(
@@ -253,7 +254,7 @@ class _loginState extends State<login> {
                                       borderRadius: BorderRadius.circular(15),
                                       color: Colors.blue
                                     ),
-                                    child: Icon(Icons.arrow_forward,color: Colors.white,),
+                                    child: const Icon(Icons.arrow_forward,color: Colors.white,),
                                   ),
                                 ),
                                 // SizedBox(width: 20,),
@@ -285,7 +286,7 @@ class _loginState extends State<login> {
                             Container(
                               width: w>h?w/2-50:w-50,
                               height: 50,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 borderRadius: BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20)),
                                 color: Colors.green,
                               ),
@@ -521,7 +522,13 @@ class _loginState extends State<login> {
         final SharedPreferences prefs = await _prefs;
         prefs.setString("mob",data['Mobile']);
 
-        routeToHome(currentUser);
+        if(currentUser.Permission=='Superuser'){
+          routeToSuperUser(currentUser);
+        }
+        else{
+          routeToHome(currentUser);
+        }
+
 
       }
 
@@ -540,6 +547,12 @@ class _loginState extends State<login> {
   routeToHome(userModel currentUser){
     Navigator.push(context, MaterialPageRoute(builder: (context){
       return homePage(currentUser:currentUser);
+    }));
+  }
+
+  routeToSuperUser(userModel currentUser){
+    Navigator.push(context, MaterialPageRoute(builder: (context){
+      return superUser(currentUser: currentUser,);
     }));
   }
 

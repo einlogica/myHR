@@ -79,7 +79,8 @@ class _profilePageState extends State<profilePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    // print(widget.mobile);
+    // print(widget.HLP);
     getInfo();
     setProfileImage();
 
@@ -98,7 +99,9 @@ class _profilePageState extends State<profilePage> {
   }
 
   getInfo()async{
+    print(widget.mobile);
     currentUser = await apiServices().getProfile(widget.mobile);
+    print(currentUser.Name);
     setState(() {
       progressIndicator=false;
     });
@@ -449,7 +452,13 @@ class _profilePageState extends State<profilePage> {
                                         progressIndicator=true;
                                       });
                                       // showPasswordBox(true);
-                                      showResetPassword();
+                                      if(currentUser.Email==""){
+                                        showMessage("Please update email to reset password");
+                                      }
+                                      else{
+                                        showResetPassword();
+                                      }
+
                                       setState(() {
                                         progressIndicator=false;
                                       });

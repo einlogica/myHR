@@ -1,4 +1,7 @@
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:einlogica_hr/Screens/Accounts/privacyPage.dart';
 import 'package:einlogica_hr/Screens/Accounts/refundPage.dart';
 import 'package:einlogica_hr/Screens/Accounts/terms.dart';
@@ -7,6 +10,8 @@ import 'package:einlogica_hr/Widgets/FieldArea.dart';
 import 'package:einlogica_hr/services/apiServices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../../Models/employerModel.dart';
@@ -19,7 +24,8 @@ import 'locationsPage.dart';
 class settingsPage extends StatefulWidget {
 
   final userModel currentUser;
-  const settingsPage({super.key,required this.currentUser});
+  final Function callback;
+  const settingsPage({super.key,required this.currentUser,required this.callback});
 
   @override
   State<settingsPage> createState() => _settingsPageState();
@@ -38,6 +44,9 @@ class _settingsPageState extends State<settingsPage> {
   int _quantity =1;
   int _amount = 0;
   String orderID="";
+  bool imgFromCamera=false;
+  var pickedImage;
+  late File? imageFile;
 
   List<String> settings = ["Drop Down","Locations"];
   Uint8List empIcon= Uint8List(0);
@@ -84,7 +93,7 @@ class _settingsPageState extends State<settingsPage> {
 
   fetchSubscription()async{
     subList = await apiServices().getSubscription(widget.currentUser.Mobile);
-    print(subList[0]);
+    // print(subList[0]);
   }
 
   menuFunction(String name){
@@ -174,7 +183,7 @@ class _settingsPageState extends State<settingsPage> {
                     child: Column(
                       children: [
                         SizedBox(height: 10,),
-                        subList.isEmpty?SizedBox():Center(
+                        subList.isEmpty?SizedBox():widget.currentUser.Permission!="Admin"?SizedBox():Center(
                           child: Container(
                             width: w,
                             // height: 130,
@@ -270,10 +279,56 @@ class _settingsPageState extends State<settingsPage> {
                                 // ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
-                                  child: empIcon.isNotEmpty?Image.memory(empIcon,fit: BoxFit.contain,):Image.asset('assets/profile.png'),
+                                  child: empIcon.isNotEmpty?Image.memory(empIcon,fit: BoxFit.contain,):Container(
+                                      width: w>h?w/5:w/3,
+                                      height: w>h?w/5:w/3,
+                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(80),border: Border.all(color: Colors.blue,width: 5)),
+                                      child: const Center(child: Text("Logo",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.blue),))),
                                 ),
                               ),
                             ),
+                            Center(
+                              child: SizedBox(
+                                width: w>h?w/5*1.5:w/3*1.5,
+                                height: w>h?w/5:w/3,
+                                child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: SizedBox(
+                                        width: w>h?w/5:w/2,
+                                        height: 50,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            ElevatedButton(
+                                              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
+                                              onPressed: (){
+                                                imgFromCamera=true;
+                                                // if(Platform.isAndroid || Platform.isIOS){
+                                                //   getImage();
+                                                // }
+                                                getImage();
+
+                                              },
+                                              child: const Icon(Icons.camera,color: Colors.white,),
+                                            ),
+                                            ElevatedButton(
+                                              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
+                                              onPressed: (){
+                                                imgFromCamera=false;
+                                                // if(Platform.isAndroid){
+                                                //   getImage();
+                                                // }
+                                                getImage();
+
+                                              },
+                                              child: const Icon(Icons.image,color: Colors.white,),
+                                            ),
+                                          ],
+                                        )
+                                    )
+                                ),
+                              ),
+                            )
                             // SizedBox(
                             //   height: w/3,
                             //   child: Align(
@@ -294,7 +349,7 @@ class _settingsPageState extends State<settingsPage> {
                             // ),
                           ],
                         ),
-                        // SizedBox(height: 20,),
+                        SizedBox(height: 20,),
                         empDetails.length!=0?SizedBox(
                           child: Column(
                             children: [
@@ -618,6 +673,73 @@ class _settingsPageState extends State<settingsPage> {
   }
 
   // _loading?loadingWidget():const SizedBox(),
+
+
+  Future getImage() async {
+    setState(() {
+      _loading=true;
+    });
+    if(imgFromCamera==true){
+      // pickedImage = await ImagePicker.pickImage(source: ImageSource.camera);
+      // pickedImage = await ImagePicker.platform.pickImage(source: ImageSource.camera);
+      pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);
+    }
+    else{
+      pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    }
+    // print("===================");
+    // print(pickedImage.toString());
+    if(pickedImage.toString()!="null") {
+      // print("My Comments: Running image picker");
+
+      final croppedFile = (await ImageCropper().cropImage(
+        // maxHeight: 800,
+        // maxWidth: 800,
+        compressFormat: ImageCompressFormat.jpg,
+        // compressQuality: 50,
+        sourcePath: pickedImage.path,
+        // cropStyle: CropStyle.rectangle,
+        uiSettings: [
+          AndroidUiSettings(
+              toolbarTitle: 'Cropper',
+              toolbarColor: Colors.blue,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false),
+        ],
+      ));
+      if(croppedFile != null){
+        // print("My Comments: Running image cropper");
+        imageFile = File(croppedFile.path);
+
+        String baseimage="";
+        List<int> imageBytes = imageFile!.readAsBytesSync();
+        baseimage = base64Encode(imageBytes);
+
+        String status = await apiServices().uploadLogo(baseimage, widget.currentUser.Mobile);
+        showMessage(status);
+
+        widget.callback();
+        // print("Calling callback");
+        await fetchData();
+
+        setState(() {
+          _loading=false;
+        });
+
+      }
+      else{
+        setState(() {
+          _loading=false;
+        });
+      }
+    }
+    else{
+      setState(() {
+        _loading=false;
+      });
+    }
+  }
 
   Widget menuButton(String item,Function callback){
     // print(item);

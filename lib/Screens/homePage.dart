@@ -142,8 +142,11 @@ class _homePageState extends State<homePage> {
 
 
   setEmployerImage()async{
-    // print("Setting employer icon =================");
+    print("Setting employer icon =================");
     empIcon=await apiServices().getBill(widget.currentUser.Employer, "Employer");
+    setState(() {
+
+    });
   }
 
   fetchEvents()async{
@@ -151,7 +154,7 @@ class _homePageState extends State<homePage> {
   }
 
   setProfileImage()async{
-    // print("Setting profile image =================");
+    print("Setting profile image =================");
     imageFile=await apiServices().getBill(widget.currentUser.ImageFile, "Profile");
     setState(() {
     });
@@ -815,7 +818,7 @@ class _homePageState extends State<homePage> {
                           widget.currentUser.Permission=="Admin" || widget.currentUser.Permission=="Manager"?const SizedBox(height: 30,):const SizedBox(),
                           widget.currentUser.Permission=="Admin" || widget.currentUser.Permission=="Manager"?gridContainer3('assets/setting.png', "Account Settings", (){
                             Navigator.push(context, MaterialPageRoute(builder: (context){
-                              return settingsPage(currentUser: widget.currentUser,);
+                              return settingsPage(currentUser: widget.currentUser,callback:setEmployerImage);
                             }));
                           }):SizedBox(),
                           eventList.isNotEmpty?SizedBox(

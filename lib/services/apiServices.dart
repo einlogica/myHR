@@ -39,10 +39,10 @@ class apiServices{
 
 
   //--------------PRODUCTION
-  // var url = "https://phpcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
+  var url = "https://phpcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
 
   //--------------TEST
-  var url = "https://testingcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
+  // var url = "https://testingcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
 
   var appVersion ="V1.1.0+23";
   // var emp = "";
@@ -68,6 +68,10 @@ class apiServices{
     }
 
     return status;
+  }
+
+  void setEmp(String emp1){
+    emp=emp1;
   }
 
 
@@ -164,6 +168,17 @@ class apiServices{
     return status;
   }
 
+  // Upload Logo Image
+  Future<String> uploadLogo(String file,String mobile)async{
+
+    print("executing image upload method");
+    String status="";
+
+    final response = await apiRequest("jilariapi.php", {"action":"upload_logo","usermobile":mobile,"file": file,"emp":emp});
+    status = response.body.trim();
+    return status;
+  }
+
 
   //Api to fetch user details
   //To get managers list in addEmployeePage
@@ -172,6 +187,7 @@ class apiServices{
     List<userModel> userList=[];
 
     final response = await apiRequest("jilariapi.php", {"action":"get_userdetails","mobile":mobile,"filter":filter,"emp":emp});
+    // print(response.body.trim());
     if(response.body.trim()!="Failed"){
       var data = jsonDecode(response.body);
       userList=[];
@@ -182,6 +198,23 @@ class apiServices{
 
     return userList;
   }
+
+  //To get admin list for superuser
+  // Future<List<userModel>> getAdmins(String mobile,String filter)async{
+  //   print("Executing get User Details method");
+  //   List<userModel> userList=[];
+  //
+  //   final response = await apiRequest("jilariapi.php", {"action":"get_admins","mobile":mobile,"filter":filter,"emp":emp});
+  //   if(response.body.trim()!="Failed"){
+  //     var data = jsonDecode(response.body);
+  //     userList=[];
+  //     for (var d in data){
+  //       userList.add(userModel(Mobile: d['Mobile'], Name: d['Name'],Email: d['Email']??"", EmployeeID: d['EmployeeID'],Employer: d['Employer'], Department: d['Department'], Position: d['Position'],Permission: d['Permission'],Manager: d['Manager'],ManagerID: d['ManagerID'], DOJ: d['DOJ'],LeaveCount: double.parse(d['LeaveCount']), Status: d['Status'], ImageFile: d['ImageFile']));
+  //     }
+  //   }
+  //
+  //   return userList;
+  // }
 
   Future<userModel> getProfile(String mobile)async{
     print("Executing get profile method");
@@ -664,6 +697,7 @@ class apiServices{
   //Get profile image
   Future<Uint8List> getBill(String item,String type)async{
     print("Calling getBill function2");
+    // print(type);
     if(type=="App"){
       item=appVersion;
     }

@@ -164,13 +164,13 @@ class _registrationState extends State<registration> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.check_circle,
                             color: Colors.green,
                             size: 80,
                           ),
                           SizedBox(height: 16),
-                          Text(
+                          const Text(
                             'Thank You for Registering!',
                             style: TextStyle(
                               fontSize: 20,
@@ -180,7 +180,7 @@ class _registrationState extends State<registration> {
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(height: 8),
-                          Text(
+                          const Text(
                             'An email has been sent to your registered email address with the login credentials.',
                             style: TextStyle(
                               fontSize: 16,
@@ -194,7 +194,7 @@ class _registrationState extends State<registration> {
                             onPressed: () {
                               Navigator.pop(context); // Navigate back or take any action
                             },
-                            child: Text('Continue'),
+                            child: Text('Continue',style: TextStyle(color: Colors.white),),
                           ),
                         ],
                       ),

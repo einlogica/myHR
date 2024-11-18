@@ -190,6 +190,7 @@ class _reporteesPageState extends State<reporteesPage> {
                         ),
                         child: ListTile(
                             onTap: (){
+                              // print(widget.currentUser.Permission);
                               Navigator.push(context, MaterialPageRoute(builder: (context){
                                 return profilePage(permission: widget.currentUser.Permission,mobile: employeeList[index].Mobile,callback: (){},HLP: widget.currentUser.Permission,Image: '${employeeList[index].Mobile}.png',);
                               }));
