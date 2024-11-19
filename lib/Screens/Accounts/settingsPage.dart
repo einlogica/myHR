@@ -265,32 +265,40 @@ class _settingsPageState extends State<settingsPage> {
                           ),
                         ),
 
-                        // SizedBox(height: 20,),
+                        SizedBox(height: 10,),
                         Stack(
                           children: [
                             Center(
-                              child: SizedBox(
-                                width: w>h?w/5:w/3,
-                                height: w>h?w/5:w/3,
-                                // decoration: BoxDecoration(
-                                //   borderRadius: BorderRadius.circular(w/4),
-                                //   // border: Border.all(color: Colors.black,width: 2),
-                                //   color: Colors.white,
-                                // ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: empIcon.isNotEmpty?Image.memory(empIcon,fit: BoxFit.contain,):Container(
-                                      width: w>h?w/5:w/3,
-                                      height: w>h?w/5:w/3,
-                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(80),border: Border.all(color: Colors.blue,width: 5)),
-                                      child: const Center(child: Text("Logo",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.blue),))),
+                              child: Container(
+                                width: w>h?w/5*1.2:w/3*1.2,
+                                height: w>h?w/5*1.2:w/3*1.2,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(w>h?w/5*1.2:w/3*1.2,),
+                                  border: Border.all(color: Colors.blue,width: 6)
+                                ),
+                                child: SizedBox(
+                                  width: w>h?w/5:w/3,
+                                  height: w>h?w/5:w/3,
+                                  // decoration: BoxDecoration(
+                                  //   borderRadius: BorderRadius.circular(w/4),
+                                  //   // border: Border.all(color: Colors.black,width: 2),
+                                  //   color: Colors.white,
+                                  // ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: empIcon.isNotEmpty?Image.memory(empIcon,fit: BoxFit.contain,):Container(
+                                        width: w>h?w/5:w/3,
+                                        height: w>h?w/5:w/3,
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(80),border: Border.all(color: Colors.black,width: 5)),
+                                        child: const Center(child: Text("Logo",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.black),))),
+                                  ),
                                 ),
                               ),
                             ),
                             Center(
                               child: SizedBox(
-                                width: w>h?w/5*1.5:w/3*1.5,
-                                height: w>h?w/5:w/3,
+                                width: w>h?w/5*2:w/3*2,
+                                height: w>h?w/5*1.2:w/3*1.2,
                                 child: Align(
                                     alignment: Alignment.bottomCenter,
                                     child: SizedBox(

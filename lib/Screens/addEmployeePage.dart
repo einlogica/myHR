@@ -48,6 +48,7 @@ class _addEmployeePageState extends State<addEmployeePage> {
 
   final TextEditingController _nameCtrl= TextEditingController();
   final TextEditingController _mobileCtrl = TextEditingController();
+  final TextEditingController _emailCtrl = TextEditingController();
   final TextEditingController _employeeidCtrl = TextEditingController();
   final TextEditingController _dojCtrl = TextEditingController();
   final TextEditingController _positionCtrl = TextEditingController();
@@ -75,6 +76,7 @@ class _addEmployeePageState extends State<addEmployeePage> {
     // TODO: implement dispose
     _nameCtrl.dispose();
     _mobileCtrl.dispose();
+    _emailCtrl.dispose();
     _employeeidCtrl.dispose();
     _dojCtrl.dispose();
     _positionCtrl.dispose();
@@ -234,7 +236,7 @@ class _addEmployeePageState extends State<addEmployeePage> {
                               FieldArea(title: "Name",ctrl: _nameCtrl,type: TextInputType.text,len:20),
                               FieldArea(title: "Mobile",ctrl: _mobileCtrl,type: TextInputType.number,len:10),
                               FieldArea(title: "Employee ID",ctrl: _employeeidCtrl,type: TextInputType.text,len:10),
-                              // FieldArea(title: "Position",ctrl: _positionCtrl,type: TextInputType.text,len:20),
+                              FieldArea(title: "Email",ctrl: _emailCtrl,type: TextInputType.text,len:49),
                               // FieldArea(title: "Department",ctrl: _departmentCtrl,type: TextInputType.text,len:20),
                               FieldArea(title: "Leave Count",ctrl: _leaveCtrl,type: TextInputType.number,len:5),
                               FieldAreaWithCalendar(title: "Date of Joining",ctrl: _dojCtrl,type: TextInputType.datetime,days:24000,fdays: 0,),
@@ -321,7 +323,7 @@ class _addEmployeePageState extends State<addEmployeePage> {
                                         return;
                                       }
 
-                                      Map<String,dynamic> newUser = {"Mobile": _mobileCtrl.text, "Name": _nameCtrl.text, "EmployeeID": _employeeidCtrl.text,"Employer":widget.employer, "Department": dropdownDep,
+                                      Map<String,dynamic> newUser = {"Mobile": _mobileCtrl.text, "Name": _nameCtrl.text, "Email":_emailCtrl.text,"EmployeeID": _employeeidCtrl.text,"Employer":widget.employer, "Department": dropdownDep,
                                           "Position": dropdownPos, "Permission": dropdownUser, "Manager": managerList[dropIndex-1].Name, "ManagerID": managerList[dropIndex-1].EmployeeID,
                                           "LeaveCount": double.parse(_leaveCtrl.text),"DOJ":_dojCtrl.text,"Sex":dropdownSex,"DOB":dobCtrl.text,"AL1":adl1Ctrl.text,"AL2":adl2Ctrl.text,"AL3":adl3Ctrl.text,
                                       "Zip":zipCtrl.text,"BG":dropdownblood,"EmName":emNameCtrl.text,"EmNum":emNumCtrl.text,"BankName":bankNameCtrl.text,"AccNo":accNumCtrl.text,"PAN":panCtrl.text};

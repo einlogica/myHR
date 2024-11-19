@@ -1,4 +1,5 @@
 import 'package:einlogica_hr/Models/userModel.dart';
+import 'package:einlogica_hr/Widgets/loadingWidget.dart';
 import 'package:einlogica_hr/services/apiServices.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,7 @@ class _superUserState extends State<superUser> {
 
   var w=0.00,h=0.00,t=0.00;
   List<userModel> adminList = [];
+  bool _loading = false;
 
   @override
   void initState() {
@@ -27,7 +29,7 @@ class _superUserState extends State<superUser> {
 
   void getList()async{
     adminList = await apiServices().getUserDetails(widget.currentUser.Mobile, "SUPER");
-    print(adminList.toString());
+    // print(adminList.toString());
     setState(() {
 
     });
@@ -63,11 +65,6 @@ class _superUserState extends State<superUser> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const SizedBox(
-                        width: 60,
-                        height: 40,
-                      ),
-                      Text("Super User",style: const TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),),
                       InkWell(
                         onTap: (){
                           Navigator.pop(context);
@@ -75,8 +72,13 @@ class _superUserState extends State<superUser> {
                         child: const SizedBox(
                             width:80,
                             height:50,
-                            child: Icon(Icons.exit_to_app,color: Colors.white,)
+                            child: Icon(Icons.arrow_back,color: Colors.white,)
                         ),
+                      ),
+                      const Text("myHR Accounts",style: const TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),),
+                      const SizedBox(
+                        width: 60,
+                        height: 40,
                       ),
                     ],
                   ),
@@ -87,7 +89,7 @@ class _superUserState extends State<superUser> {
           SizedBox(
             width: w,
             height: h-60-t,
-            child: adminList.isEmpty?SizedBox():ListView.builder(
+            child: adminList.isEmpty?loadingWidget():ListView.builder(
                 padding: EdgeInsets.only(bottom: 50),
                 itemCount: adminList.length,
                 itemBuilder: (context,index){
@@ -114,8 +116,10 @@ class _superUserState extends State<superUser> {
                           ],
                         ),
                         child: ListTile(
-                          title: Text(adminList[index].Name),
+                          leading: Icon(Icons.person),
+                          title: Text(adminList[index].Name,style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),),
                           subtitle: Text(adminList[index].Employer),
+                          trailing: Icon(Icons.arrow_forward_ios_sharp),
                         ),
                       ),
                     ),

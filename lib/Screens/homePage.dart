@@ -513,120 +513,7 @@ class _homePageState extends State<homePage> {
                                         )
                                     )
                                 ),
-                                // kIsWeb?SizedBox():Align(
-                                //     alignment: Alignment.topRight,
-                                //     child: Padding(
-                                //         padding: const EdgeInsets.only(right: 20.0),
-                                //         child: InkWell(
-                                //           onTap: ()async{
-                                //             if(locationName!=""){
-                                //               return;
-                                //             }
-                                //             // print("checkin pressed");
-                                //             bool location = await locationServices().checkLocationServices();
-                                //             if(!location){
-                                //               showMessage("Please enable location services");
-                                //               return;
-                                //             }
-                                //
-                                //             bool device = await apiServices().checkDevice();
-                                //             if(!device){
-                                //               showMessage("Unknown Device");
-                                //               return;
-                                //             }
-                                //
-                                //
-                                //             if(locationName==""){
-                                //               setState(() {
-                                //                 // _refresh=true;
-                                //                 checkinWidth=true;
-                                //                 // print(checkinWidth);
-                                //               });
-                                //               // showMessage("Checking Location Services");
-                                //               bool status=await locationServices().checkLocationServices();
-                                //               // showMessage("$status");
-                                //               if(status==true){
-                                //                 // showMessage("preparing model");
-                                //                 currLocation=await locationServices().prepareModel();
-                                //                 await showDialogBox("CheckIn").then((value) => null);
-                                //               }
-                                //               fetchAttStatus();
-                                //             }
-                                //
-                                //           },
-                                //           child: AnimatedContainer(
-                                //             duration: const Duration(seconds: 1),
-                                //             curve: Curves.fastOutSlowIn,
-                                //             width: checkinWidth?w-w/2:w/3,
-                                //             height: 50,
-                                //             // height: checkinWidth?w/2:50,
-                                //             decoration: BoxDecoration(
-                                //               borderRadius: BorderRadius.circular(25),
-                                //               gradient: const LinearGradient(
-                                //                   begin: Alignment.bottomLeft,
-                                //                   end: Alignment.topRight,
-                                //                   colors: [AppColors.themeStart,AppColors.themeStop]
-                                //               ),
-                                //               boxShadow: const [
-                                //                 BoxShadow(
-                                //                   color: Colors.grey,
-                                //                   spreadRadius: 1,
-                                //                   blurRadius: 2,
-                                //                   offset: Offset(2, 2),
-                                //                 ),
-                                //               ],
-                                //             ),
-                                //             child: Center(
-                                //                 child: locationName==""?Row(
-                                //                   mainAxisAlignment: checkinWidth?MainAxisAlignment.spaceEvenly:MainAxisAlignment.center,
-                                //                   children: [
-                                //                     const Text("Check in",style: TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
-                                //                     checkinWidth?const SizedBox(
-                                //                         width: 20,
-                                //                         height: 20,
-                                //                         child: CircularProgressIndicator(color: Colors.white,)):const SizedBox(),
-                                //
-                                //                   ],
-                                //                 ):
-                                //                 Padding(
-                                //                   padding: const EdgeInsets.only(left:12.0,right:2.0),
-                                //                   child: Row(
-                                //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                //                     children: [
-                                //                       SizedBox(width: 5,),
-                                //                       // const Icon(Icons.work,color: Colors.white,),
-                                //                       Text(leaveDay=='0.5'?"Half Day":locationStatus,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white),),
-                                //                       (locationStatus=='Present' || leaveDay=='0.5') ?InkWell(
-                                //                           onTap: ()async{
-                                //                             // await locationServices().openMap(posLat, posLong);
-                                //                             setState(() {
-                                //                               checkOutPressed=true;
-                                //                             });
-                                //                             bool status=await locationServices().checkLocationServices();
-                                //                             if(status==true){
-                                //                               currLocation=await locationServices().prepareModel();
-                                //                               await showDialogBox(attTime=='00:00'?"CheckIn":"CheckOut").then((value) => null);
-                                //                             }
-                                //                             fetchAttStatus();
-                                //
-                                //                           },
-                                //                           child: Container(
-                                //                               width: 80,
-                                //                               height: 40,
-                                //                               decoration: BoxDecoration(
-                                //                                   borderRadius: BorderRadius.circular(20),
-                                //                                   color: Colors.white
-                                //                               ),
-                                //                               child: Center(child: checkOutPressed?const SizedBox(width: 20,height: 20,child: CircularProgressIndicator()):Text(attTime=='00:00'?"CheckIn":"CheckOut")))):const SizedBox(),
-                                //                       // SizedBox(width: 10,),
-                                //                     ],
-                                //                   ),
-                                //                 )
-                                //             ),
-                                //           ),
-                                //         )
-                                //     )
-                                // ),
+
                               ],
                             ),
                           ),
@@ -667,14 +554,6 @@ class _homePageState extends State<homePage> {
                             ),
                           ):const SizedBox(),
 
-                          // const SizedBox(height: 10,),
-                          // const Align(
-                          //     alignment: Alignment.centerLeft,
-                          //
-                          //     child: Padding(
-                          //       padding: EdgeInsets.only(left:10.0),
-                          //       child: Text("What would you like to do?",style: TextStyle(fontSize: 18,color: Colors.grey,fontStyle: FontStyle.italic),),
-                          //     )),
                           const SizedBox(height: 20,),
                           SizedBox(
                             width: w,
