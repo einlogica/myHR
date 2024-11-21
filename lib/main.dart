@@ -24,9 +24,7 @@ Future<void> main() async{
 
   // iOS initialization
   final DarwinInitializationSettings initializationSettingsIOS =
-  DarwinInitializationSettings(
-    onDidReceiveLocalNotification: onDidReceiveLocalNotification,
-  );
+  DarwinInitializationSettings();
 
   // Combine initialization settings
   final InitializationSettings initializationSettings =

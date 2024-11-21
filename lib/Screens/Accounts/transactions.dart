@@ -1,5 +1,6 @@
 import 'package:einlogica_hr/services/apiServices.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../Models/paymentModel.dart';
 import '../../Models/userModel.dart';
 import '../../Widgets/loadingWidget.dart';
@@ -110,10 +111,29 @@ class _transactionsPageState extends State<transactionsPage> {
                       itemBuilder: (context,index){
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            title: Text("Period: ${paymentList[index].FromDate}  -  ${paymentList[index].ToDate} "),
-                            subtitle: Text("${paymentList[index].TransactionID}"),
-                            trailing: Text("${paymentList[index].Total}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
+                          child: Container(
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.black,width: 2),
+                            color: Colors.blue.shade50
+                            ),
+                            child: ListTile(
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Text("Bill Period:",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
+                                  Text("Bill Period: ${DateFormat('MMM yyyy').format(DateTime.parse(paymentList[index].FromDate))}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                                  // Text("${paymentList[index].FromDate} - ${paymentList[index].ToDate} ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                                ],
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Txn id: ${paymentList[index].TransactionID}"),
+                                  Text("Date: ${DateFormat('dd MM yyyy').format(DateTime.parse(paymentList[index].Date))}")
+                                ],
+                              ),
+                              trailing: Text("${paymentList[index].Total}/-",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                            ),
                           ),
                         );
                       }):const Center(child: Text("Nothing to display"),)

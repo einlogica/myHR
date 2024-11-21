@@ -153,7 +153,9 @@ class apiServices{
   //Update FCMTocken
   void updateFCM(String mobile)async{
     FirebaseMessaging messaging = FirebaseMessaging.instance;
+
     String? FCMtocken = await messaging.getToken();
+
     await apiRequest("jilariapi.php", {"action":"updatefcm","usermobile":mobile,"fcm": FCMtocken.toString(),"device":_identifier});
   }
 
@@ -705,6 +707,7 @@ class apiServices{
     final response = await apiRequest("jilariapi.php", {"action":"get_billImage","filename":item,"type":type,"emp":emp});
     if(response.statusCode==200){
       var data = response.body.trim();
+      // print(data);
       if(data!="Failed"){
         profileImage=base64Decode(data);
       }
@@ -1730,6 +1733,7 @@ class apiServices{
     }
     catch(e){
       print(e.toString());
+      return res;
     }
 
     return res;

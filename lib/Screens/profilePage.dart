@@ -99,9 +99,9 @@ class _profilePageState extends State<profilePage> {
   }
 
   getInfo()async{
-    print(widget.mobile);
+    // print(widget.mobile);
     currentUser = await apiServices().getProfile(widget.mobile);
-    print(currentUser.Name);
+    // print(currentUser.Name);
     setState(() {
       progressIndicator=false;
     });
