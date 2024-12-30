@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "1087954814595",
     "project_id": "einlogicahr",
-    "storage_bucket": "einlogicahr.appspot.com"
+    "storage_bucket": "einlogicahr.firebasestorage.app"
   },
   "client": [
     {

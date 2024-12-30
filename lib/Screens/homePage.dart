@@ -34,7 +34,8 @@ import '../Models/summaryModel.dart';
 
 class homePage extends StatefulWidget {
   final userModel currentUser;
-  homePage({super.key,required this.currentUser});
+  final bool superAdmin;
+  homePage({super.key,required this.currentUser, required this.superAdmin});
 
   @override
   State<homePage> createState() => _homePageState();
@@ -124,7 +125,11 @@ class _homePageState extends State<homePage> {
   fetchData2()async{
     collectionTab = await apiServices().getSettings('CollectionTab');
     financeTab = await apiServices().getSettings('FinanceTab');
-    apiServices().updateFCM(widget.currentUser.Mobile);
+    if(widget.superAdmin==false){
+      print("Updating FCM");
+      apiServices().updateFCM(widget.currentUser.Mobile);
+    }
+
     await fetchEvents();
     await setEmployerImage();
 

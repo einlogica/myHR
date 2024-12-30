@@ -49,9 +49,10 @@ Future<void> main() async{
   );
 
   // await Upgrader.clearSavedSettings();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+  await Firebase.initializeApp();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
@@ -88,6 +89,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       // theme: ThemeData(fontFamily: 'Mitr'),
       // home: Dashboard(),
+      theme: ThemeData(
+        scrollbarTheme: ScrollbarThemeData(
+          thumbColor: WidgetStateProperty.all(Colors.blue),
+          thickness: WidgetStateProperty.all(7.0),
+          radius: const Radius.circular(10),
+        ),
+      ),
       builder: (BuildContext context, Widget? child) {
         return MediaQuery(
 

@@ -44,7 +44,7 @@ class apiServices{
   //--------------TEST
   // var url = "https://testingcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
 
-  var appVersion ="V1.1.2+25";
+  var appVersion ="V1.1.6+30";
   // var emp = "";
 
 //================================================================================================================================================= USERS
@@ -152,8 +152,12 @@ class apiServices{
 
   //Update FCMTocken
   void updateFCM(String mobile)async{
+    print("Executing update FCM method");
     FirebaseMessaging messaging = FirebaseMessaging.instance;
-
+    final notificationSettings = await FirebaseMessaging.instance.requestPermission(provisional: true);
+    await Future.delayed(Duration(seconds: 1));
+    String? apns = await messaging.getAPNSToken();
+    print(apns);
     String? FCMtocken = await messaging.getToken();
 
     await apiRequest("jilariapi.php", {"action":"updatefcm","usermobile":mobile,"fcm": FCMtocken.toString(),"device":_identifier});

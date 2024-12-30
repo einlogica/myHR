@@ -1,3 +1,4 @@
+import 'package:einlogica_hr/Screens/upload_bill.dart';
 import 'package:flutter/material.dart';
 
 class FieldAreaWithDropDown extends StatefulWidget {
@@ -21,6 +22,7 @@ class _FieldAreaWithDropDownState extends State<FieldAreaWithDropDown> {
       child: SizedBox(
         width: w-50,
         child: DropdownButtonFormField(
+          borderRadius: BorderRadius.circular(10),
           menuMaxHeight: 200,
           dropdownColor: Colors.blue.shade50,
           items: widget.dropList.map<DropdownMenuItem<String>>((String value) {
@@ -46,6 +48,7 @@ class _FieldAreaWithDropDownState extends State<FieldAreaWithDropDown> {
             enabled: true,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
+
         ),
       ),
     );

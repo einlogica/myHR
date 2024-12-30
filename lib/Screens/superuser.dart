@@ -86,18 +86,18 @@ class _superUserState extends State<superUser> {
               ],
             ),
           ),
-          SizedBox(
+          adminList.isEmpty?const CircularProgressIndicator():SizedBox(
             width: w,
             height: h-60-t,
-            child: adminList.isEmpty?loadingWidget():ListView.builder(
-                padding: EdgeInsets.only(bottom: 50),
+            child: ListView.builder(
+                padding: const EdgeInsets.only(bottom: 50),
                 itemCount: adminList.length,
                 itemBuilder: (context,index){
                   return InkWell(
                     onTap: (){
                       apiServices().setEmp(adminList[index].Employer);
                       Navigator.push(context, MaterialPageRoute(builder: (context){
-                        return homePage(currentUser:adminList[index]);
+                        return homePage(currentUser:adminList[index],superAdmin: true,);
                       }));
                     },
                     child: Padding(
@@ -116,10 +116,10 @@ class _superUserState extends State<superUser> {
                           ],
                         ),
                         child: ListTile(
-                          leading: Icon(Icons.person),
-                          title: Text(adminList[index].Name,style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),),
+                          leading: const Icon(Icons.person),
+                          title: Text(adminList[index].Name,style: const TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),),
                           subtitle: Text(adminList[index].Employer),
-                          trailing: Icon(Icons.arrow_forward_ios_sharp),
+                          trailing: const Icon(Icons.arrow_forward_ios_sharp),
                         ),
                       ),
                     ),

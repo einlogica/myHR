@@ -227,7 +227,7 @@ class _attendancePageState extends State<attendancePage> {
 
                 Expanded(
                   child: SizedBox(
-                    width: w-20,
+                    width: w-10,
                     // height: h/2,
                     // color: Colors.grey,
                     child: ListView.builder(

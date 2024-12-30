@@ -546,7 +546,7 @@ class _loginState extends State<login> {
 
   routeToHome(userModel currentUser){
     Navigator.push(context, MaterialPageRoute(builder: (context){
-      return homePage(currentUser:currentUser);
+      return homePage(currentUser:currentUser,superAdmin: false,);
     }));
   }
 
