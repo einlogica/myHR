@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:js_interop';
 import 'package:csv/csv.dart';
 import 'package:einlogica_hr/Models/billerModel.dart';
 import 'package:einlogica_hr/Widgets/FieldAreaWithCalendar.dart';
@@ -546,8 +547,8 @@ class _downloadsPageState extends State<downloadsPage> {
       showMessage("Invalid input dates");
       return;
     }
-    else if(diff>90){
-      showMessage("Max 90 days data can be fetched !");
+    else if(diff>366){
+      showMessage("Max 1 year data can be fetched !");
       return;
     }
     else if(selectedUsers.length==0){
@@ -586,6 +587,7 @@ class _downloadsPageState extends State<downloadsPage> {
     else{
 
       String response = await apiServices().getTracker(users,item, fromDate, toDate);
+      // print("================response");
       // print(response);
       var data = jsonDecode(response);
       for (var d in data){

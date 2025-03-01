@@ -635,7 +635,7 @@ class _settingsPageState extends State<settingsPage> {
                                 // _loading=true;
                               });
                               orderID=await apiServices().getOrderid(widget.currentUser.Mobile, _amount.toString());
-                              print(orderID);
+                              // print(orderID);
                               Razorpay razorpay = Razorpay();
                               var options = {
                                 'key': 'rzp_live_aUnuQeSvJAEjzs',

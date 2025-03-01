@@ -510,7 +510,7 @@ class apiServices{
   Future<String> postRegularization(String mobile, String name, String date, String regIn, String regOut, String comments)async{
     print("Executing post Regularization method");
     String status ="";
-    final response = await apiRequest("jilariapi.php",{"action":"postRegularization","usermobile":mobile,"username":name,"date":date,"regIn":regIn,"regOut":regOut,"comments":comments});
+    final response = await apiRequest("jilariapi.php",{"action":"postRegularization","usermobile":mobile,"username":name,"date":date,"regIn":regIn,"regOut":regOut,"comments":comments,"emp":emp});
     status = response.body.trim();
     return status;
   }
@@ -1705,7 +1705,7 @@ class apiServices{
     print("Executing get tracker method");
     String status="";
     final response = await apiRequest("jilariapi.php", {"action":"get_tracker","device":_identifier,"users":users.toString(),"item":item,"fromDate":fromDate,"toDate":toDate,"emp":emp});
-
+    // print(response.body.trim());
     if(response.statusCode==200){
       status = response.body.trim();
     }

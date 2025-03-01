@@ -16,7 +16,21 @@ FlutterLocalNotificationsPlugin();
 Future<void> main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
+  // print("=============");
+  // print(Firebase.apps.toString());
 
+  // if (Firebase.apps.isEmpty) {
+  //   await Firebase.initializeApp(
+  //     options: DefaultFirebaseOptions.currentPlatform,
+  //   );
+  // }
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    print("Firebase already initialized: $e");
+  }
 
   // Android initialization
   const AndroidInitializationSettings initializationSettingsAndroid =
@@ -49,10 +63,14 @@ Future<void> main() async{
   );
 
   // await Upgrader.clearSavedSettings();
+  // if (Firebase.apps.isEmpty) {
+  //   await Firebase.initializeApp(
+  //     options: DefaultFirebaseOptions.currentPlatform,
+  //   );
+  // }
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
-  await Firebase.initializeApp();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
@@ -69,7 +87,12 @@ void onDidReceiveLocalNotification(
 
 // TODO: Define the background message handler
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
 
   // if (kDebugMode) {
   //   print("Handling a background message: ${message.messageId}");

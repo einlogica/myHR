@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
-// import 'dart:html' as html;
+import 'dart:html' as html;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
@@ -18,17 +18,17 @@ class savefile{
     String status="";
 
     String directoryPath;
-    // if(kIsWeb){
-    //   print("Detected web activity");
-    //   final blob = html.Blob([data]);
-    //   final url = html.Url.createObjectUrlFromBlob(blob);
-    //   final anchor = html.AnchorElement(href: url)
-    //     ..setAttribute("download", fileName)
-    //     ..click();
-    //   html.Url.revokeObjectUrl(url);
-    //   status = "Success";
-    // }
-    // else
+    if(kIsWeb){
+      print("Detected web activity");
+      final blob = html.Blob([data]);
+      final url = html.Url.createObjectUrlFromBlob(blob);
+      final anchor = html.AnchorElement(href: url)
+        ..setAttribute("download", fileName)
+        ..click();
+      html.Url.revokeObjectUrl(url);
+      status = "Success";
+    }
+    else
     if (Platform.isAndroid) {
       // final directory = await getExternalStorageDirectory();
       // filePath = '$directory/$fileName';
