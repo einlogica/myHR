@@ -1,5 +1,5 @@
 import 'package:einlogica_hr/Models/userModel.dart';
-import 'package:einlogica_hr/Widgets/loadingWidget.dart';
+// import 'package:einlogica_hr/Widgets/loadingWidget.dart';
 import 'package:einlogica_hr/services/apiServices.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +18,7 @@ class _superUserState extends State<superUser> {
 
   var w=0.00,h=0.00,t=0.00;
   List<userModel> adminList = [];
-  bool _loading = false;
+  // bool _loading = false;
 
   @override
   void initState() {
@@ -75,7 +75,7 @@ class _superUserState extends State<superUser> {
                             child: Icon(Icons.arrow_back,color: Colors.white,)
                         ),
                       ),
-                      const Text("myHR Accounts",style: const TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),),
+                      const Text("myHR Accounts",style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),),
                       const SizedBox(
                         width: 60,
                         height: 40,
@@ -108,7 +108,7 @@ class _superUserState extends State<superUser> {
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
+                              color: Colors.black.withValues(alpha: .3),
                               spreadRadius: 2,
                               blurRadius: 2,
                               offset: const Offset(0, 4),

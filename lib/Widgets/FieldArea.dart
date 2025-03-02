@@ -20,7 +20,7 @@ class _FieldAreaState extends State<FieldArea> {
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
         width: w-50,
-        height: 60,
+        // height: 60,
         // color: Colors.grey,
         child: SizedBox(
           // width: w-20,

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:einlogica_hr/Models/collectionModel.dart';
 import 'package:einlogica_hr/Widgets/FieldAreaWithCalendar.dart';
 import 'package:einlogica_hr/Widgets/FieldAreaWithDropDown.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:geolocator/geolocator.dart';
@@ -205,7 +205,7 @@ class _collectMaterialState extends State<collectMaterial> {
     }
     else if(title == "Vehicle"){
       selectedVehicle=selected;
-      print(selectedVehicle);
+      // print(selectedVehicle);
     }
     setState(() {});
   }
@@ -219,7 +219,7 @@ class _collectMaterialState extends State<collectMaterial> {
 
     return Scaffold(
         floatingActionButton: _addData || imageDownloaded
-            ? SizedBox()
+            ? const SizedBox()
             : FloatingActionButton(
                 backgroundColor: AppColors.buttonColorDark,
                 onPressed: () {
@@ -334,13 +334,13 @@ class _collectMaterialState extends State<collectMaterial> {
                     child: Column(
                       children: [
                         const SizedBox(height: 5,),
-                        _addData || imageDownloaded?SizedBox():FieldArea(title: "Search Name/Shop", ctrl: searchCtrl, type: TextInputType.text, len: 20),
+                        _addData || imageDownloaded?const SizedBox():FieldArea(title: "Search Name/Shop", ctrl: searchCtrl, type: TextInputType.text, len: 20),
                         const SizedBox(height: 5,),
                         Expanded(
                           child: SizedBox(
-                            child: filteredcollectionList.isEmpty?Center(child:Text("Nothing to display")):SizedBox(
+                            child: filteredcollectionList.isEmpty?const Center(child:Text("Nothing to display")):SizedBox(
                               child: ListView.builder(
-                                  padding: EdgeInsets.only(bottom: 80),
+                                  padding: const EdgeInsets.only(bottom: 80),
                                   itemCount: filteredcollectionList.length,
                                   itemBuilder: (context,int index){
                                     return Padding(
@@ -351,7 +351,7 @@ class _collectMaterialState extends State<collectMaterial> {
                                           color: Colors.white,
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.black.withOpacity(0.3),
+                                              color: Colors.black.withValues(alpha: .3),
                                               spreadRadius: 2,
                                               blurRadius: 2,
                                               offset: const Offset(0, 4),
@@ -389,7 +389,7 @@ class _collectMaterialState extends State<collectMaterial> {
                                                     width: 50,
                                                     height: 50,
                                                     child: Center(
-                                                      child: filteredcollectionList[index].file=="NONE"?SizedBox():Icon(Icons.image,color: Colors.green,),
+                                                      child: filteredcollectionList[index].file=="NONE"?const SizedBox():const Icon(Icons.image,color: Colors.green,),
                                                     ),
                                                   ),
                                                 ),
@@ -400,15 +400,15 @@ class _collectMaterialState extends State<collectMaterial> {
                                                         width:w/2,
                                                         child: SingleChildScrollView(
                                                             scrollDirection:Axis.horizontal,
-                                                            child: Text("${filteredcollectionList[index].shopname}",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),))),
-                                                    SizedBox(height: 10,),
+                                                            child: Text(filteredcollectionList[index].shopname,style: const TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),))),
+                                                    const SizedBox(height: 10,),
                                                     SizedBox(
                                                       width: w-150,
                                                       child: Row(
                                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                         children: [
-                                                          Text("${filteredcollectionList[index].date}",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-                                                          Text("${filteredcollectionList[index].time}",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                                                          Text(filteredcollectionList[index].date,style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                                                          Text(filteredcollectionList[index].time,style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
                     
                                                         ],
                                                       ),
@@ -417,15 +417,15 @@ class _collectMaterialState extends State<collectMaterial> {
                     
                                                     const SizedBox(height: 10,),
                                                     // Text("${collectionList[index].name}"),
-                                                    filteredcollectionList[index].item=="Cash"?SizedBox():SizedBox(
+                                                    filteredcollectionList[index].item=="Cash"?const SizedBox():SizedBox(
                                                       // width: w/2,
                                                       child: Column(
                                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: [
-                                                          filteredcollectionList[index].vehicle=="NA"?SizedBox():Text("Vehicle : ${filteredcollectionList[index].vehicle} Kg"),
-                                                          filteredcollectionList[index].dry=="0"?SizedBox():Text("Dry : ${filteredcollectionList[index].dry} Kg"),
-                                                          filteredcollectionList[index].cloth=="0"?SizedBox():Text("Cloth : ${filteredcollectionList[index].cloth} Kg"),
+                                                          filteredcollectionList[index].vehicle=="NA"?const SizedBox():Text("Vehicle : ${filteredcollectionList[index].vehicle} Kg"),
+                                                          filteredcollectionList[index].dry=="0"?const SizedBox():Text("Dry : ${filteredcollectionList[index].dry} Kg"),
+                                                          filteredcollectionList[index].cloth=="0"?const SizedBox():Text("Cloth : ${filteredcollectionList[index].cloth} Kg"),
                     
                                                         ],
                                                       ),
@@ -435,8 +435,8 @@ class _collectMaterialState extends State<collectMaterial> {
                                                       child: Row(
                                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                         children: [
-                                                          filteredcollectionList[index].item=="Cash"?Text("CASH",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),):filteredcollectionList[index].amt=="0"?SizedBox():Text("Amount : ${filteredcollectionList[index].amt} /-"),
-                                                          filteredcollectionList[index].tot=="0"?SizedBox():Text("Total : ${filteredcollectionList[index].tot} /-",style: TextStyle(fontWeight: FontWeight.bold),),
+                                                          filteredcollectionList[index].item=="Cash"?const Text("CASH",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),):filteredcollectionList[index].amt=="0"?const SizedBox():Text("Amount : ${filteredcollectionList[index].amt} /-"),
+                                                          filteredcollectionList[index].tot=="0"?const SizedBox():Text("Total : ${filteredcollectionList[index].tot} /-",style: const TextStyle(fontWeight: FontWeight.bold),),
                     
                                                         ],
                                                       ),
@@ -445,7 +445,7 @@ class _collectMaterialState extends State<collectMaterial> {
                     
                                                   ],
                                                 ),
-                                                Spacer(),
+                                                const Spacer(),
                                                 Column(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
@@ -472,13 +472,13 @@ class _collectMaterialState extends State<collectMaterial> {
                                                         ),
                                                       ),
                                                     ),
-                                                    SizedBox(height: 20,),
+                                                    const SizedBox(height: 20,),
                     
                                                     InkWell(
                                                       onTap: ()async{
                                                         await locationServices().openMap(double.parse(filteredcollectionList[index].lat), double.parse(filteredcollectionList[index].long));
                                                       },
-                                                      child: Icon(Icons.location_on,color: Colors.green,),
+                                                      child: const Icon(Icons.location_on,color: Colors.green,),
                                                     )
                                                   ],
                                                 )
@@ -617,18 +617,18 @@ class _collectMaterialState extends State<collectMaterial> {
           children: [
             // FieldArea(title: "Division", ctrl: _divisionCtrl, type: TextInputType.number, len: 3),
             FieldAreaWithDropDown(title: "Item", dropList: itemList, dropdownValue: itemDropDown, callback: dropDownCallback),
-            itemDropDown=="Yard"?SizedBox():FieldAreaWithDropDown(
+            itemDropDown=="Yard"?const SizedBox():FieldAreaWithDropDown(
                 title: "Division",
                 dropList: divList,
                 dropdownValue: dropDownDiv,
                 callback: dropDownCallback),
-            itemDropDown=="Yard"?SizedBox():FieldAreaWithDropDown(
+            itemDropDown=="Yard"?const SizedBox():FieldAreaWithDropDown(
                 title: "Type",
                 dropList: typeList,
                 dropdownValue: dropDownType,
                 callback: dropDownCallback),
 
-            itemDropDown=="Yard"?SizedBox():SizedBox(
+            itemDropDown=="Yard"?const SizedBox():SizedBox(
               width: w - 20,
               height: 50,
               child: Row(
@@ -664,7 +664,7 @@ class _collectMaterialState extends State<collectMaterial> {
               ),
             ),
             !addNewShop
-                ? itemDropDown=="Yard"?SizedBox():Column(
+                ? itemDropDown=="Yard"?const SizedBox():Column(
               children: [
                 const SizedBox(
                   height: 10,
@@ -726,7 +726,7 @@ class _collectMaterialState extends State<collectMaterial> {
                       border: Border.all(
                           color: Colors.black),
                       color: Colors.grey
-                          .withOpacity(.2),
+                          .withValues(alpha: .2),
                     ),
                     child: Padding(
                       padding:
@@ -760,7 +760,7 @@ class _collectMaterialState extends State<collectMaterial> {
                     : const SizedBox(),
               ],
             )
-                : SizedBox(),
+                : const SizedBox(),
 
             addNewShop
                 ? Column(
@@ -800,14 +800,14 @@ class _collectMaterialState extends State<collectMaterial> {
             ):Column(
               children: [
                 FieldAreaWithCalendar(title: "Date", ctrl: _dateController, type: TextInputType.datetime,days: 365,fdays: 0,),
-                itemDropDown=="Yard"?FieldAreaWithDropDown(title: "Vehicle", dropList: vehicleList, dropdownValue: selectedVehicle, callback: dropDownCallback):SizedBox(),
-                itemDropDown=="Yard" && selectedVehicle=="Other"?FieldArea(title: "Specify", ctrl: _specifyCtrl, type: TextInputType.text, len: 20):SizedBox(),
+                itemDropDown=="Yard"?FieldAreaWithDropDown(title: "Vehicle", dropList: vehicleList, dropdownValue: selectedVehicle, callback: dropDownCallback):const SizedBox(),
+                itemDropDown=="Yard" && selectedVehicle=="Other"?FieldArea(title: "Specify", ctrl: _specifyCtrl, type: TextInputType.text, len: 20):const SizedBox(),
                 // FieldAreaWithDropDown(title: "Item", dropList: itemList, dropdownValue: itemDropDown, callback: dropDownCallback),
                 itemDropDown!='Material' && itemDropDown!="Yard"?const SizedBox():FieldArea(title: "Dry Weight (KG)", ctrl: _dryController, type: TextInputType.number, len: 8),
                 itemDropDown!='Material'?const SizedBox():FieldArea(title: "Cloth Weight (KG)", ctrl: _clothController, type: TextInputType.number, len: 8),
-                itemDropDown=="Yard"?SizedBox():FieldArea(title: "Collected Amount", ctrl: _amountCtrl, type: TextInputType.number, len: 5),
-                SizedBox(height: 5,),
-                itemDropDown=="Yard"?SizedBox():SizedBox(
+                itemDropDown=="Yard"?const SizedBox():FieldArea(title: "Collected Amount", ctrl: _amountCtrl, type: TextInputType.number, len: 5),
+                const SizedBox(height: 5,),
+                itemDropDown=="Yard"?const SizedBox():SizedBox(
                   width: w-20,
                   height: 50,
                   // color: Colors.grey,
@@ -865,7 +865,7 @@ class _collectMaterialState extends State<collectMaterial> {
                             return imageViewer(imagefile: imageFile!.readAsBytesSync(), mobile: widget.mobile,download: false,);
                           }));
                         },
-                        child: Container(
+                        child: SizedBox(
                           width: w/4,
                           height: w/4,
                           // decoration: BoxDecoration(
@@ -897,7 +897,7 @@ class _collectMaterialState extends State<collectMaterial> {
               ],
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             SizedBox(
@@ -1036,7 +1036,7 @@ class _collectMaterialState extends State<collectMaterial> {
                   ],
                 )),
 
-            SizedBox(
+            const SizedBox(
               height: 30,
             )
           ],

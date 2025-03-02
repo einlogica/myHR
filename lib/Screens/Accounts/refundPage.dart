@@ -35,7 +35,7 @@ class _refundPageState extends State<refundPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: Container(
+      body: SizedBox(
         width: w,
         height: h,
         child: Stack(

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
+// import 'dart:typed_data';
 import 'package:einlogica_hr/Models/collectionModel.dart';
 import 'package:einlogica_hr/Models/employerModel.dart';
 import 'package:einlogica_hr/Models/paymentModel.dart';
@@ -29,9 +29,9 @@ import 'package:unique_identifier/unique_identifier.dart';
 
 
 var token;
-var _identifier;
-var _mobileidentifier;
-var emp;
+late String _identifier;
+late String _mobileidentifier;
+late String emp;
 
 
 class apiServices{
@@ -44,7 +44,7 @@ class apiServices{
   //--------------TEST
   // var url = "https://testingcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
 
-  var appVersion ="V1.1.6+30";
+  var appVersion ="V1.1.7+31";
   // var emp = "";
 
 //================================================================================================================================================= USERS
@@ -78,13 +78,14 @@ class apiServices{
 
   //Login function
   Future<String> checkLogin(String mobile,String password)async{
-    print("Executing check login method");
     String status = "";
 
     var data;
 
     final response = await apiRequest("login.php", {"usermobile": mobile,"userpass": password,"app": appVersion});
+    // print("==========");
     // print(response.body);
+    // print(response.statusCode);
     if (response.statusCode == 200) {
       status = response.body.trim();
       data = jsonDecode(response.body);
@@ -104,7 +105,6 @@ class apiServices{
 
   //Check for Updated version
   Future<bool> checkUpdate()async{
-    print("executing check update method");
     String status="";
 
     final response = await apiRequest("jilariapi.php", {"action":"checkUpdate","app":appVersion});
@@ -119,7 +119,6 @@ class apiServices{
 
   //Download new app
   Future<Uint8List> getNewApp()async{
-    print("executing get new app method");
     Uint8List status =Uint8List(0);
 
     final response = await apiRequest("jilariapi.php", {"action":"getNewApp"});
@@ -152,12 +151,10 @@ class apiServices{
 
   //Update FCMTocken
   void updateFCM(String mobile)async{
-    print("Executing update FCM method");
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     final notificationSettings = await FirebaseMessaging.instance.requestPermission(provisional: true);
     await Future.delayed(Duration(seconds: 1));
     String? apns = await messaging.getAPNSToken();
-    print(apns);
     String? FCMtocken = await messaging.getToken();
 
     await apiRequest("jilariapi.php", {"action":"updatefcm","usermobile":mobile,"fcm": FCMtocken.toString(),"device":_identifier});
@@ -166,7 +163,6 @@ class apiServices{
   // Upload Profile Image
   Future<String> uploadImage(String file,String mobile)async{
 
-    print("executing image upload method");
     String status="";
 
     final response = await apiRequest("jilariapi.php", {"action":"upload_image","usermobile":mobile,"file": file,"emp":emp});
@@ -177,7 +173,6 @@ class apiServices{
   // Upload Logo Image
   Future<String> uploadLogo(String file,String mobile)async{
 
-    print("executing image upload method");
     String status="";
 
     final response = await apiRequest("jilariapi.php", {"action":"upload_logo","usermobile":mobile,"file": file,"emp":emp});
@@ -189,7 +184,6 @@ class apiServices{
   //Api to fetch user details
   //To get managers list in addEmployeePage
   Future<List<userModel>> getUserDetails(String mobile,String filter)async{
-    print("Executing get User Details method");
     List<userModel> userList=[];
 
     final response = await apiRequest("jilariapi.php", {"action":"get_userdetails","mobile":mobile,"filter":filter,"emp":emp});
@@ -223,7 +217,6 @@ class apiServices{
   // }
 
   Future<userModel> getProfile(String mobile)async{
-    print("Executing get profile method");
 
     userModel currentUser = userModel(Mobile: "", Name: "",Email: "", EmployeeID: "", Employer: "", Department: "", Position: "", Permission: "", Manager: "", ManagerID: "", DOJ: "", LeaveCount: 0, Status: "", ImageFile: "");
 
@@ -238,7 +231,6 @@ class apiServices{
 
   //To get employee list under a manager for dashboardPage
   Future<List<reporteeModel>> getReportees(String mobile,String filter,String date)async{
-    print("Executing get Reportees method");
     List<reporteeModel> userList=[];
 
     final response = await apiRequest("jilariapi.php", {"action":"getReportees","mobile":mobile,"filter":filter,"date":date,"emp":emp});
@@ -292,7 +284,6 @@ class apiServices{
 
   //Add user
   Future<String> addUser(Map<String,dynamic> user)async{
-    print("Executing add user method");
     String status="";
     user.addAll({"device":_identifier});
     final response = await apiRequest("jilariapi.php",{"action":"add_user","user":jsonEncode(user)});
@@ -305,7 +296,6 @@ class apiServices{
 
   //Search directory
   Future<List<directoryModel>> searchDirectory(String filter)async{
-    print("Executing search Directory method");
     List<directoryModel> list = [];
 
     final response = await apiRequest("jilariapi.php", {"action":"searchDirectory","filter": filter,"emp":emp});
@@ -321,7 +311,6 @@ class apiServices{
 
   //Update Basic Information
   Future<String>updateBasicDetails(String Email,String Manager, String ManagerID, String Position, String Department, String Permission,String Mobile,String DOJ,String Leave)async{
-    print("Executing update basic details method");
     String status="";
 
     final response = await apiRequest("jilariapi.php", {"action":"updateBasicDetails","email":Email,"manager":Manager,"managerid":ManagerID,"position":Position,"department":Department,"permission":Permission,"mobile":Mobile,"doj":DOJ,"leave":Leave});
@@ -332,7 +321,6 @@ class apiServices{
   }
 
   Future<personalInfoModel> checkPersonalInfo(String mob)async{
-    print("Executing check personal info method");
     personalInfoModel personalInfo = personalInfoModel(ID: 0, Name: "", Mobile: "", Sex: "", DOB: "", AddL1: "", AddL2: "", AddL3: "", Zip: "", BloodGroup: "", EmContactName: "", EmContactNum: "", BankName: "", AccNum: "",UAN: "",PAN: "",ESICNo: "");
 
     // String _identifier = (await UniqueIdentifier.serial)!;
@@ -346,7 +334,6 @@ class apiServices{
   }
 
   Future<String> updatePersonalInfo(Map<String,dynamic> user)async{
-    print("Executing update personal details method");
     String status="";
     final response = await apiRequest("jilariapi.php",{"action":"updatePersonalInfo","user":jsonEncode(user),"emp":emp});
     if (response.statusCode == 200) {
@@ -356,7 +343,6 @@ class apiServices{
   }
 
   Future<String> deactivateEmployee(String mobile)async{
-    print("Executing deactivate employee method");
     String status="";
 
     final response = await apiRequest("jilariapi.php", {"action":"deactivateEmployee","mobile":mobile,"emp":emp,"device":_identifier});
@@ -367,7 +353,6 @@ class apiServices{
   }
 
   Future<List<String>> getDepartments(String mobile)async{
-    print("Executing get departments method");
     List<String> status=["Select"];
     final response = await apiRequest("jilariapi.php", {"action":"getDepartments","mobile":mobile,"emp":emp});
 
@@ -381,7 +366,6 @@ class apiServices{
   }
 
   Future<List<String>> getPositions(String mobile)async{
-    print("Executing get positions method");
     List<String> status=["Select"];
 
     final response = await apiRequest("jilariapi.php", {"action":"getPositions","mobile":mobile,"emp":emp});
@@ -401,7 +385,6 @@ class apiServices{
 
   //Fetch Montly Attendance data for chart preparation
   Future<List<Map<String,dynamic>>>getMonthlyAttendance(String mobile,String month,String year)async{
-    print("Executing get monthly attendance data method");
     List<Map<String,dynamic>> att = [];
     final response = await apiRequest("jilariapi.php", {"action":"getMonthlyAttendance","usermobile": mobile,"emp":emp,"month":month,"year":year});
     // print("response= ${response.body.trim()}");
@@ -419,7 +402,6 @@ class apiServices{
 
   //Fetch Todays attendance status
   Future<String> attendanceStatus(String mobile)async{
-    print("Executing attendance status method");
     String status = "";
 
     final response = await apiRequest("jilariapi.php", {"action":"get_attendanceStatus","usermobile": mobile});
@@ -430,7 +412,6 @@ class apiServices{
 
   //Mark Absent
   Future<String> markAbsent(String mobile,String date)async{
-    print("Executing markAbsent method");
     String status = "";
     final sqlDateFormat = DateFormat('dd-MM-yyyy');
     var formatteddate = DateFormat('yyyy-MM-dd').format(sqlDateFormat.parse(date));
@@ -446,11 +427,9 @@ class apiServices{
 
   //Post checkin attendance to database
   Future<String> postAttendance(String name,String mobile,double posLat,double posLong,String location,String type)async{
-    print("Executing post attendance method");
     String status="";
 
     final response = await apiRequest("jilariapi.php", {"action":"post_Attendance","usermobile": mobile,"username":name,"posLat":posLat.toStringAsFixed(5),"posLong":posLong.toStringAsFixed(5),"location":location,"type":type});
-    print("response=${response.body}");
     if(response.statusCode==200){
       var data = jsonDecode(response.body);
 
@@ -463,7 +442,6 @@ class apiServices{
 
   //Fetch attendance data
   Future<List<attendanceModel>> getAttendanceData(String mobile,int month,int year)async{
-    print("Calling attendance data");
     List<attendanceModel> attendanceList = [];
 
     final response = await apiRequest("jilariapi.php", {"action":"get_AttendanceData","usermobile": mobile,"month":month.toString(),"year":year.toString(),});
@@ -491,7 +469,6 @@ class apiServices{
 
 
   Future<List<attendanceModel>> getRegularization(String mobile)async{
-    print("executing get regularization method");
     List<attendanceModel> list =[];
 
     final response = await apiRequest("jilariapi.php", {"action":"getRegularization","usermobile": mobile,"emp":emp});
@@ -508,7 +485,6 @@ class apiServices{
 
   //Post regularization request
   Future<String> postRegularization(String mobile, String name, String date, String regIn, String regOut, String comments)async{
-    print("Executing post Regularization method");
     String status ="";
     final response = await apiRequest("jilariapi.php",{"action":"postRegularization","usermobile":mobile,"username":name,"date":date,"regIn":regIn,"regOut":regOut,"comments":comments,"emp":emp});
     status = response.body.trim();
@@ -517,7 +493,6 @@ class apiServices{
 
   //Approve regularization request
   Future<String> approveRegularization(String mobile,String date,String type)async{
-    print("Executing approve regularization method");
     String status = "";
 
     final response = await apiRequest("jilariapi.php", {"action":"approveRegularization","usermobile":mobile,"date":date,"status":type});
@@ -539,7 +514,6 @@ class apiServices{
 
   //Apply Leave
   Future<String> applyLeave(String mobile,String name,List<String> dateList2,String comments,double days)async{
-    print("Executing Applying Leave method");
     String status="";
     String date=jsonEncode(dateList2);
 
@@ -561,7 +535,6 @@ class apiServices{
 
   //Fetch applied leave list
   Future<List<leaveModel>>getLeaves(String mobile, String type,String year,String month)async{
-    print("executing getLeave method");
     List<leaveModel> leaveList = [];
 
     final response = await apiRequest("jilariapi.php", {"action":"getLeave","usermobile": mobile,"type":type,"year":year,"month":month,"emp":emp});
@@ -584,7 +557,6 @@ class apiServices{
   //Output:
   Future<String>deleteLeave(String ID,String type)async{
 
-    print("executing delete Leave method");
     String status ="";
 
     final response = await apiRequest("jilariapi.php", {"action":"deleteLeave","id": ID,"type":type});
@@ -603,7 +575,6 @@ class apiServices{
 
 
   Future<String> updateLeave(List<String> idList,String per,String approval, String comments)async{
-    print("Executing update leave method");
     String status = "";
     String id=jsonEncode(idList);
     final response = await apiRequest("jilariapi.php", {"action":"updateLeave","id": id, "status":approval,"comments":comments,"per":per,"emp":emp});
@@ -622,9 +593,22 @@ class apiServices{
 
   //========================================================================================================================================= EXPENSE
 
+  //Fetch Expense Types
+  Future<List<String>>getExpenseType()async{
+    List<String> type =[];
+    final response = await apiRequest("jilariapi.php", {"action":"getExpenseType","emp":emp});
+    // print("response= ${response.body.trim()}");
+    if(response.body.trim()!="Failed"){
+      var data = jsonDecode(response.body.trim());
+      for(var d in data){
+        type.add(d['Type']);
+      }
+    }
+    return type;
+  }
+
   //Fetch Montly Attendance data for chart preparation
   Future<List<Map<String,dynamic>>>getMonthlyExpense(String mobile,String month,String year)async{
-    print("Executing get monthly expense summary method");
     List<Map<String,dynamic>> exp = [];
     final response = await apiRequest("jilariapi.php", {"action":"getMonthlyExpense","usermobile": mobile,"emp":emp,"month":month,"year":year});
     // print("response= ${response.body.trim()}");
@@ -642,7 +626,6 @@ class apiServices{
 
   // Api to fetch user expenses
   Future<List<userExpenseModel>> getUserExpenses(String mob,String mon, String year,String type)async{
-    print("executing getUserExpenses method");
 
     List<userExpenseModel> userExpenseList=[];
     final response = await apiRequest("jilariapi.php", {"action":"get_userexpense","usermobile": mob,"mon":mon,"year":year,"type":type,"emp":emp});
@@ -651,7 +634,7 @@ class apiServices{
       var data = jsonDecode(response.body);
       userExpenseList.clear();
       for (var d in data){
-        userExpenseList.add(userExpenseModel(ID:d['ID'],Mobile: d['Mobile'], Name: d['Name'],Site: d['Site'],LabourName: d['LabourName'],LabourCount: d['LabourCount'],Duration: d['Duration'],FromLoc: d['FromLoc'],ToLoc: d['ToLoc'],KM: d['KM'], Date : d['Date'], Type: d['Type'],Item: d['Item'], ShopName: d['ShopDesc']==null?"":d['ShopDesc'],ShopDist: d['District']==null?"":d['District'],ShopPhone: d['Phone']==null?"":d['Phone'],ShopGst: d['GST']==null?"":d['GST'],BillNo: d['BillNo'], Amount: d['Amount'], Filename: d['Filename'],Status: d['Status'],L1Status: d['L1Status'],L1Comments: d['L1Comments'],L2Status: d['L2Status'],L2Comments: d['L2Comments'],FinRemarks: d['FinRemarks']));
+        userExpenseList.add(userExpenseModel(ID:d['ID'],Mobile: d['Mobile'], Name: d['Name'],Site: d['Site'],LabourName: d['LabourName'],LabourCount: d['LabourCount'],Duration: d['Duration'],FromLoc: d['FromLoc'],ToLoc: d['ToLoc'],KM: d['KM'], Date : d['Date'], Type: d['Type'],Item: d['Item'], ShopName: d['ShopDesc']??'',ShopDist: d['District']??'',ShopPhone: d['Phone']??'',ShopGst: d['GST']??'',BillNo: d['BillNo'], Amount: d['Amount'], Filename: d['Filename'],Status: d['Status'],L1Status: d['L1Status'],L1Comments: d['L1Comments'],L2Status: d['L2Status'],L2Comments: d['L2Comments'],FinRemarks: d['FinRemarks']));
       }
     }
 
@@ -660,7 +643,6 @@ class apiServices{
 
   // Api to fetch user expenses
   Future<double> getPreExpenses(String mob,String mon, String year,String type)async{
-    print("executing get Previous Expenses method");
 
     double userExpense=0.00;
     final response = await apiRequest("jilariapi.php", {"action":"get_preexpense","usermobile": mob,"mon":mon,"year":year,"type":type,"emp":emp});
@@ -674,7 +656,6 @@ class apiServices{
 
   //Fetch Vehicle list
   Future<String>fetchVehicle(String usermobile)async{
-    print("Executing fetch vehicle method");
     String data="";
     final response = await apiRequest("jilariapi.php", {"action":"getVehicle","usermobile":usermobile,"emp":emp});
     if (response.statusCode == 200) {
@@ -702,7 +683,6 @@ class apiServices{
   //Get Bill image
   //Get profile image
   Future<Uint8List> getBill(String item,String type)async{
-    print("Calling getBill function2");
     // print(type);
     if(type=="App"){
       item=appVersion;
@@ -722,7 +702,6 @@ class apiServices{
 
   //Delete Bill
   Future<String> deleteBill(String mobile,String selectedID)async{
-    print("Executing delete bill method");
     String status="";
 
     final response = await apiRequest("jilariapi.php", {"action":"delete_bill","usermobile": mobile,"billid": selectedID,"emp":emp});
@@ -738,7 +717,6 @@ class apiServices{
 
   //Update Expense
   Future<String> updateBill(String id,String per,String approval, String comments)async{
-    print("Executing update bill method");
     String status = "";
     final response = await apiRequest("jilariapi.php", {"action":"updateExpense","id": id, "status":approval,"comments":comments,"per":per});
     if (response.statusCode == 200) {
@@ -753,7 +731,6 @@ class apiServices{
 
   //Clear Expense from finance
   Future<String> clearBill(List<String> id,String per,String approval, String comments)async{
-    print("Executing clear bill method");
     String status = "";
 
     String idList=jsonEncode(id);
@@ -770,7 +747,6 @@ class apiServices{
 
   //add employee advance to expense
   Future<String> addEmployeeAdvance(String mobile,String name, String account,String location,String date, String amount)async{
-    print("Executing add employee advance method");
     String status = "";
 
     final response = await apiRequest("jilariapi.php", {"action":"addEmployeeAdvance","emp":emp,"id":_identifier,"usermobile": mobile,"username":name, "account":account,"location":location,"date":date,"amount":amount});
@@ -786,7 +762,6 @@ class apiServices{
 
   //add daily wage expense
   Future<String> addDailyWages(String mobile,String name, String site,String labourName,String labourCount, String duration,String amount,String date)async{
-    print("Executing add daily wages method");
     String status = "";
 
     final response = await apiRequest("jilariapi.php", {"action":"addDailyWages","usermobile": mobile,"username":name,"site": site,"labour": labourName,"labourcount": labourCount,"duration": duration,"amount":amount,"date":date});
@@ -802,7 +777,6 @@ class apiServices{
 
   //Upload Bill
   Future<String> uploadBill(String mobile,String name,String type,String item,String site,String fromLoc,String toLoc,String km,String billno,String amt,String date,String file,String avail)async{
-    print("Executing upload bill method");
     String status ="";
 
     final response = await apiRequest("jilariapi.php", {"action":"upload_bill","emp":emp,"usermobile": mobile,"username":name,"type": type,"item":item,"site": site,"fromLoc": fromLoc,"toLoc": toLoc,"km": km,"billno":billno,
@@ -822,7 +796,6 @@ class apiServices{
 
   //Upload Purchase Bill
   Future<String> uploadPurchaseBill(String mobile,String name,String type,String item,String site,String billno,String amt,String date,String file,String avail, billerModel biller)async{
-    print("Executing upload purchase bill method");
     String status ="";
 
     final response = await apiRequest("jilariapi.php", {"action":"upload_purchasebill","emp":emp,"usermobile": mobile,"username":name,"type": type,"item":item,"site":site,"billno":billno,"billamount":amt,"billdate":date,"file":file,"fileavailable":avail,"id":biller.id,
@@ -844,7 +817,6 @@ class apiServices{
 
   //Get Biller data
   Future<List<billerModel>> getBiller(String filter, String type)async{
-    print("Executing get biller method");
     List<billerModel> list =[];
 
     final response = await apiRequest("jilariapi.php", {"action":"getBiller","filter":filter,"type":type,"emp":emp});
@@ -862,7 +834,6 @@ class apiServices{
 
   //Add Shop Address
   Future<String> addBiller(billerModel biller,String user, String mobile)async{
-    print("Executing add biller method");
     final response = await apiRequest("jilariapi.php", {"action":"addBiller","username":user,"usermobile":mobile,"emp":emp,"shop":biller.name,"l1":biller.addressl1,"l2":biller.addressl2,"l3":biller.addressl3,"dist":biller.district,"phone":biller.mobile,"gst":biller.gst,"div":biller.division,"type":biller.type});
     if (response.statusCode == 200 && response.body.trim()=="Success") {
       return "Success";
@@ -876,7 +847,6 @@ class apiServices{
 
   //Get District List
   Future<List<String>> getDistrict(String state)async{
-    print("Executing get district method");
     List<String>distList =[];
     final response = await apiRequest("jilariapi.php", {"action":"getDistrict","state":state});
     if (response.statusCode == 200) {
@@ -894,7 +864,6 @@ class apiServices{
 
   //Fetch material summary
   Future<List<Map<String,dynamic>>>getMaterialSummary(String mobile, DateTime Date)async{
-    print("Executing get material summary data method");
     String date = DateFormat('yyyy-MM-dd').format(Date);
     List<Map<String,dynamic>> att = [];
     final response = await apiRequest("jilariapi.php", {"action":"getMaterialSummary","usermobile": mobile,"emp":emp,"date":date});
@@ -911,7 +880,6 @@ class apiServices{
 
   //Fetch material summary
   Future<List<Map<String,dynamic>>>getBillerSummary(String mobile,DateTime Date)async{
-    print("Executing get biller summary data method");
     String date = DateFormat('yyyy-MM-dd').format(Date);
     List<Map<String,dynamic>> att = [];
     final response = await apiRequest("jilariapi.php", {"action":"getBillerSummary","usermobile": mobile,"emp":emp,"date":date});
@@ -928,7 +896,6 @@ class apiServices{
 
   //Fetch cash summary
   Future<List<Map<String,dynamic>>>getCashSummary(String mobile,DateTime Date)async{
-    print("Executing get biller summary data method");
     String date = DateFormat('yyyy-MM-dd').format(Date);
     List<Map<String,dynamic>> att = [];
     final response = await apiRequest("jilariapi.php", {"action":"getCashSummary","usermobile": mobile,"emp":emp,"date":date});
@@ -945,11 +912,8 @@ class apiServices{
 
 
   Future<String> uploadCollection(String usermobile,String username, String shopid,String shopname,String veh, String date, String dry,String cloth, String amt, String image, double lat, double long,String item)async{
-    print("Executing upload collection method");
     String status="";
-    print(shopname);
     final response = await apiRequest("jilariapi.php", {"action":"uploadCollection","usermobile":usermobile,"username":username,"shopid":shopid,"shopname":shopname,"vehicle":veh,"date":date,"dry":dry==''?'0':dry,"cloth":cloth==''?'0':cloth,"amt":amt==''?'0':amt,"image":image,"emp":emp,"lat":lat.toString(),"long":long.toString(),"item":item});
-    print(response.body);
     if (response.statusCode == 200) {
       status = response.body.trim();
     }
@@ -962,7 +926,6 @@ class apiServices{
   }
 
   Future<List<collectionModel>> getCollection(String mobile, String per,String date)async{
-    print("Executing get collection method");
     List<collectionModel> collectionList =[];
     final response = await apiRequest("jilariapi.php", {"action":"getCollection","usermobile":mobile,"per":per,"emp": emp,"date":date,});
     // print(response.body.trim());
@@ -980,7 +943,6 @@ class apiServices{
 
 
   Future<String> deleteCollection(String id,String mobile)async{
-    print("Executing delete collection method");
 
     String status="";
     final response = await apiRequest("jilariapi.php", {"action":"deleteCollection","id":id,"usermobile":mobile,"emp":emp});
@@ -1004,7 +966,6 @@ class apiServices{
   //Update Drive Activity
   Future<String> updateDriveActivity(String ID, String sKM, String eKM)async{
 
-    print("Calling update drive activity");
     String status="";
 
     if(int.parse(sKM)>int.parse(eKM)){
@@ -1023,7 +984,6 @@ class apiServices{
 
   //Fetch activity data
   Future<List<activityModel>> getActivity(String mobile,String date,String type)async{
-    print("Calling get activity data");
 
     List<activityModel> actList = [];
 
@@ -1050,7 +1010,6 @@ class apiServices{
 
   //Delete Activity
   Future<String> deleteActivity(String mobile,String id)async{
-    print("Executing delete activity method");
     String status="";
 
     final response = await apiRequest("jilariapi.php", {"action":"delete_Activity","usermobile": mobile,"id":id});
@@ -1066,7 +1025,6 @@ class apiServices{
   //Post Activity
   Future<String> postActivity(String name, String mobile,String type,String site,String date,bool drive,String startKM, String endKM, String lat, String long,String activity,String cust,String remarks)async{
 
-    print("Calling postActivity method");
     String status="";
 
     var sKM=0,eKM=0;
@@ -1090,7 +1048,6 @@ class apiServices{
   }
 
   Future<List<String>> getActivityType()async{
-    print("Executing get activity type method");
     List<String> list = ['Select'];
 
     final response = await apiRequest("jilariapi.php", {"action":"getActivityType","emp": emp,});
@@ -1106,7 +1063,6 @@ class apiServices{
   }
 
   Future<List<String>> getCustomerType()async{
-    print("Executing get activity type method");
     List<String> list = ['Select'];
 
     final response = await apiRequest("jilariapi.php", {"action":"getCustomerType","emp": emp,});
@@ -1124,7 +1080,6 @@ class apiServices{
   //============================================================================================================================== PAY SLIP
 
   Future<payRollModel> getSalaryStructure(String mobile)async{
-    print("Execute get Salary Structure method");
     payRollModel paySlip = payRollModel(Mobile: "", Name: "",Month: 0,Year: 0, Days: 0, WorkingDays: 0, LeaveDays: 0, LOP: 0, PresentDays: 0, TotalLOP: 0, Basic: 0, Allowance: 0, HRA: 0, TA: 0, DA: 0, Incentive: 0, GrossIncome: 0, PF: 0, ESIC: 0, ProTax: 0, Advance: 0, GrossDeduction: 0, NetPay: 0);
     // String _identifier = (await UniqueIdentifier.serial)!;
 
@@ -1141,7 +1096,6 @@ class apiServices{
   }
 
   Future<String> updateSalary(String mobile,String basic,String special,String hra, String ta, String da,String incentive,String pf,String esic,String proTax)async{
-    print("Execute update Salary method");
     String status = "";
     final response = await apiRequest("jilariapi.php", {"action":"updateSalary","usermobile":mobile,"device":_identifier,"basic":basic,"special":special,"hra":hra,"ta":ta,"da":da,"incentive":incentive,"pf":pf,"esic":esic,"protax":proTax});
     if(response.statusCode==200){
@@ -1153,7 +1107,6 @@ class apiServices{
 
   //Fetch advance details of users
   Future<advanceModel> getAdvanceDetails(String mobile)async{
-    print("Executing get advance details method");
     advanceModel advanceData = advanceModel(mobile: "", name: "", amount: "", date: "", emi: "", startdate: "", balance: "", status: "");
     final response = await apiRequest("jilariapi.php",{"action":"getAdvanceDetails","usermobile":mobile});
     if(response.statusCode==200){
@@ -1168,7 +1121,6 @@ class apiServices{
 
   //Add advances to employye account
   Future<String> addAdvance(String account,String mobile,String amount,String emi,String startdate,String entrydate)async{
-    print("Executing add advance details method");
     String status ="";
     final response = await apiRequest("jilariapi.php",{"action":"addAdvance","account":account,"usermobile":mobile,"amount":amount,"emi":emi,"startdate":startdate,"entrydate":entrydate,"emp":emp});
     if(response.statusCode==200){
@@ -1179,7 +1131,6 @@ class apiServices{
 
   //Fetch generated payroll
   Future<List<payRollModel>>getPayrollTemplate()async{
-    print("Executing get payroll template method");
     List<payRollModel> payrollList =[];
 
     final response = await apiRequest("jilariapi.php", {"action":"getPayrollTemplate","device": _identifier,"emp":emp});
@@ -1196,7 +1147,6 @@ class apiServices{
 
   //Fetch actual monthly payroll rolledout
   Future<List<payRollModel>>fetchPayRoll(int month,int year)async{
-    print("Executing fetch actual payroll method");
     List<payRollModel> payrollList =[];
 
     final response = await apiRequest("jilariapi.php", {"action":"fetchPayRoll","device": _identifier,"month":month.toString(),"year":year.toString(),"emp":emp});
@@ -1213,7 +1163,6 @@ class apiServices{
   //Generate Payroll
   Future<String>generatePayroll(String month,String year,String LOP,List<String>users)async{
 
-    print("Executing generate payroll method");
     String status = "";
     final response = await apiRequest("jilariapi.php", {"action":"generatePayroll","month":month,"year":year,"lop":LOP,"device": _identifier,"emp":emp,"users":users.toString()});
 
@@ -1225,7 +1174,6 @@ class apiServices{
 
   //Delete Payroll template
   Future<String>deleteTemplate()async{
-    print("Executing delete template method");
     String status = "";
     final response = await apiRequest("jilariapi.php", {"action":"deleteTemplate","device": _identifier,"emp":emp});
     if(response.statusCode==200){
@@ -1236,7 +1184,6 @@ class apiServices{
 
   //import csv to payslip template
   Future<String> importPayRoll(String csvData)async{
-    print("Executing import csv method");
     String status="";
 
     Map<String, dynamic> combinedData = {
@@ -1265,7 +1212,7 @@ class apiServices{
       }
     }
     catch(e){
-      print(e);
+      status ="Failed";
     }
 
     return status;
@@ -1283,7 +1230,6 @@ class apiServices{
   }
 
   Future<List<paySlipModel>>getPaySlip(String year,String usermobile)async{
-    print("Executing get payslip method");
     List<paySlipModel> paySlipList = [];
 
     final response = await apiRequest("jilariapi.php", {"action":"getPaySlip","usermobile":usermobile,"year":year,"device":_identifier,"emp":emp});
@@ -1305,7 +1251,6 @@ class apiServices{
 
   //Fetch Employer Details
   Future<List<employerModel>> getEmployer(String shortname)async{
-    print("Executing get employer details method");
     List<employerModel> employerList = [];
     final response = await apiRequest("jilariapi.php",{"action":"getEmployerDetails","emp":emp});
     if(response.statusCode==200){
@@ -1341,7 +1286,6 @@ class apiServices{
 
   //Fetch policy List
   Future<List<policyModel>> getPolicy()async{
-    print("Executing get Policy method");
     List<policyModel> policyList = [];
     final response = await apiRequest("jilariapi.php", {"action":"getPolicy","emp":emp});
     if(response.statusCode==200 && response.body.trim()!="Failed"){
@@ -1356,7 +1300,6 @@ class apiServices{
 
   //upload Policy
   Future<String> uploadPolicy(File? _selectedFile, String title)async{
-    print("Executing upload policy method");
     String status="";
 
     try {
@@ -1381,7 +1324,6 @@ class apiServices{
 
     } catch (e) {
       // Handle error
-      print('Error occurred: $e');
     }
 
     return status;
@@ -1389,7 +1331,6 @@ class apiServices{
 
 
   Future<String> deletePolicy(String id)async{
-    print("Executing delete policy method");
     String status ="";
 
     final response = await apiRequest("jilariapi.php", {"action":"deletePolicy","id":id,"emp":emp,"device":_identifier});
@@ -1404,7 +1345,6 @@ class apiServices{
 
 
   Future<List<eventsModel>>getHoliday()async{
-    print("Executing get holiday method");
     List<eventsModel> evenList =[];
     final response = await apiRequest("jilariapi.php", {"action":"getHoliday","emp":emp});
     if(response.statusCode==200 && response.body.trim()!="Failed"){
@@ -1417,7 +1357,6 @@ class apiServices{
   }
 
   Future<String>postHoliday(String name,String date,)async{
-    print("Executing post holiday method");
     String status="";
     final response = await apiRequest("jilariapi.php", {"action":"postHoliday","emp":emp,"date":date,"name":name,"device":_identifier});
     if(response.statusCode==200){
@@ -1427,7 +1366,6 @@ class apiServices{
   }
 
   Future<String>deleteHoliday(String id)async{
-    print("Executing delete holiday method");
     String status="";
     final response = await apiRequest("jilariapi.php", {"action":"deleteHoliday","emp":emp,"id":id,"device":_identifier});
     if(response.statusCode==200){
@@ -1437,7 +1375,6 @@ class apiServices{
   }
 
   Future<List<eventsModel>>getEvents()async{
-    print("Executing get events method");
     List<eventsModel> evenList =[];
     final response = await apiRequest("jilariapi.php", {"action":"getEvents","emp":emp});
     if(response.statusCode==200 && response.body.trim()!="Failed"){
@@ -1452,7 +1389,6 @@ class apiServices{
   //========================================================================================================================== Settings
 
   Future<List<String>>fetchSettingsList(String selection,String usermobile)async{
-    print("Executing get settings list method");
     List<String> settingsList =[];
     final response = await apiRequest("jilariapi.php", {"action":"fetchSettingsList","selection":selection,"usermobile":usermobile,"emp":emp});
     if(response.statusCode==200 && response.body.trim()!="Failed"){
@@ -1465,10 +1401,8 @@ class apiServices{
   }
 
   Future<String> updateSettingsList(List<String> selectedList,String selection,String usermobile)async{
-    print("Executing update settings list method");
     String status="Invalid";
     final response = await apiRequest("jilariapi.php", {"action":"updateSettingsList","selection":selection,"list":jsonEncode(selectedList),"usermobile":usermobile,"emp":emp});
-
     if(response.statusCode==200){
      status = response.body.trim();
     }
@@ -1477,7 +1411,6 @@ class apiServices{
   }
 
   Future<String> getQuote(String usermobile,String empCount)async{
-    print("Executing update settings list method");
     String status="Invalid";
     final response = await apiRequest("jilariapi.php", {"action":"getQuote","usermobile":usermobile,"emp":emp,"empCount":empCount});
 
@@ -1492,7 +1425,6 @@ class apiServices{
   //========================================================================================================================== PAYMENT
 
   Future<List<Map<String,dynamic>>> getSubscription(String mobile)async{
-    print("Executing get subscription metghod");
     List<Map<String,dynamic>> subList =[];
 
     final response = await apiRequest("jilariapi.php", {"action":"getSubscription","usermobile": mobile,"emp":emp});
@@ -1507,9 +1439,9 @@ class apiServices{
 
   }
 
-  Future<String> updatePayment(String mobile,int amount,int qty,String id,String order)async{
+  Future<String> updatePayment(String mobile,String id,String order,String status)async{
     // String status ="";
-    final response = await apiRequest("jilariapi.php", {"action":"updatePayment","usermobile": mobile,"emp":emp,"amount":amount.toString(),"qty":qty.toString(),"id":id,"order":order});
+    final response = await apiRequest("jilariapi.php", {"action":"updatePayment","usermobile": mobile,"emp":emp,"id":id,"order":order,"status":status});
     // print("response= ${response.body.trim()}");
     if(response.body.trim()!="Failed"){
       return "Success";
@@ -1519,10 +1451,21 @@ class apiServices{
     }
   }
 
-  Future<String> getOrderid(String mobile,String amount)async{
-    print("Executing get order id method");
+  // Future<String> insertTransaction(String mobile,int amount,int qty,String order)async{
+  //   // String status ="";
+  //   final response = await apiRequest("jilariapi.php", {"action":"insertTransaction","usermobile": mobile,"emp":emp,"amount":amount.toString(),"qty":qty.toString(),"order":order});
+  //   // print("response= ${response.body.trim()}");
+  //   if(response.body.trim()!="Failed"){
+  //     return "Success";
+  //   }
+  //   else{
+  //     return "Failed";
+  //   }
+  // }
 
-    final response = await apiRequest("jilariapi.php", {"action":"getOrderid","usermobile": mobile,"emp":emp,"amount":amount});
+  Future<String> getOrderid(String mobile,String amount, String qty)async{
+
+    final response = await apiRequest("jilariapi.php", {"action":"getOrderid","usermobile": mobile,"emp":emp,"amount":amount,"qty":qty});
 
     if(response.body.trim()!="Failed"){
       return response.body.trim();
@@ -1533,7 +1476,6 @@ class apiServices{
   }
 
   Future<bool> validateSignature(String razorpay_signature,String razorpay_payment_id,String razorpay_order_id)async{
-    print("Executing get order id method");
 
     final response = await apiRequest("jilariapi.php", {"action":"validateSignature","razorpay_signature": razorpay_signature,"razorpay_payment_id":razorpay_payment_id,"razorpay_order_id":razorpay_order_id});
     if(response.body.trim()=="Signature is valid"){
@@ -1566,7 +1508,6 @@ class apiServices{
 
   //Fetch complied zip file
   Future<Uint8List>getZip(List<String> usermobile,String fromDate,String toDate,String type)async{
-    print("Executing get Zip method");
     Uint8List status =Uint8List(0);
 
     final response = await apiRequest("jilariapi.php", {"action":"getZip","usermobile": usermobile.toString(),"fromDate":fromDate,"toDate":toDate,"emp":emp,"type":type});
@@ -1580,7 +1521,6 @@ class apiServices{
 
   //Fetch pending action summary
   Future<List<summaryModel>> getPendingActions(String usermobile,String per)async{
-    print("Executing get pending list method");
     List<summaryModel> pendingList = [];
 
     final response = await apiRequest("jilariapi.php", {"action":"getPendingActions","usermobile": usermobile,"per":per,"emp":emp});
@@ -1597,7 +1537,6 @@ class apiServices{
 
   //Fetch Settings
   Future<String> getSettings(String parameter)async{
-    print("Executing get settings method");
     String data="";
     final response = await apiRequest("jilariapi.php", {"action":"getSettings","param": parameter,"emp":emp});
 
@@ -1610,7 +1549,6 @@ class apiServices{
 
   //Fetch Accounts details
   Future<List<String>> getAccounts()async{
-    print("Executing get accounts method");
     List<String> Acc= ['Select'];
     final response = await apiRequest("jilariapi.php", {"action":"getAccounts","device": _identifier,"emp":emp});
 
@@ -1626,7 +1564,6 @@ class apiServices{
 
   //Fetch incomplete drive activity data
   Future<List<activityModel>> getDriveActivity(String mobile)async{
-    print("Calling activity data");
     List<activityModel> actList = [];
 
     final response = await apiRequest("jilariapi.php", {"action":"getDriveActivity","usermobile": mobile});
@@ -1651,7 +1588,6 @@ class apiServices{
 
   //Get default locations
   Future<List<locationModel>> getDefaultLocations()async{
-    print("Calling getDefaultLocations in apiServices");
     List<locationModel> defaultLocation =[];
     final response = await apiRequest("jilariapi.php", {"action":"getDefLocation","emp":emp});
     if(response.body.trim()!="Failed"){
@@ -1665,7 +1601,6 @@ class apiServices{
   }
 
   Future<String> saveLocations(String mobile,String location,String lat,String long,String range)async{
-    print("Executing save location method");
     String status ="Failed";
 
     final response = await apiRequest("jilariapi.php", {"action":"saveLocations","usermobile":mobile,"location":location,"lat":lat,"long":long,"range":range,"emp":emp});
@@ -1677,7 +1612,6 @@ class apiServices{
   }
 
   Future<String> deleteLocations(String mobile,String ID)async{
-    print("Executing delete location method");
     String status ="Failed";
 
     final response = await apiRequest("jilariapi.php", {"action":"deleteLocations","usermobile":mobile,"id":ID,"emp":emp});
@@ -1690,7 +1624,6 @@ class apiServices{
 
   //get dashboard summary
   Future<String>getDashboardSummary(String mobile,String permission)async{
-    print("Executing get dashboard summary method");
     String status="";
     final response = await apiRequest("jilariapi.php", {"action":"getDashboardSummary","usermobile":mobile,"permission":permission,"emp":emp});
     // print(response.body);
@@ -1702,7 +1635,6 @@ class apiServices{
 
   //fetch trackers for downloading
   Future<String>getTracker(List<String>users,String item,String fromDate, String toDate)async{
-    print("Executing get tracker method");
     String status="";
     final response = await apiRequest("jilariapi.php", {"action":"get_tracker","device":_identifier,"users":users.toString(),"item":item,"fromDate":fromDate,"toDate":toDate,"emp":emp});
     // print(response.body.trim());
@@ -1725,7 +1657,7 @@ class apiServices{
         'Authorization': 'Bearer $token',
       },
       );
-
+      // print(response.body.trim());
       if(response.body.trim()=="TokenFailed"){
         SystemNavigator. pop();
       }
@@ -1736,7 +1668,6 @@ class apiServices{
 
     }
     catch(e){
-      print(e.toString());
       return res;
     }
 

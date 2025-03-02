@@ -30,7 +30,7 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
   void initState() {
     // TODO: implement initState
     if(widget.currentUser.Permission=="Admin"){
-      settings = ["Department","Position","Bank","Activity","Customer","Vehicle","Site Name"];
+      settings = ["Department","Position","Bank","Activity","Expense","Customer","Vehicle","Site Name"];
     }
     else{
       settings = ["Department","Position","Activity","Customer","Vehicle","Site Name"];
@@ -54,7 +54,7 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: Container(
+      body: SizedBox(
         width: w,
         height: h,
         child: Stack(
@@ -105,53 +105,49 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
                   ),
                 ),
                 Expanded(
-                  child: Container(
-                    // width: w,
-                    // height: h-80-t,
-                    child: ListView.builder(
-                        itemCount: settings.length,
-                        padding: EdgeInsets.zero,
-                        itemBuilder: (context,index){
-                          return Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: InkWell(
-                              onTap: ()async{
-                                setState((){
-                                  _loading=true;
-                                });
-                                selectedOption=settings[index];
-                                await fetchList(selectedOption);
-                                setState(() {
-                                  _loading=false;
-                                });
-                              },
-                              child: Container(
-                                width: w-20,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.3),
-                                      spreadRadius: 2,
-                                      blurRadius: 2,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                child:  ListTile(
-                                  title: Text("${settings[index]}"),
-                                  leading: Icon(Icons.list),
-                                  trailing: SizedBox(
-                                      width: 30,
-                                      child: Icon(Icons.arrow_forward_ios_rounded)
+                  child: ListView.builder(
+                      itemCount: settings.length,
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (context,index){
+                        return Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: InkWell(
+                            onTap: ()async{
+                              setState((){
+                                _loading=true;
+                              });
+                              selectedOption=settings[index];
+                              await fetchList(selectedOption);
+                              setState(() {
+                                _loading=false;
+                              });
+                            },
+                            child: Container(
+                              width: w-20,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.3),
+                                    spreadRadius: 2,
+                                    blurRadius: 2,
+                                    offset: const Offset(0, 4),
                                   ),
+                                ],
+                              ),
+                              child:  ListTile(
+                                title: Text(settings[index]),
+                                leading: const Icon(Icons.list),
+                                trailing: const SizedBox(
+                                    width: 30,
+                                    child: Icon(Icons.arrow_forward_ios_rounded)
                                 ),
                               ),
                             ),
-                          );
-                        }),
-                  ),
+                          ),
+                        );
+                      }),
                 ),
 
               ],
@@ -166,7 +162,7 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
                     Container(
                         width: w,
                         height: 60,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           gradient: LinearGradient(
                               begin: Alignment.bottomCenter,
                               end: Alignment.topCenter,
@@ -174,7 +170,7 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
                           ),
                         ),
 
-                        child: Center(child: Text("${selectedOption}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white),))
+                        child: Center(child: Text(selectedOption,style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white),))
                     ),
                     Expanded(
                       child: SizedBox(
@@ -190,11 +186,11 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
 
                                 ),
                                 child:  ListTile(
-                                  title: Text("${selectedList[index]}"),
+                                  title: Text(selectedList[index]),
                                   leading: SizedBox(
                                     width: 40,
                                     height: 40,
-                                    child: Center(child: Text("${index+1}",style: TextStyle(fontSize: 14),)),
+                                    child: Center(child: Text("${index+1}",style: const TextStyle(fontSize: 14),)),
                                   ),
                                   trailing: InkWell(
                                     onTap: (){
@@ -204,7 +200,7 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
 
                                       });
                                     },
-                                    child: SizedBox(
+                                    child: const SizedBox(
                                         width: 40,
                                         height: 40,
                                         child: Icon(Icons.delete)
@@ -221,7 +217,7 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
                       children: [
                         SizedBox(
                             width:w-w/3,
-                            child: FieldArea(title: "${selectedOption}", ctrl: _addCtrl, type: TextInputType.text, len: 30)),
+                            child: FieldArea(title: selectedOption, ctrl: _addCtrl, type: TextInputType.text, len: 30)),
                         SizedBox(
                           width: w/4,
                           height: 60,
@@ -235,7 +231,7 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
 
                               });
                             },
-                            child: Text("Add"),
+                            child: const Text("Add"),
                           ),
                         ),
                       ],
@@ -291,11 +287,11 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
                       ),
                     ),
 
-                    SizedBox(height: 10,)
+                    const SizedBox(height: 10,)
                   ],
                 ),
               ),
-            ):SizedBox(),
+            ):const SizedBox(),
             _loading?loadingWidget():const SizedBox(),
           ],
         ),
@@ -308,8 +304,8 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
     return showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        contentPadding: EdgeInsets.all(8),
-        insetPadding: EdgeInsets.all(8),
+        contentPadding: const EdgeInsets.all(8),
+        insetPadding: const EdgeInsets.all(8),
         // backgroundColor: AppColors.boxColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),

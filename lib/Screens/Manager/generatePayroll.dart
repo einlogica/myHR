@@ -299,7 +299,7 @@ class _generatePayrollPageState extends State<generatePayrollPage> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("Employees:",style: TextStyle(fontWeight: FontWeight.bold),),
+                                    const Text("Employees:",style: TextStyle(fontWeight: FontWeight.bold),),
                                     Text("${selectedUsers.length}  "),
                                   ],
                                 ),
@@ -311,7 +311,7 @@ class _generatePayrollPageState extends State<generatePayrollPage> {
                                   height: 40,
                                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(5),
                                       color: AppColors.buttonColorDark),
-                                  child: Icon(Icons.arrow_drop_down_circle_outlined,color: Colors.white,),
+                                  child: const Icon(Icons.arrow_drop_down_circle_outlined,color: Colors.white,),
                                 ),
                                 onTap: (){
                                   setState(() {
@@ -520,7 +520,7 @@ class _generatePayrollPageState extends State<generatePayrollPage> {
           enableList?Container(
             width: w,
             height: h,
-            color: Colors.grey.withOpacity(.4),
+            color: Colors.grey.withValues(alpha: .4),
             child: Center(
               child: Container(
                 width: w>h?w/2:w-20,
@@ -539,7 +539,7 @@ class _generatePayrollPageState extends State<generatePayrollPage> {
                             leading: SizedBox(
                               width: 40,
                               height: 40,
-                              child: index==0?SizedBox():selectedUsers.contains(reporteeList[index-1].Mobile)?const Icon(Icons.check,color: Colors.green,):SizedBox(),
+                              child: index==0?const SizedBox():selectedUsers.contains(reporteeList[index-1].Mobile)?const Icon(Icons.check,color: Colors.green,):const SizedBox(),
                             ),
                             onTap: (){
 
@@ -586,7 +586,7 @@ class _generatePayrollPageState extends State<generatePayrollPage> {
                 ),
               ),
             ),
-          ):SizedBox(),
+          ):const SizedBox(),
           _loading?loadingWidget():const SizedBox(),
         ],
       ),

@@ -67,7 +67,7 @@ class _holidayPageState extends State<holidayPage> {
       ):const SizedBox(),
       body: Stack(
         children: [
-          Container(
+          SizedBox(
             width: w,
             height: h,
             child: Column(
@@ -140,7 +140,7 @@ class _holidayPageState extends State<holidayPage> {
                             widget.permission=="Admin"?DataCell(
                               Center(
                                 child: InkWell(
-                                  child: Container(
+                                  child: const SizedBox(
                                     width: 20,
                                     height: 20,
                                     child: Icon(Icons.delete,size: 20,),
@@ -198,7 +198,7 @@ class _holidayPageState extends State<holidayPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               FieldArea("Event",_titleCtrl,TextInputType.text),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
               SizedBox(
                 width: w-20,
                 height: 50,

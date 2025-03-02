@@ -252,7 +252,7 @@ class _timesheetPageState extends State<timesheetPage> {
                 const SizedBox(height: 5,),
                 Expanded(
                   child: ListView.builder(
-                    padding: EdgeInsets.only(bottom: 50),
+                    padding: const EdgeInsets.only(bottom: 50),
                       itemCount: filteredactList.length,
                       itemBuilder: (context,index){
 
@@ -267,7 +267,7 @@ class _timesheetPageState extends State<timesheetPage> {
                                     color: filteredactList[index].type=="Pending"?Colors.red.shade50:Colors.white,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.3),
+                                        color: Colors.black.withValues(alpha: .3),
                                         spreadRadius: 2,
                                         blurRadius: 2,
                                         offset: const Offset(0, 3),
@@ -319,12 +319,12 @@ class _timesheetPageState extends State<timesheetPage> {
                                                   children: [
                                                     Text(filteredactList[index].type,style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 14),),
                                                     const Spacer(),
-                                                    filteredactList[index].type=='Pending'?SizedBox():Text(filteredactList[index].date,style: const TextStyle(fontSize: 10,))
+                                                    filteredactList[index].type=='Pending'?const SizedBox():Text(filteredactList[index].date,style: const TextStyle(fontSize: 10,))
                                                   ],
                                                 ),
 
                                                 // const SizedBox(height: 10,),
-                                                filteredactList[index].type=='Pending'?SizedBox():filteredactList[index].time!=""?Align(alignment: Alignment.centerRight,child: Text(filteredactList[index].time.substring(0,5),style: const TextStyle(color: Colors.black,fontSize: 10),)):const SizedBox(),
+                                                filteredactList[index].type=='Pending'?const SizedBox():filteredactList[index].time!=""?Align(alignment: Alignment.centerRight,child: Text(filteredactList[index].time.substring(0,5),style: const TextStyle(color: Colors.black,fontSize: 10),)):const SizedBox(),
                                                 filteredactList[index].cust!=""?Text("Customer: ${filteredactList[index].cust}",style: const TextStyle(color: Colors.black,fontSize: 14),):const SizedBox(),
                                                 filteredactList[index].site!=""?Text("Location: ${filteredactList[index].site}",style: const TextStyle(color: Colors.black,fontSize: 14),):const SizedBox(),
 
@@ -362,7 +362,7 @@ class _timesheetPageState extends State<timesheetPage> {
                                     ),
                                     SizedBox(
                                       width: 60,
-                                      child: filteredactList[index].type=="Pending"?SizedBox():Column(
+                                      child: filteredactList[index].type=="Pending"?const SizedBox():Column(
                                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                         children: [
 
@@ -511,12 +511,12 @@ class _timesheetPageState extends State<timesheetPage> {
                       
                             // const SizedBox(height: 20,),
                             FieldAreaWithDropDown(title: "Activity", dropList: typeList, dropdownValue: dropdownvalue, callback: dropdowncallback),
-                            dropdownvalue=="Others"?FieldArea(title: "Activity Name", ctrl: _activityCtrl, type: TextInputType.text, len: 50):SizedBox(),
+                            dropdownvalue=="Others"?FieldArea(title: "Activity Name", ctrl: _activityCtrl, type: TextInputType.text, len: 50):const SizedBox(),
                             FieldAreaWithDropDown(title: "Customer", dropList: customerList, dropdownValue: dropdowncustomer, callback: dropdowncallback),
-                            dropdowncustomer=="Others"?FieldArea(title: "Customer Name", ctrl: custCtrl, type: TextInputType.text, len: 20):SizedBox(),
+                            dropdowncustomer=="Others"?FieldArea(title: "Customer Name", ctrl: custCtrl, type: TextInputType.text, len: 20):const SizedBox(),
                             // FieldArea(title: "Location", ctrl: _siteCtrl, type: TextInputType.text, len: 40),
                             FieldAreaWithDropDown(title: "Location", dropList: siteList, dropdownValue: dropdownsite, callback: dropdowncallback),
-                            dropdownsite=="Other"?FieldArea(title: "Specify Location", ctrl: _siteCtrl, type: TextInputType.text, len: 40):SizedBox(),
+                            dropdownsite=="Other"?FieldArea(title: "Specify Location", ctrl: _siteCtrl, type: TextInputType.text, len: 40):const SizedBox(),
                             FieldAreaWithCalendar(title: "Date", ctrl: dateController, type: TextInputType.datetime,days:365,fdays: 0,),
                             // FieldArea(title: "Activity", ctrl: _activityCtrl, type: TextInputType.text, len: 200),
                             // FieldArea(title: "Customer Name", ctrl: custCtrl, type: TextInputType.text, len: 20),
@@ -557,8 +557,8 @@ class _timesheetPageState extends State<timesheetPage> {
                               ),
                             ),
                             const SizedBox(height: 10,),
-                            _drive?FieldArea(title: "Start KM:", ctrl: _startCtrl, type: TextInputType.number, len: 10):SizedBox(),
-                            _drive?FieldArea(title: "End KM:", ctrl: _endCtrl, type: TextInputType.number, len: 10):SizedBox(),
+                            _drive?FieldArea(title: "Start KM:", ctrl: _startCtrl, type: TextInputType.number, len: 10):const SizedBox(),
+                            _drive?FieldArea(title: "End KM:", ctrl: _endCtrl, type: TextInputType.number, len: 10):const SizedBox(),
                       
                             _pending==-1?SizedBox(
                               width: w-20,

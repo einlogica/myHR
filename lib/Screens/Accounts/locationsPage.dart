@@ -62,7 +62,7 @@ class _locationsPageState extends State<locationsPage> {
         },
         child: const Icon(Icons.add_circle_outline,color: Colors.white,),
       ),
-      body: Container(
+      body: SizedBox(
         width: w,
         height: h,
         child: Stack(
@@ -128,7 +128,7 @@ class _locationsPageState extends State<locationsPage> {
                                 color: Colors.white,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.3),
+                                    color: Colors.black.withValues(alpha: .3),
                                     spreadRadius: 2,
                                     blurRadius: 2,
                                     offset: const Offset(0, 4),
@@ -137,7 +137,7 @@ class _locationsPageState extends State<locationsPage> {
                               ),
                               child:  ListTile(
                                 title: Text("${locationList[index].locationName} (${locationList[index].range}m)"),
-                                leading: Icon(Icons.location_on),
+                                leading: const Icon(Icons.location_on),
                                 subtitle: Text("${locationList[index].posLat},${locationList[index].posLong}"),
                                 trailing: InkWell(
                                   onTap: (){
@@ -150,7 +150,7 @@ class _locationsPageState extends State<locationsPage> {
                                       fetchList();
                                     }
                                   },
-                                  child: SizedBox(
+                                  child: const SizedBox(
                                       width: 30,
                                       height: 30,
                                       child: Icon(Icons.delete)
@@ -160,7 +160,7 @@ class _locationsPageState extends State<locationsPage> {
                             ),
                           );
                         }),
-                  ):Center(child: Text("Nothing to display"),),
+                  ):const Center(child: Text("Nothing to display"),),
                 ),
 
 
@@ -198,7 +198,7 @@ class _locationsPageState extends State<locationsPage> {
                 FieldArea(title: "Longitude", ctrl: _longCtrl, type: TextInputType.number, len: 8),
                 FieldArea(title: "Range (Meter)", ctrl: _rangeCtrl, type: TextInputType.number, len: 3),
             
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
             
               ],
             ),

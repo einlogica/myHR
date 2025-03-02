@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:js_interop';
+// import 'dart:js_interop';
 import 'package:csv/csv.dart';
 import 'package:einlogica_hr/Models/billerModel.dart';
 import 'package:einlogica_hr/Widgets/FieldAreaWithCalendar.dart';
@@ -96,7 +96,7 @@ class _downloadsPageState extends State<downloadsPage> {
     t=MediaQuery.of(context).viewPadding.top;
 
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         width: w,
         height: h,
         child: Stack(
@@ -157,7 +157,7 @@ class _downloadsPageState extends State<downloadsPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Employees:",style: TextStyle(fontWeight: FontWeight.bold),),
+                            const Text("Employees:",style: TextStyle(fontWeight: FontWeight.bold),),
                             Text("${selectedUsers.length}  "),
                           ],
                         ),
@@ -169,7 +169,7 @@ class _downloadsPageState extends State<downloadsPage> {
                           height: 40,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(5),
                               color: AppColors.buttonColorDark),
-                          child: Icon(Icons.arrow_drop_down_circle_outlined,color: Colors.white,),
+                          child: const Icon(Icons.arrow_drop_down_circle_outlined,color: Colors.white,),
                         ),
                         onTap: (){
                           setState(() {
@@ -180,8 +180,9 @@ class _downloadsPageState extends State<downloadsPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 FieldAreaWithDropDown(title: "Reports", dropList: ReportList, dropdownValue: reportDropDown, callback: dropdownCallback),
+                // SizedBox(height: 10,),
                 FieldAreaWithCalendar(title: "From Date", ctrl: fromController, type: TextInputType.text,days:800,fdays: 0,),
                 FieldAreaWithCalendar(title: "To Date", ctrl: toController, type: TextInputType.text,days:800,fdays: 0,),
                 const SizedBox(height: 40,),
@@ -210,7 +211,7 @@ class _downloadsPageState extends State<downloadsPage> {
             enableList?Container(
               width: w,
               height: h,
-              color: Colors.black.withOpacity(.4),
+              color: Colors.black.withValues(alpha: .4),
               child: Center(
                 child: Container(
                   width: w>h?w/2:w-20,
@@ -225,11 +226,11 @@ class _downloadsPageState extends State<downloadsPage> {
                       Container(
                         height: 40,
                         width: w>h?w/2:w-20,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
                           color: Colors.blue
                         ),
-                        child: Center(child: Text("Select Employees",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),)),
+                        child: const Center(child: Text("Select Employees",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),)),
                       ),
                       SizedBox(
                         height: (h*.8-110),
@@ -238,11 +239,11 @@ class _downloadsPageState extends State<downloadsPage> {
                           itemCount: employees.length,
                           itemBuilder: (context,index){
                             return ListTile(
-                              title: Text("${employees[index]}"),
+                              title: Text("$employees[index]"),
                               leading: SizedBox(
                                 width: 40,
                                 height: 40,
-                                child: index==0?SizedBox():selectedUsers.contains(reporteeList[index-1].Mobile)?const Icon(Icons.check,color: Colors.green,):SizedBox(),
+                                child: index==0?const SizedBox():selectedUsers.contains(reporteeList[index-1].Mobile)?const Icon(Icons.check,color: Colors.green,):const SizedBox(),
                               ),
                               onTap: (){
 
@@ -273,9 +274,9 @@ class _downloadsPageState extends State<downloadsPage> {
                           },
                         ),
                       ),
-                      SizedBox(height: 10,),
+                      const SizedBox(height: 10,),
                       SizedBox(
-                        width:w>h?w/2:w-80,
+                        width:w>h?w/2-80:w-80,
                         height: 40,
                         child: ElevatedButton(
                           style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
@@ -287,12 +288,12 @@ class _downloadsPageState extends State<downloadsPage> {
                           child: const Text("Done",style: TextStyle(color: Colors.white),),
                         ),
                       ),
-                      SizedBox(height: 10,)
+                      const SizedBox(height: 10,)
                     ],
                   ),
                 ),
               ),
-            ):SizedBox(),
+            ):const SizedBox(),
 
             tableView?SafeArea(
               child: Container(
@@ -320,8 +321,8 @@ class _downloadsPageState extends State<downloadsPage> {
                                 refresh=false;
                               });
                             },
-                            child: Text("Download"),
                           style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blue),foregroundColor: WidgetStateProperty.all(Colors.white)),
+                            child: const Text("Download"),
                         ),
                         ElevatedButton(
                             style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blue),foregroundColor: WidgetStateProperty.all(Colors.white)),
@@ -330,19 +331,19 @@ class _downloadsPageState extends State<downloadsPage> {
                                 tableView=false;
                               });
                             },
-                            child: Text("Close")),
+                            child: const Text("Close")),
                       ],
                     ),
-                    SizedBox(height: 10,)
+                    const SizedBox(height: 10,)
                   ],
                 ),
               ),
-            ):SizedBox(),
+            ):const SizedBox(),
 
             refresh?Container(
               width: w,
               height: h,
-              color: Colors.black.withOpacity(.2),
+              color: Colors.black.withValues(alpha: .2),
               child: const Center(
                 child: SizedBox(
                   width: 40,
@@ -350,7 +351,7 @@ class _downloadsPageState extends State<downloadsPage> {
                   child: CircularProgressIndicator(),
                 ),
               ),
-            ):SizedBox(),
+            ):const SizedBox(),
           ],
         ),
       ),
@@ -517,7 +518,7 @@ class _downloadsPageState extends State<downloadsPage> {
       );
     }
     else{
-      return SizedBox();
+      return const SizedBox();
     }
 
   }
@@ -551,7 +552,7 @@ class _downloadsPageState extends State<downloadsPage> {
       showMessage("Max 1 year data can be fetched !");
       return;
     }
-    else if(selectedUsers.length==0){
+    else if(selectedUsers.isEmpty){
       showMessage("No employee selected !");
       return;
     }

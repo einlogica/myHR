@@ -210,7 +210,7 @@ class _dashboardState extends State<dashboard> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text("Reportees",style: TextStyle(fontSize: 18,color: AppColors.buttonColorDark,fontWeight: FontWeight.bold),),
-                                !loadSummary?SizedBox(width: 10,height: 18,child: CircularProgressIndicator()):Text(employeeCount.toStringAsFixed(0),style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark),),
+                                !loadSummary?const SizedBox(width: 10,height: 18,child: CircularProgressIndicator()):Text(employeeCount.toStringAsFixed(0),style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark),),
 
                               ],
                             ),
@@ -250,7 +250,7 @@ class _dashboardState extends State<dashboard> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text("Regularization",style: TextStyle(fontSize: 14,color: AppColors.buttonColorDark,fontWeight: FontWeight.bold),),
-                                    !loadSummary?SizedBox(width: 10,height: 10,child: CircularProgressIndicator()):Text(summary[0],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark),),
+                                    !loadSummary?const SizedBox(width: 10,height: 10,child: CircularProgressIndicator()):Text(summary[0],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark),),
                                   ],
                                 ),
                               ),
@@ -339,7 +339,7 @@ class _dashboardState extends State<dashboard> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text("Leave Requests",style: TextStyle(fontSize: 14,color: AppColors.buttonColorDark,fontWeight: FontWeight.bold),),
-                                    !loadSummary?SizedBox(width: 10,height: 10,child: CircularProgressIndicator()):Text(summary[2],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark),)
+                                    !loadSummary?const SizedBox(width: 10,height: 10,child: CircularProgressIndicator()):Text(summary[2],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark),)
                                   ],
                                 ),
                               ),
@@ -380,7 +380,7 @@ class _dashboardState extends State<dashboard> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text("Claim Requests",style: TextStyle(fontSize: 14,color: AppColors.buttonColorDark,fontWeight: FontWeight.bold),),
-                                    !loadSummary?SizedBox(width: 10,height: 10,child: CircularProgressIndicator()):Text(summary[3],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark))
+                                    !loadSummary?const SizedBox(width: 10,height: 10,child: CircularProgressIndicator()):Text(summary[3],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: AppColors.buttonColorDark))
                                   ],
                                 ),
                               ),
@@ -405,7 +405,7 @@ class _dashboardState extends State<dashboard> {
                           SizedBox(
                             width: w-10,
                             height: 200,
-                            child: (presentCount+leaveCount+absentCount==0)?Center(child: Text("No Attendance yet")):pieChartWidget(),
+                            child: (presentCount+leaveCount+absentCount==0)?const Center(child: Text("No Attendance yet")):pieChartWidget(),
                           ),
                           const SizedBox(height: 40,),
                           const Padding(
@@ -429,7 +429,7 @@ class _dashboardState extends State<dashboard> {
                           ),
                           const SizedBox(height: 30,),
                         ],
-                      ):Center(child:Text("Nothing to display"))
+                      ):const Center(child:Text("Nothing to display"))
 
 
 
@@ -492,7 +492,7 @@ class _dashboardState extends State<dashboard> {
       PieChartSectionData(
         color: Colors.green,
         value: presentCount.toDouble(),
-        title: '${presentCount}',
+        title: '$presentCount',
         radius: 50,
         titleStyle: const TextStyle(
           fontSize: 16,
@@ -503,7 +503,7 @@ class _dashboardState extends State<dashboard> {
       PieChartSectionData(
         color: Colors.orange,
         value: absentCount.toDouble(),
-        title: '${absentCount}',
+        title: '$absentCount',
         radius: 50,
         titleStyle: const TextStyle(
           fontSize: 16,
@@ -514,7 +514,7 @@ class _dashboardState extends State<dashboard> {
       PieChartSectionData(
         color: Colors.red,
         value: leaveCount.toDouble(),
-        title: '${leaveCount}',
+        title: '$leaveCount',
         radius: 50,
         titleStyle: const TextStyle(
           fontSize: 16,
@@ -553,11 +553,11 @@ class _dashboardState extends State<dashboard> {
           //     ),
           //   ),
           // ),
-          gridData: FlGridData(show: false),
+          gridData: const FlGridData(show: false),
 
           borderData: FlBorderData(
             show: false,
-            border: Border.all(color: Colors.black.withOpacity(.2), width: 1),
+            border: Border.all(color: Colors.black.withValues(alpha: .2), width: 1),
           ),
           barGroups: attendanceData.map((data) {
             return BarChartGroupData(
@@ -592,9 +592,9 @@ class _dashboardState extends State<dashboard> {
         // headingRowColor: WidgetStateColor.resolveWith(
         //         (states) => Colors.blue),
         columnSpacing: 20,
-        columns: [
-          const DataColumn(label: Text('Type')),
-          const DataColumn(label: Text('Amount')),
+        columns: const [
+          DataColumn(label: Text('Type')),
+          DataColumn(label: Text('Amount')),
         ],
         rows: expenseData.map((model) {
           return DataRow(

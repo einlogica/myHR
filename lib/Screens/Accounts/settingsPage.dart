@@ -52,7 +52,7 @@ class _settingsPageState extends State<settingsPage> {
   Uint8List empIcon= Uint8List(0);
   List<employerModel> empDetails = [];
   List<Map<String,dynamic>> subList = [];
-  TextEditingController _empCtrl= TextEditingController();
+  final TextEditingController _empCtrl= TextEditingController();
 
   // List<String> settingsImage = ['assets/Drop Down.png','assets/Locations.png'];
   // List<String> selectedList = [];
@@ -126,7 +126,7 @@ class _settingsPageState extends State<settingsPage> {
       resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          Container(
+          SizedBox(
             width: w,
             height: h,
             // color: Colors.grey,
@@ -182,25 +182,25 @@ class _settingsPageState extends State<settingsPage> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        SizedBox(height: 10,),
-                        subList.isEmpty?SizedBox():widget.currentUser.Permission!="Admin"?SizedBox():Center(
+                        const SizedBox(height: 10,),
+                        subList.isEmpty?const SizedBox():widget.currentUser.Permission!="Admin"?const SizedBox():Center(
                           child: Container(
                             width: w,
                             // height: 130,
-                            color: Colors.blue.withOpacity(.2),
+                            color: Colors.blue.withValues(alpha:.2),
                             child: Column(
                               children: [
                                 Container(
                                     width: w,
                                     color: Colors.blue.shade300,
-                                    child: Center(child: Text("Subscription",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),))
+                                    child: const Center(child: Text("Subscription",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),))
                                 ),
 
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
                                     children: [
-                                      Container(
+                                      SizedBox(
                                         // color: Colors.grey,
                                         width: w/2,
                                         child: Column(
@@ -208,8 +208,8 @@ class _settingsPageState extends State<settingsPage> {
                                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                           children: [
                                             // const Text("Subscription : Active",style: TextStyle(fontSize: 16),),
-                                            Text(subList[0]['Amount']==0?"Plan : Free":"Plan : ${subList[0]['Amount']}",style: TextStyle(fontSize: 16),),
-                                            Text("Employees : ${subList[0]['EmpCount']}",style: TextStyle(fontSize: 16),),
+                                            Text(subList[0]['Amount']==0?"Plan : Free":"Plan : ${subList[0]['Amount']}",style: const TextStyle(fontSize: 16),),
+                                            Text("Employees : ${subList[0]['EmpCount']}",style: const TextStyle(fontSize: 16),),
                                             Text("Expiry: ${subList[0]['Expiry']}",style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
                                             // SizedBox(height: 10,),
                                             //
@@ -217,19 +217,19 @@ class _settingsPageState extends State<settingsPage> {
                                           ],
                                         ),
                                       ),
-                                      Spacer(),
-                                      Container(
+                                      const Spacer(),
+                                      SizedBox(
                                         width: w/3,
                                         // color: Colors.grey,
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            subList[0]['Amount']==0?SizedBox():SizedBox(
+                                            subList[0]['Amount']==0?const SizedBox():SizedBox(
                                               width: 100,
                                               height: 40,
                                               child: ElevatedButton(
 
-                                                  style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark.withOpacity(.5))),
+                                                  style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark.withValues(alpha: .5))),
                                                   onPressed: (){
                                                     setState(() {
                                                       _payment=true;
@@ -237,7 +237,7 @@ class _settingsPageState extends State<settingsPage> {
                                                   },
                                                   child: const Text("Pay",style: TextStyle(color: Colors.white),)),
                                             ),
-                                            SizedBox(height: 10,),
+                                            const SizedBox(height: 10,),
                                             InkWell(
                                               onTap: (){
                                                 setState(() {
@@ -251,7 +251,7 @@ class _settingsPageState extends State<settingsPage> {
                                                       borderRadius: BorderRadius.circular(15),
                                                       color: Colors.blue
                                                   ),
-                                                  child: Center(child: Text("Upgrade",style: TextStyle(fontSize: 12,color: Colors.white),))
+                                                  child: const Center(child: Text("Upgrade",style: TextStyle(fontSize: 12,color: Colors.white),))
                                               ),
                                             ),
                                           ],
@@ -265,7 +265,7 @@ class _settingsPageState extends State<settingsPage> {
                           ),
                         ),
 
-                        SizedBox(height: 10,),
+                        const SizedBox(height: 10,),
                         Stack(
                           children: [
                             Center(
@@ -274,7 +274,16 @@ class _settingsPageState extends State<settingsPage> {
                                 height: w>h?w/5*1.2:w/3*1.2,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(w>h?w/5*1.2:w/3*1.2,),
-                                  border: Border.all(color: Colors.blue,width: 6)
+                                  // border: Border.all(color: Colors.blue,width: 6),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: .3),
+                                      spreadRadius: 2,
+                                      blurRadius: 2,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
                                 ),
                                 child: SizedBox(
                                   width: w>h?w/5:w/3,
@@ -285,11 +294,14 @@ class _settingsPageState extends State<settingsPage> {
                                   //   color: Colors.white,
                                   // ),
                                   child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
+                                    padding: const EdgeInsets.all(15.0),
                                     child: empIcon.isNotEmpty?Image.memory(empIcon,fit: BoxFit.contain,):Container(
                                         width: w>h?w/5:w/3,
                                         height: w>h?w/5:w/3,
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(80),border: Border.all(color: Colors.black,width: 5)),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(80),
+                                            // border: Border.all(color: Colors.black,width: 5),
+                                        ),
                                         child: const Center(child: Text("Logo",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.black),))),
                                   ),
                                 ),
@@ -357,18 +369,18 @@ class _settingsPageState extends State<settingsPage> {
                             // ),
                           ],
                         ),
-                        SizedBox(height: 20,),
-                        empDetails.length!=0?SizedBox(
+                        const SizedBox(height: 20,),
+                        empDetails.isNotEmpty?SizedBox(
                           child: Column(
                             children: [
-                              Text(empDetails[0].name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                              Text(empDetails[0].name,style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
                               Text(empDetails[0].addl1),
                               Text(empDetails[0].addl2),
                             ],
                           ),
-                        ):SizedBox(),
+                        ):const SizedBox(),
 
-                        SizedBox(height: 20,),
+                        const SizedBox(height: 20,),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -396,35 +408,35 @@ class _settingsPageState extends State<settingsPage> {
                         InkWell(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context){
-                              return termsPage();
+                              return const termsPage();
                             }));
                           },
                           child: SizedBox(
                             width: w/4,
-                            child: Center(child: Text("T&C",style: TextStyle(fontSize: 11),)),
+                            child: const Center(child: Text("T&C",style: TextStyle(fontSize: 11),)),
                           ),
                         ),
                         InkWell(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context){
-                              return privacyPage();
+                              return const privacyPage();
                             }));
                           },
                           child: SizedBox(
                             width: w/4,
-                            child: Center(child: Text("Privacy",style: TextStyle(fontSize: 11),)),
+                            child: const Center(child: Text("Privacy",style: TextStyle(fontSize: 11),)),
                           ),
                         ),
 
                         InkWell(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context){
-                              return refundPage();
+                              return const refundPage();
                             }));
                           },
                           child: SizedBox(
                             width: w/4,
-                            child: Center(child: Text("Refund",style: TextStyle(fontSize: 11),)),
+                            child: const Center(child: Text("Refund",style: TextStyle(fontSize: 11),)),
                           ),
                         ),
                       ],
@@ -440,7 +452,7 @@ class _settingsPageState extends State<settingsPage> {
           _upgrade?Container(
             width: w,
             height: h,
-            color: Colors.black.withOpacity(.7),
+            color: Colors.black.withValues(alpha: .7),
             child: Center(
               child: Container(
                 width: w-50,
@@ -449,14 +461,14 @@ class _settingsPageState extends State<settingsPage> {
                     color: Colors.white
                 ),
                 child: _quoteSend?Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SizedBox(height: 10,),
-                      Text("Quote request has been send",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.blue),),
-                      SizedBox(height: 20,),
-                      Text("Thanks for your query, Our team will be contacting you soon.."),
+                      const SizedBox(height: 10,),
+                      const Text("Quote request has been send",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.blue),),
+                      const SizedBox(height: 20,),
+                      const Text("Thanks for your query, Our team will be contacting you soon.."),
                       // SizedBox(height: 10,),
                       // Align(
                       //     alignment: Alignment.centerLeft,
@@ -464,7 +476,7 @@ class _settingsPageState extends State<settingsPage> {
                       // Align(
                       //     alignment: Alignment.centerLeft,
                       //     child: Text("myHR Team")),
-                      SizedBox(height: 20,),
+                      const SizedBox(height: 20,),
                       ElevatedButton(
                         style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                         onPressed: (){
@@ -474,15 +486,15 @@ class _settingsPageState extends State<settingsPage> {
                             _upgrade=false;
                           });
                         },
-                        child: Text("OK",style: TextStyle(color: Colors.white),),
+                        child: const Text("OK",style: TextStyle(color: Colors.white),),
                       ),
                     ],
                   ),
                 ):Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(height: 10,),
-                    Text("Upgrade plan",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.blue),),
+                    const SizedBox(height: 10,),
+                    const Text("Upgrade plan",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.blue),),
 
                     Padding(
                       padding: const EdgeInsets.all(20.0),
@@ -499,7 +511,7 @@ class _settingsPageState extends State<settingsPage> {
                               });
                               String status = await apiServices().getQuote(widget.currentUser.Mobile, _empCtrl.text);
                               _empCtrl.clear();
-                              print(status);
+                              // print(status);
                               _loading=false;
                               if(status=="Success"){
                                 _quoteSend=true;
@@ -509,7 +521,7 @@ class _settingsPageState extends State<settingsPage> {
                               });
 
                             },
-                            child: Text("Get Quote",style: TextStyle(color: Colors.white),),
+                            child: const Text("Get Quote",style: TextStyle(color: Colors.white),),
                         ),
                         ElevatedButton(
                           style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
@@ -518,21 +530,21 @@ class _settingsPageState extends State<settingsPage> {
                               _upgrade=false;
                             });
                           },
-                          child: Text("Cancel",style: TextStyle(color: Colors.white),),
+                          child: const Text("Cancel",style: TextStyle(color: Colors.white),),
                         ),
                       ],
                     ),
-                    SizedBox(height: 10,)
+                    const SizedBox(height: 10,)
                   ],
                 ),
               ),
             ),
 
-          ):SizedBox(),
+          ):const SizedBox(),
           _payment?Container(
             width: w,
             height: h,
-            color: Colors.black.withOpacity(.7),
+            color: Colors.black.withValues(alpha: .7),
             child: Center(
               child: Container(
                 width: w-50,
@@ -555,60 +567,53 @@ class _settingsPageState extends State<settingsPage> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Container(
-                          // color: Colors.blue,
-                          // width: w/3,
-                          // height: ,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              const Text("Months",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
-                              // const SizedBox(height: 5,),
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.blue),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.remove),
-                                      onPressed: (){
-                                        setState(() {
-                                          _quantity==1?1:_quantity--;
-                                          _amount = _quantity*int.parse(subList[0]['Amount'].toString());
-                                        });
-                                      },
-                                    ),
-                                    Container(
-                                        // color: Colors.grey.withOpacity(.5),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text('$_quantity',style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                                        )),
-                                    IconButton(
-                                      icon: const Icon(Icons.add),
-                                      onPressed: (){
-                                        setState(() {
-                                          _quantity==24?24:_quantity++;
-                                          _amount = _quantity*int.parse(subList[0]['Amount'].toString());
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const Text("Months",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                            // const SizedBox(height: 5,),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                            ],
-                          ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.remove),
+                                    onPressed: (){
+                                      setState(() {
+                                        _quantity==1?1:_quantity--;
+                                        _amount = _quantity*int.parse(subList[0]['Amount'].toString());
+                                      });
+                                    },
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('$_quantity',style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.add),
+                                    onPressed: (){
+                                      setState(() {
+                                        _quantity==24?24:_quantity++;
+                                        _amount = _quantity*int.parse(subList[0]['Amount'].toString());
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 20,),
+                        const SizedBox(height: 20,),
                         Container(
                           // decoration:BoxDecoration(
                           //   borderRadius: BorderRadius.circular(5),
                           //   color: Colors.blue,
                           // ),
-                          color: Colors.blue.withOpacity(.3),
+                          color: Colors.blue.withValues(alpha: .3),
                           // width: w/3,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -623,7 +628,7 @@ class _settingsPageState extends State<settingsPage> {
                         )
                       ],
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -634,11 +639,14 @@ class _settingsPageState extends State<settingsPage> {
                                 _payment=false;
                                 // _loading=true;
                               });
-                              orderID=await apiServices().getOrderid(widget.currentUser.Mobile, _amount.toString());
+                              orderID=await apiServices().getOrderid(widget.currentUser.Mobile, _amount.toString(), _quantity.toString());
                               // print(orderID);
+                              // await apiServices().insertTransaction(widget.currentUser.Mobile,_amount,_quantity,orderID);
+                              // showMessage("Payment Successfull: ${response.paymentId}");
                               Razorpay razorpay = Razorpay();
                               var options = {
                                 'key': 'rzp_live_aUnuQeSvJAEjzs',
+                                // 'key': 'rzp_test_9OpZHzb53yxKPB',
                                 'amount': _amount*100,
                                 'name': "myHR from Einlogica",
                                 'order_id': orderID,
@@ -765,7 +773,7 @@ class _settingsPageState extends State<settingsPage> {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: .3),
                 spreadRadius: 2,
                 blurRadius: 2,
                 offset: const Offset(0, 4),
@@ -801,7 +809,7 @@ class _settingsPageState extends State<settingsPage> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(mess),duration: const Duration(seconds: 1),));
   }
 
-  void handlePaymentErrorResponse(PaymentFailureResponse response){
+  void handlePaymentErrorResponse(PaymentFailureResponse response)async{
     /*
     * PaymentFailureResponse contains three values:
     * 1. Error Code
@@ -810,6 +818,7 @@ class _settingsPageState extends State<settingsPage> {
     * */
     // showAlertDialog(context, "Payment Failed", "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");
     clearScreen();
+    await apiServices().updatePayment(widget.currentUser.Mobile,"NA",orderID,"Failed");
     showMessage("Payment Failed");
 
   }
@@ -828,7 +837,7 @@ class _settingsPageState extends State<settingsPage> {
     // print(response.orderId);
     bool signature = await apiServices().validateSignature(response.signature!, response.paymentId!, response.orderId!);
     if(signature){
-      await apiServices().updatePayment(widget.currentUser.Mobile,_amount,_quantity,response.paymentId!,response.orderId!);
+      await apiServices().updatePayment(widget.currentUser.Mobile,response.paymentId!,response.orderId!,"Received");
       showMessage("Payment Successfull: ${response.paymentId}");
       await fetchSubscription();
     }

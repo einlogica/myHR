@@ -242,7 +242,7 @@ class _leaveApprovalPageState extends State<leaveApprovalPage> {
                 pendingId.isNotEmpty?Container(
                   width: w,
                   height: 50,
-                  color: Colors.black.withOpacity(.6),
+                  color: Colors.black.withValues(alpha: .6),
                   child: Center(
                     child: SizedBox(
                       width: w,
@@ -311,7 +311,7 @@ class _leaveApprovalPageState extends State<leaveApprovalPage> {
               child: (approved && approvedList.isEmpty) || (!approved && pendingList.isEmpty)?const Center(
                 child: Text("Nothing to display"),
               ):ListView.builder(
-                  padding: EdgeInsets.only(bottom: 50),
+                  padding: const EdgeInsets.only(bottom: 50),
                   itemCount: approved?approvedList.length:pendingList.length,
                   itemBuilder: (context,index){
                     var item = approved?approvedList[index]:pendingList[index];
@@ -348,7 +348,7 @@ class _leaveApprovalPageState extends State<leaveApprovalPage> {
                             color: DateTime.parse(item.LeaveDate).isBefore(DateTime.now().subtract(const Duration(days: 1)))?Colors.red.shade50:Colors.white,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.3),
+                                color: Colors.black.withValues(alpha: .3),
                                 spreadRadius: 2,
                                 blurRadius: 2,
                                 offset: const Offset(0, 3),

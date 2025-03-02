@@ -40,7 +40,7 @@ class _profilePageState extends State<profilePage> {
 
   var w=0.00,h=0.00,t=0.00;
   // TextEditingController _nameCtrl= TextEditingController();
-  var pickedImage;
+  late var pickedImage;
   bool imgFromCamera=false;
   bool progressIndicator=true;
   bool imageLoaded = false;
@@ -88,8 +88,8 @@ class _profilePageState extends State<profilePage> {
 
   setProfileImage()async{
 
-    final response=await apiServices().getBill("${widget.Image}", "Profile");
-    if(response!="Failed"){
+    final response=await apiServices().getBill(widget.Image, "Profile");
+    if(response!=Uint8List(0)){
       profileImage=response;
     }
     setState(() {
@@ -196,7 +196,7 @@ class _profilePageState extends State<profilePage> {
                       child: Column(
                         children: <Widget>[
                           const SizedBox(height: 20),
-                          Container(
+                          SizedBox(
                             width: w>h?w/5:w/2,
                             height: w>h?w/5:w/2,
                             child: Stack(
@@ -263,7 +263,7 @@ class _profilePageState extends State<profilePage> {
                           buildTextField("Position", currentUser.Position),
                           buildTextField("Department", currentUser.Department),
                           buildTextField("Manager", currentUser.Manager),
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 5,),
                           !pInfo?InkWell(
                             onTap: (){
                               setState(() {
@@ -275,9 +275,9 @@ class _profilePageState extends State<profilePage> {
                               height: 30,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
-                                color: Colors.grey.withOpacity(.4)
+                                color: Colors.grey.withValues(alpha: .4)
                               ),
-                              child: Icon(Icons.keyboard_arrow_down_sharp,size: 20,),
+                              child: const Icon(Icons.keyboard_arrow_down_sharp,size: 20,),
                             ),
                           ):SizedBox(
                             child: Column(
@@ -289,7 +289,7 @@ class _profilePageState extends State<profilePage> {
                                 buildTextField("Zip", personalInfo.Zip),
                                 buildTextField("Emerg Contact", personalInfo.EmContactName),
                                 buildTextField("Emerg Number", personalInfo.EmContactNum),
-                                currentUser.Status!="ACTIVE"?buildTextField("Status", currentUser.Status):SizedBox(),
+                                currentUser.Status!="ACTIVE"?buildTextField("Status", currentUser.Status):const SizedBox(),
                               ],
                             ),
                           ),
@@ -871,8 +871,8 @@ class _profilePageState extends State<profilePage> {
     return showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        contentPadding: EdgeInsets.all(8),
-        insetPadding: EdgeInsets.all(8),
+        contentPadding: const EdgeInsets.all(8),
+        insetPadding: const EdgeInsets.all(8),
         // backgroundColor: AppColors.boxColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
@@ -949,8 +949,8 @@ class _profilePageState extends State<profilePage> {
     return showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        contentPadding: EdgeInsets.all(8),
-        insetPadding: EdgeInsets.all(8),
+        contentPadding: const EdgeInsets.all(8),
+        insetPadding: const EdgeInsets.all(8),
         // backgroundColor: AppColors.boxColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),

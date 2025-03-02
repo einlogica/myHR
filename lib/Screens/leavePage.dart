@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_calendar_carousel/classes/event.dart';
 // import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
@@ -147,7 +147,7 @@ class _leavePageState extends State<leavePage> {
                               ),
                             ),
                             const Text("Leave Management",style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),),
-                            leavePressed?SizedBox(width: 60,):InkWell(
+                            leavePressed?const SizedBox(width: 60,):InkWell(
                               onTap: ()async{
 
                                 if(leaveStr=="YEARLY"){
@@ -252,8 +252,8 @@ class _leavePageState extends State<leavePage> {
                 const SizedBox(height: 10,),
                 Container(
                     width: w,
-                    color: Colors.grey.withOpacity(.3),
-                    child: Center(child: Text("${DateFormat.MMMM().format(DateTime(0, int.parse(_selMonth)))} - ${_sel}",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),))
+                    color: Colors.grey.withValues(alpha: .3),
+                    child: Center(child: Text("${DateFormat.MMMM().format(DateTime(0, int.parse(_selMonth)))} - $_sel",style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold),))
                 ),
                 const SizedBox(height: 10,),
                 Expanded(
@@ -281,7 +281,7 @@ class _leavePageState extends State<leavePage> {
                                     color: DateTime.parse(leaveList[index].LeaveDate).isBefore(DateTime.now())?Colors.red.shade50:Colors.white,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.3),
+                                        color: Colors.black.withValues(alpha: .3),
                                         spreadRadius: 2,
                                         blurRadius: 2,
                                         offset: const Offset(0, 3),
@@ -380,10 +380,10 @@ class _leavePageState extends State<leavePage> {
                               Container(
                                 width: w,
                                 height: 30,
-                                color: Colors.white.withOpacity(.2),
-                                child:Center(child: Text("${DateFormat.MMMM().format(DateTime(0, int.parse(_selMonth)))} - ${_sel}",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Colors.white),))
+                                color: Colors.white.withValues(alpha: .2),
+                                child:Center(child: Text("${DateFormat.MMMM().format(DateTime(0, int.parse(_selMonth)))} - $_sel",style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Colors.white),))
                               ),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               calendar(),
 
                               SizedBox(
@@ -492,7 +492,7 @@ class _leavePageState extends State<leavePage> {
             leaveCardPressed?Container(
               width: w,
               height: h,
-              color: Colors.black.withOpacity(.7),
+              color: Colors.black.withValues(alpha: .7),
               child: Center(
                 child: leaveCard(_index),
               ),
@@ -515,13 +515,13 @@ class _leavePageState extends State<leavePage> {
           padding: const EdgeInsets.only(bottom: 20.0),
           child: TableCalendar(
             headerVisible: false,
-            headerStyle: HeaderStyle(formatButtonVisible: false),
+            headerStyle: const HeaderStyle(formatButtonVisible: false),
             pageJumpingEnabled: false,
             firstDay: DateTime(DateTime.now().year-1,01,01),
             lastDay: DateTime(DateTime.now().year+2,01,01),
             focusedDay: _currentDate,
             daysOfWeekStyle: DaysOfWeekStyle(
-              weekendStyle: TextStyle().copyWith(color: Colors.red),
+              weekendStyle: const TextStyle().copyWith(color: Colors.red),
             ),
             calendarStyle: const CalendarStyle(
               isTodayHighlighted: false,
@@ -564,7 +564,7 @@ class _leavePageState extends State<leavePage> {
 
                 _currentDate = selectedDay;
                 focusedDay=_currentDate;
-                print(_currentDate);
+                // print(_currentDate);
                 if(dateList.contains(_currentDate)){
                   dateList.remove(_currentDate);
                 }

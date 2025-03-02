@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:einlogica_hr/Widgets/FieldArea.dart';
 import 'package:einlogica_hr/Widgets/FieldAreaWithCalendar.dart';
 import 'package:einlogica_hr/Widgets/FieldAreaWithDropDown.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -95,6 +95,7 @@ class _upload_billState extends State<upload_bill> {
   List<String> siteList = ["Select","Other"];
   String dropdownsite = "Select";
   String dropdowndistrict = "Select";
+  List<String>expenseType=[];
 
   @override
   void dispose() {
@@ -129,6 +130,8 @@ class _upload_billState extends State<upload_bill> {
   }
 
   fetchVehicle()async{
+    expenseType=await apiServices().getExpenseType();
+    items.addAll(expenseType);
     List<String> sites=await apiServices().fetchSettingsList("Site Name",widget.mobile);
     siteList.addAll(sites);
     var response =await apiServices().fetchVehicle(widget.mobile);
@@ -245,8 +248,8 @@ class _upload_billState extends State<upload_bill> {
                         children: [
                           const SizedBox(height: 10,),
                           SizedBox(child: FieldAreaWithDropDown(title: "Type", dropList: items, dropdownValue: dropdownvalue, callback: dropDownCallback)),
-                          dropdownvalue=='Other' || dropdownvalue=='Purchase' ?FieldArea(title: "Specify Item", ctrl: _specifyCtrl, type: TextInputType.text, len: 40):SizedBox(),
-                          dropdownvalue=='Fuel'?FieldAreaWithDropDown(title: "Vehicle", dropList: vehicleList, dropdownValue: selectedVehicle, callback: dropDownCallback):SizedBox(),
+                          dropdownvalue=='Other' || dropdownvalue=='Purchase' ?FieldArea(title: "Specify Item", ctrl: _specifyCtrl, type: TextInputType.text, len: 40):const SizedBox(),
+                          dropdownvalue=='Fuel'?FieldAreaWithDropDown(title: "Vehicle", dropList: vehicleList, dropdownValue: selectedVehicle, callback: dropDownCallback):const SizedBox(),
 
                           dropdownvalue=='Purchase'?!addNewShop?Column(
                             children: [
@@ -307,7 +310,7 @@ class _upload_billState extends State<upload_bill> {
                                     width: w-70,
                                     decoration: BoxDecoration(
                                       border: Border.all(color: Colors.black),
-                                      color: Colors.grey.withOpacity(.2),
+                                      color: Colors.grey.withValues(alpha: .2),
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -378,10 +381,10 @@ class _upload_billState extends State<upload_bill> {
 
                             ],
                           ),
-                          dropdownvalue=='Fuel' && selectedVehicle=='Other' ?FieldArea(title: "Specify", ctrl: _specifyCtrl, type: TextInputType.text, len: 20):SizedBox(),
+                          dropdownvalue=='Fuel' && selectedVehicle=='Other' ?FieldArea(title: "Specify", ctrl: _specifyCtrl, type: TextInputType.text, len: 20):const SizedBox(),
                           // FieldArea(title: "Location", ctrl: _siteCtrl, type: TextInputType.text, len: 30),
                           FieldAreaWithDropDown(title: "Location", dropList: siteList, dropdownValue: dropdownsite, callback: dropDownCallback),
-                          dropdownsite=="Other"?FieldArea(title: "Specify Location", ctrl: _siteCtrl, type: TextInputType.text, len: 40):SizedBox(),
+                          dropdownsite=="Other"?FieldArea(title: "Specify Location", ctrl: _siteCtrl, type: TextInputType.text, len: 40):const SizedBox(),
                           FieldAreaWithCalendar(title: "Expense Date", ctrl: dateController, type: TextInputType.datetime,days:2,fdays: 0,),
                           travel.contains(dropdownvalue)?FieldArea(title: "From", ctrl: _fromCtrl, type: TextInputType.text, len: 20):const SizedBox(),
                           travel.contains(dropdownvalue)?FieldArea(title: "To", ctrl: _toCtrl, type: TextInputType.text, len: 20):const SizedBox(),
@@ -795,6 +798,9 @@ class _upload_billState extends State<upload_bill> {
       else{
         return true;
       }
+    }
+    else if(dropdownvalue!='Select' && _amountCtrl.text!="" && dateController.text!=""){
+      return true;
     }
     else{
       return false;

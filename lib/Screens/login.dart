@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:einlogica_hr/Screens/registration.dart';
 import 'package:einlogica_hr/Screens/superuser.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:einlogica_hr/Models/userModel.dart';
 import 'package:einlogica_hr/Models/userExpenseModel.dart';
@@ -19,12 +19,12 @@ import '../style/patternPainter.dart';
 
 
 
-TextEditingController _mobileCtrl = TextEditingController();
-TextEditingController _passwordCtrl= TextEditingController();
-TextEditingController _newpass1Ctrl= TextEditingController();
-TextEditingController _newpass2Ctrl= TextEditingController();
+final TextEditingController _mobileCtrl = TextEditingController();
+final TextEditingController _passwordCtrl= TextEditingController();
+final TextEditingController _newpass1Ctrl= TextEditingController();
+final TextEditingController _newpass2Ctrl= TextEditingController();
 
-var savMob,savPass,mobile,password,_error,mob,name,permission,department;
+late String savMob,savPass,mobile,password,_error,mob,name,permission,department;
 bool loginPressed=false;
 bool defPass=false;
 
@@ -161,12 +161,12 @@ class _loginState extends State<login> {
                           // const SizedBox(height: 20,),
                           SizedBox(
                             width: w-(w/3),
-                              child: Text("Sign In",style: TextStyle(fontSize: 30,color: Colors.blue),),
+                              child: const Text("Sign In",style: TextStyle(fontSize: 30,color: Colors.blue),),
                           ),
                           const SizedBox(height: 10,),
                           SizedBox(
                             width: w-(w/3),
-                            child: Text("Please use your credentials",style: TextStyle(fontSize: 12,color: Colors.grey),),
+                            child: const Text("Please use your credentials",style: TextStyle(fontSize: 12,color: Colors.grey),),
                           ),
                           const SizedBox(height: 40,),
                           SizedBox(
@@ -258,7 +258,7 @@ class _loginState extends State<login> {
                                   ),
                                 ),
                                 // SizedBox(width: 20,),
-                                Spacer(),
+                                const Spacer(),
                               ],
                             ),
                           )
@@ -269,7 +269,7 @@ class _loginState extends State<login> {
                           // )
                         ],
                       ),
-                    ):SizedBox(),
+                    ):const SizedBox(),
                     defPass?Center(
                       child: Container(
                         width: w>h?w/2-50:w-50,
@@ -444,7 +444,7 @@ class _loginState extends State<login> {
                         child: Container(
                           width: w-20,
                           height: h/3+100,
-                          color: Colors.white.withOpacity(.6),
+                          color: Colors.white.withValues(alpha: .6),
                           child: const Center(child: SizedBox(
                             width: 50,
                             height: 50,

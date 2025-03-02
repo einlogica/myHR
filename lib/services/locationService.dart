@@ -11,7 +11,6 @@ class locationServices{
   //Check Location Services
 
   Future<bool> checkLocationServices()async{
-    print("Executing check location services method");
     bool serviceEnabled;
     bool status=false;
     LocationPermission permission;
@@ -91,7 +90,6 @@ class locationServices{
 
   //prepare attendance data
   Future<locationModel> prepareModel()async{
-    print("Calling prepareModel function in location services");
 
     //Get Current location
     // Position _position = await getCurrentLocation();
@@ -128,7 +126,6 @@ class locationServices{
 
   //Open location on Google maps
   Future<void> openMap(double latitude, double longitude) async {
-    print("Executing open map");
     String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
     String iosUrl = 'https://maps.apple.com/?q=$latitude,$longitude';
 
@@ -140,7 +137,6 @@ class locationServices{
       }
 
     } else if (Platform.isIOS) {
-      print("detected ios platform");
       try {
         await launchUrl(Uri.parse(iosUrl), mode: LaunchMode.externalApplication);
       } catch(e){

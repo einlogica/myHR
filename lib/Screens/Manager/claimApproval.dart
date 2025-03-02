@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:einlogica_hr/Models/userExpenseModel.dart';
 import 'package:einlogica_hr/Models/userModel.dart';
@@ -210,7 +210,7 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
                   const SizedBox(height: 5,),
                   FieldArea(title: "Search", ctrl: searchCtrl, type: TextInputType.text, len: 20),
                   const SizedBox(height: 5,),
-                  Container(
+                  SizedBox(
                     width: w-20,
                     height: 50,
                     child: Row(
@@ -262,7 +262,7 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
                     width: w,
 
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
+                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
                       color: Colors.green.shade100,
                     ),
                     child: Column(
@@ -279,7 +279,7 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
                                 height: 30,
 
                                 child: Center(
-                                  child: Text("${total.toString()} /-",style: TextStyle(fontWeight: FontWeight.bold),),
+                                  child: Text("${total.toString()} /-",style: const TextStyle(fontWeight: FontWeight.bold),),
                                 ),
                               ),
                               const SizedBox(width: 5,),
@@ -500,7 +500,7 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
       child: (approved && approvedExpenseList.isEmpty) || (!approved && pendingExpenseList.isEmpty)? const Center(
         child: Text("Nothing to display"),
       ):ListView.builder(
-          padding: EdgeInsets.only(bottom: 50),
+          padding: const EdgeInsets.only(bottom: 50),
           itemCount: approved?approvedExpenseList.length:pendingExpenseList.length,
           itemBuilder: (context,int index){
             // print(index);
@@ -624,8 +624,8 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
         context: context,
         builder: (context) => AlertDialog(
           backgroundColor: Colors.transparent,
-          contentPadding: EdgeInsets.all(10),
-          insetPadding: EdgeInsets.all(10),
+          contentPadding: const EdgeInsets.all(10),
+          insetPadding: const EdgeInsets.all(10),
           // title: Text(item.Name),
           content: expenseCard(item),
         )
@@ -750,7 +750,7 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
                       height: 40,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: AppColors.buttonColorDark.withOpacity(.4),
+                          color: AppColors.buttonColorDark.withValues(alpha: .4),
                           boxShadow: const [BoxShadow(
                             color: Colors.black26,
                             blurRadius: 0.2,
@@ -767,13 +767,13 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
               //Approval if status is pending
               item.Status=="Applied"?const SizedBox(height: 10,):const SizedBox(),
               (widget.currentUser.Permission=='Admin' || widget.currentUser.Permission=='Manager')?SizedBox(
-                  child: (widget.currentUser.Permission=='Manager' && (item.Status=='L1 Approved' || item.Status=='Approved'))?SizedBox():Column(
+                  child: (widget.currentUser.Permission=='Manager' && (item.Status=='L1 Approved' || item.Status=='Approved'))?const SizedBox():Column(
                     children: [
                       FieldArea(title: "Comments",type: TextInputType.text,ctrl: commentsCtrl,len: 50,),
 
                       Row(
                         children: [
-                          item.Status=='Approved'?SizedBox():TextButton(
+                          item.Status=='Approved'?const SizedBox():TextButton(
                             onPressed: () async{
                               setState(() {
                                 refresh=true;
@@ -832,7 +832,7 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
                               ),
                               // color: AppColors.buttonColorDark,
                               // padding: const EdgeInsets.all(14),
-                              child: Center(child: const Text("Reject",style: TextStyle(color: Colors.white))),
+                              child: const Center(child: Text("Reject",style: TextStyle(color: Colors.white))),
                             ),
                           ),
                         ],
@@ -847,8 +847,8 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
               (item.Status=="Approved" && (widget.currentUser.Permission=='Admin' || widget.currentUser.Department=='Finance'))?SizedBox(
                   child: Column(
                     children: [
-                      Text("Finance Clearence",style: TextStyle(fontWeight: FontWeight.bold),),
-                      SizedBox(height: 5,),
+                      const Text("Finance Clearence",style: TextStyle(fontWeight: FontWeight.bold),),
+                      const SizedBox(height: 5,),
                       FieldArea(title: "Comments",type: TextInputType.text,ctrl: commentsCtrl,len: 50,),
                       // TextFormField(
                       //   enabled: true,
@@ -899,7 +899,7 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
                             ),
 
                             // padding: const EdgeInsets.all(14),
-                            child: Center(child: Text(item.Status=="Cleared"?"Reverse":"Clear",style: TextStyle(color: Colors.white),)),
+                            child: Center(child: Text(item.Status=="Cleared"?"Reverse":"Clear",style: const TextStyle(color: Colors.white),)),
                           ),
                         ),
                       ),
@@ -1094,7 +1094,7 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
                   ),
 
                   padding: const EdgeInsets.all(14),
-                  child: Center(child: Text(stat=="Cleared"?"Reverse":"Clear",style: TextStyle(color: Colors.white),)),
+                  child: Center(child: Text(stat=="Cleared"?"Reverse":"Clear",style: const TextStyle(color: Colors.white),)),
                 ),
               ),
               TextButton(
@@ -1110,7 +1110,7 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
                   ),
                   // color: AppColors.buttonColorDark,
                   padding: const EdgeInsets.all(14),
-                  child: Center(child: const Text("Cancel",style: TextStyle(color: Colors.white))),
+                  child: const Center(child: Text("Cancel",style: TextStyle(color: Colors.white))),
                 ),
               ),
 
@@ -1137,10 +1137,10 @@ class _claimApprovalPageState extends State<claimApprovalPage> {
               width: w/4,
               // height: 10,
               // color: Colors.grey,
-              child:Text("$title: ",style: TextStyle(fontSize: 12),)
+              child:Text("$title: ",style: const TextStyle(fontSize: 12),)
           ),
           Expanded(
-            child: Text(value,style: TextStyle(fontSize: 12),),
+            child: Text(value,style: const TextStyle(fontSize: 12),),
           )
         ],
       ),

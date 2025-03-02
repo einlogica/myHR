@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:einlogica_hr/Screens/upload_bill.dart';
 import 'package:einlogica_hr/Models/userExpenseModel.dart';
@@ -68,7 +68,7 @@ class _billPageState extends State<billPage> {
     userExpenseList = await apiServices().getUserExpenses(widget.mobile,_sel!.month.toString(),_sel.year.toString(),"EMP");
     cleared=0;pending=0;rejected=0;advance=0;salary=0;
     double bal = await apiServices().getPreExpenses(widget.mobile,_sel.month.toString(),_sel.year.toString(),"EMP");
-    print("Balance = $bal");
+    // print("Balance = $bal");
     for (var d in userExpenseList){
       // if(d.Status=="Approved" && d.Type!='Advance' && d.Type!='Salary Advance'){
       //   cleared=cleared+double.parse(d.Amount);
@@ -309,7 +309,7 @@ class _billPageState extends State<billPage> {
                                   subtitle: SizedBox(child: Row(
                                     children: [
                                       Text(item.Status,style: TextStyle(fontSize: 14,color: item.Status=="Approved"?Colors.green:Colors.orange),),
-                                      Spacer(),
+                                      const Spacer(),
                                       Container(
                                         width: 80,
                                         // height: 40,
@@ -317,7 +317,7 @@ class _billPageState extends State<billPage> {
                                             borderRadius: BorderRadius.circular(5),
                                             color: AppColors.boxColor
                                         ),
-                                        child: Center(child: Text("${item.Amount}/-",style: TextStyle(fontWeight: FontWeight.bold),)),
+                                        child: Center(child: Text("${item.Amount}/-",style: const TextStyle(fontWeight: FontWeight.bold),)),
                                       ),
                                     ],
                                   )),
@@ -375,7 +375,7 @@ class _billPageState extends State<billPage> {
           expenseCardPressed?Container(
             width: w,
             height: h,
-            color: Colors.black.withOpacity(.7),
+            color: Colors.black.withValues(alpha: .7),
             child: expenseCard(),
           ):const SizedBox(),
 
@@ -434,7 +434,7 @@ class _billPageState extends State<billPage> {
           delPressed?Container(
             width: w,
             height: h,
-            color: Colors.black.withOpacity(.7),
+            color: Colors.black.withValues(alpha: .7),
 
             child: Center(
               child: Container(
@@ -618,7 +618,7 @@ class _billPageState extends State<billPage> {
                               item.ShopDist==""?const SizedBox():billText("GST", item.ShopGst),
                               item.ShopPhone==""?const SizedBox():billText("Phone", item.ShopPhone),
                             ],
-                          ):SizedBox(),
+                          ):const SizedBox(),
                           // item.FromLoc==""?Container():SizedBox(height: 5,),
                           item.LabourName==""?const SizedBox():billText("Labour Name", item.LabourName),
                           item.Duration==""?const SizedBox():billText("Duration", item.Duration),

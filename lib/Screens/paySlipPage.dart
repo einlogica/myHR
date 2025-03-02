@@ -153,7 +153,7 @@ class _paySlipPageState extends State<paySlipPage> {
                               color: Colors.white,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.3),
+                                  color: Colors.black.withValues(alpha: .3),
                                   spreadRadius: 2,
                                   blurRadius: 2,
                                   offset: const Offset(0, 2),
@@ -233,7 +233,7 @@ class _paySlipPageState extends State<paySlipPage> {
           _paySlipPressed?Container(
             width: w,
             height: h,
-            color: Colors.black.withOpacity(.4),
+            color: Colors.black.withValues(alpha: .4),
             child: Center(
               child: Container(
                 width: w-20,

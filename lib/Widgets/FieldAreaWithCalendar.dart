@@ -22,7 +22,7 @@ class _FieldAreaWithCalendarState extends State<FieldAreaWithCalendar> {
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
         width: w-50,
-        height: 60,
+        // height: 60,
         // color: Colors.grey,
         child: TextFormField(
           keyboardType: widget.type,
@@ -46,7 +46,7 @@ class _FieldAreaWithCalendarState extends State<FieldAreaWithCalendar> {
                 widget.ctrl.text = formattedDate; //set foratted date to TextField value.
               });
             }else{
-              print("Date is not selected");
+              // print("Date is not selected");
             }
           },
           decoration: InputDecoration(

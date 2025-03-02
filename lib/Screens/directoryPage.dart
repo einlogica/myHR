@@ -113,7 +113,7 @@ class _directoryPageState extends State<directoryPage> {
                   ),
                 ),
                 const SizedBox(height: 10,),
-                Container(
+                SizedBox(
                   width: w-20,
                   height: 60,
                   // color: Colors.green,

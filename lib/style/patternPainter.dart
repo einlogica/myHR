@@ -5,7 +5,7 @@ class PatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // Define starting and ending points
-    Offset startPointTop = Offset(0, 0);
+    Offset startPointTop = const Offset(0, 0);
     Offset endPointTop = Offset(size.width, 0);
     Offset controlPointTop = Offset(size.width / 2, 80);
 
@@ -14,14 +14,14 @@ class PatternPainter extends CustomPainter {
     // Offset controlPointBottom = Offset(size.width / 2, size.height - 80);
 
     Paint gradientPaintBottom = Paint()
-      ..shader = LinearGradient(
+      ..shader = const LinearGradient(
         begin: Alignment.bottomRight,
         end: Alignment.topLeft,
         colors: [Colors.green, Colors.blue],
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
 
     Paint gradientPaintBottom1 = Paint()
-      ..shader = LinearGradient(
+      ..shader = const LinearGradient(
         begin: Alignment.bottomRight,
         end: Alignment.topLeft,
         colors: [Colors.blue, Colors.green],
@@ -30,7 +30,7 @@ class PatternPainter extends CustomPainter {
     // Define gradients
 
     Paint gradientPaintTop = Paint()
-      ..shader = LinearGradient(
+      ..shader = const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [Colors.blue, Colors.green],

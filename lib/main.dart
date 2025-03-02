@@ -37,11 +37,11 @@ Future<void> main() async{
   AndroidInitializationSettings('@mipmap/ic_launcher');
 
   // iOS initialization
-  final DarwinInitializationSettings initializationSettingsIOS =
+  const DarwinInitializationSettings initializationSettingsIOS =
   DarwinInitializationSettings();
 
   // Combine initialization settings
-  final InitializationSettings initializationSettings =
+  const InitializationSettings initializationSettings =
   InitializationSettings(
     android: initializationSettingsAndroid,
     iOS: initializationSettingsIOS,
@@ -127,12 +127,12 @@ class MyApp extends StatelessWidget {
           child: child!,
         );
       },
-      home: login(),
+      home: const login(),
       // home: UpgradeAlert(
       //   child: login(),
       // ),
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalWidgetsLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         MonthYearPickerLocalizations.delegate,

@@ -108,7 +108,7 @@ class _homePageState extends State<homePage> {
 
 
   fetchData()async{
-    print("Fetch Data started============");
+    // print("Fetch Data started============");
     version= apiServices().getVersion();
     pendingList = await apiServices().getPendingActions(widget.currentUser.Mobile, widget.currentUser.Permission);
     if(pendingList.isNotEmpty){
@@ -119,14 +119,14 @@ class _homePageState extends State<homePage> {
       gridAnim=true;
       checkinWidth=false;
     });
-    print("Fetch Data ended============");
+    // print("Fetch Data ended============");
   }
 
   fetchData2()async{
     collectionTab = await apiServices().getSettings('CollectionTab');
     financeTab = await apiServices().getSettings('FinanceTab');
     if(widget.superAdmin==false){
-      print("Updating FCM");
+      // print("Updating FCM");
       apiServices().updateFCM(widget.currentUser.Mobile);
     }
 
@@ -147,7 +147,7 @@ class _homePageState extends State<homePage> {
 
 
   setEmployerImage()async{
-    print("Setting employer icon =================");
+    // print("Setting employer icon =================");
     empIcon=await apiServices().getBill(widget.currentUser.Employer, "Employer");
     setState(() {
 
@@ -159,7 +159,7 @@ class _homePageState extends State<homePage> {
   }
 
   setProfileImage()async{
-    print("Setting profile image =================");
+    // print("Setting profile image =================");
     imageFile=await apiServices().getBill(widget.currentUser.ImageFile, "Profile");
     setState(() {
     });
@@ -176,7 +176,7 @@ class _homePageState extends State<homePage> {
       var data = jsonDecode(response.trim());
       locationName=data['Location'];
       locationStatus=data['Status'];
-      print(locationName);
+      // print(locationName);
       attTime=data['InTime'].toString().substring(0,5);
       outTime=data['OutTime'].toString().substring(0,5);
       // dur = getDurationBetweenTimes(data['OutTime'],data['InTime']).toString();
@@ -311,7 +311,7 @@ class _homePageState extends State<homePage> {
 
                                         ),
                                       ),
-                                      SizedBox(height: 10,),
+                                      const SizedBox(height: 10,),
                                       Align(
                                         alignment: Alignment.centerRight,
                                         child: InkWell(
@@ -400,7 +400,7 @@ class _homePageState extends State<homePage> {
               //     ),
               //   ),
               // ):SizedBox(height: 20,),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               Expanded(
                   child: SizedBox(
                     // color: _color2,
@@ -442,13 +442,13 @@ class _homePageState extends State<homePage> {
 
                                   ],
                                 ),
-                                kIsWeb?SizedBox():Align(
+                                kIsWeb?const SizedBox():Align(
                                     alignment: Alignment.topRight,
                                     child: Padding(
                                         padding: const EdgeInsets.only(right: 20.0),
                                         child: InkWell(
                                           onTap: ()async{
-                                            print(buttonText);
+                                            // print(buttonText);
                                             if(buttonText!="Check In" && buttonText!="Check Out"){
                                               return;
                                             }
@@ -506,7 +506,7 @@ class _homePageState extends State<homePage> {
                                             child: Row(
                                                     mainAxisAlignment: checkinWidth?MainAxisAlignment.spaceEvenly:MainAxisAlignment.center,
                                                     children: [
-                                                      Text(buttonText,style: TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
+                                                      Text(buttonText,style: const TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
                                                       checkinWidth?const SizedBox(
                                                           width: 20,
                                                           height: 20,
@@ -532,7 +532,7 @@ class _homePageState extends State<homePage> {
                               // crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const SizedBox(height: 5,),
-                                Text(locationStatus=='HalfDay'?"$locationName (HalfDay)":"$locationName",style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.blue,fontSize: 18),),
+                                Text(locationStatus=='HalfDay'?"$locationName (HalfDay)":locationName,style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.blue,fontSize: 18),),
                                 const SizedBox(height: 5,),
                                 attTime!='00:00'?SizedBox(
                                   child: Row(
@@ -598,18 +598,18 @@ class _homePageState extends State<homePage> {
                               ],
                             ),
                           ),
-                          collectionTab=='1'?const SizedBox(height: 30,):SizedBox(),
+                          collectionTab=='1'?const SizedBox(height: 30,):const SizedBox(),
                           collectionTab=='1'?gridContainer3('assets/getMaterial.png', "Collection", (){
                               Navigator.push(context, MaterialPageRoute(builder: (context){
                                 return collectMaterial(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: widget.currentUser.Permission,);
                               }));
-                          }):SizedBox(),
-                          collectionTab=='1' && widget.currentUser.Permission=='Admin'?const SizedBox(height: 30,):SizedBox(),
+                          }):const SizedBox(),
+                          collectionTab=='1' && widget.currentUser.Permission=='Admin'?const SizedBox(height: 30,):const SizedBox(),
                           collectionTab=='1' && widget.currentUser.Permission=='Admin'?gridContainer3('assets/summary.png', "Collection Summary", (){
                             Navigator.push(context, MaterialPageRoute(builder: (context){
                               return collectionSumaryPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: widget.currentUser.Permission,);
                             }));
-                          }):SizedBox(),
+                          }):const SizedBox(),
 
                           const SizedBox(height: 30,),
                           SizedBox(
@@ -662,7 +662,7 @@ class _homePageState extends State<homePage> {
                             Navigator.push(context, MaterialPageRoute(builder: (context){
                               return claimApprovalPage(currentUser: widget.currentUser, callback: (){});
                             }));
-                          }):SizedBox(),
+                          }):const SizedBox(),
 
 
 
@@ -671,7 +671,7 @@ class _homePageState extends State<homePage> {
                             Navigator.push(context, MaterialPageRoute(builder: (context){
                                 return dashboard(currentUser: widget.currentUser,);
                               }));
-                          }):SizedBox(),
+                          }):const SizedBox(),
 
 
                           widget.currentUser.Permission=="Admin"?const SizedBox(height: 30,):const SizedBox(),
@@ -704,7 +704,7 @@ class _homePageState extends State<homePage> {
                             Navigator.push(context, MaterialPageRoute(builder: (context){
                               return settingsPage(currentUser: widget.currentUser,callback:setEmployerImage);
                             }));
-                          }):SizedBox(),
+                          }):const SizedBox(),
                           eventList.isNotEmpty?SizedBox(
                             child: Column(
                               children: [
@@ -741,7 +741,7 @@ class _homePageState extends State<homePage> {
                                                 ),
                                               ),
                                             ),
-                                            leading: Container(
+                                            leading: SizedBox(
                                               width: 30,
                                               height: 30,
                                               child: eventList[index].date=="Birthday"?Image.asset('assets/dob.png'):Image.asset('assets/doj.png'),
@@ -781,7 +781,7 @@ class _homePageState extends State<homePage> {
           _refresh?Container(
             width: w,
             height: h,
-            color: Colors.black.withOpacity(.4),
+            color: Colors.black.withValues(alpha: .4),
             child: Center(
               child: Container(
                 width: w/2,
@@ -801,7 +801,7 @@ class _homePageState extends State<homePage> {
           pending?Container(
             width: w,
             height: h,
-            color: Colors.black.withOpacity(.3),
+            color: Colors.black.withValues(alpha: .3),
             child: Center(
               child: Container(
                 width: w>h?w/3:w-50,
@@ -812,12 +812,12 @@ class _homePageState extends State<homePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(height: 10,),
-                    Padding(
+                    const SizedBox(height: 10,),
+                    const Padding(
                       padding: EdgeInsets.only(left:10.0),
                       child: Text("Pending actions",style: TextStyle(fontSize: 18,color: Colors.blue,fontStyle: FontStyle.italic),),
                     ),
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
                     ListView.builder(
                       padding: EdgeInsets.zero,
                       shrinkWrap: true,
@@ -826,7 +826,7 @@ class _homePageState extends State<homePage> {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Spacer(),
+                            const Spacer(),
                             SizedBox(
                               width: w>h?w/8:w/2,
                               child: Text(pendingList[index].type),
@@ -837,7 +837,7 @@ class _homePageState extends State<homePage> {
                                 alignment: Alignment.centerRight,
                                   child: Text(pendingList[index].count.toStringAsFixed(0))),
                             ),
-                            Spacer(),
+                            const Spacer(),
                           ],
                         );
                       }
@@ -876,8 +876,8 @@ class _homePageState extends State<homePage> {
         height: h,
         color: Colors.transparent,
         child: AlertDialog(
-          contentPadding: EdgeInsets.all(8),
-          insetPadding: EdgeInsets.all(20),
+          contentPadding: const EdgeInsets.all(8),
+          insetPadding: const EdgeInsets.all(20),
           // backgroundColor: AppColors.boxColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
@@ -891,7 +891,7 @@ class _homePageState extends State<homePage> {
                   Align(
                       alignment: Alignment.centerLeft,
                       child: Text("Detected Location: ${currLocation.locationName}")),
-                  SizedBox(height: 10,),
+                  const SizedBox(height: 10,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -1081,7 +1081,7 @@ class _homePageState extends State<homePage> {
                 height: 40,
                 child: Image.asset(asset),
               ),
-              Text(title,style: TextStyle(fontWeight: FontWeight.bold),),
+              Text(title,style: const TextStyle(fontWeight: FontWeight.bold),),
               const SizedBox(
                 width: 60,
                 height: 40,

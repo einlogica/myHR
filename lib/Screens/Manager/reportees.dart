@@ -61,7 +61,7 @@ class _reporteesPageState extends State<reporteesPage> {
     
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: Container(
+      body: SizedBox(
         width: w,
         height: h,
         child: Stack(
@@ -169,7 +169,7 @@ class _reporteesPageState extends State<reporteesPage> {
               width: w-20,
 
               child: ListView.builder(
-                  padding: EdgeInsets.only(bottom: 50),
+                  padding: const EdgeInsets.only(bottom: 50),
                   itemCount: employeeList.length,
                   itemBuilder: (context,index){
                     return Padding(
@@ -181,7 +181,7 @@ class _reporteesPageState extends State<reporteesPage> {
                           color: employeeList[index].Status=='ACTIVE'?Colors.white:Colors.red.shade100,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
+                              color: Colors.black.withValues(alpha: .3),
                               spreadRadius: 2,
                               blurRadius: 2,
                               offset: const Offset(0, 4),
@@ -199,7 +199,7 @@ class _reporteesPageState extends State<reporteesPage> {
                             subtitle: Row(
                               children: [
                                 Text(employeeList[index].Position),
-                                Spacer(),
+                                const Spacer(),
                                 Text(employeeList[index].AttStatus=='HalfDay'?"${employeeList[index].Location} (HL)":employeeList[index].Location,style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold,color: employeeList[index].Location=="Absent" || employeeList[index].Location=="Leave"?Colors.red:Colors.green),),
                               ],
                             ),

@@ -124,7 +124,7 @@ class _regularizePageState extends State<regularizePage> {
                                       // content: const Text("Are you sure to send regularize request?"),
                                       content: SizedBox(width:w-50,child: const Text("Are you sure to approve regularization")),
                                       actions: <Widget>[
-                                        Container(
+                                        SizedBox(
                                           width:w-20,
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

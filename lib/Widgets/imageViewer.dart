@@ -59,7 +59,7 @@ class _imageViewerState extends State<imageViewer> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       widget.download?ElevatedButton(
-                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
+                          style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blue)),
                           onPressed: ()async{
 
                             setState(() {
@@ -70,10 +70,10 @@ class _imageViewerState extends State<imageViewer> {
                             setState(() {
                               refresh=false;
                             });
-                          }, child: const Text("Download",style: TextStyle(color: Colors.white),)):SizedBox(),
-                      widget.download?SizedBox(width: 10,):SizedBox(),
+                          }, child: const Text("Download",style: TextStyle(color: Colors.white),)):const SizedBox(),
+                      widget.download?const SizedBox(width: 10,):const SizedBox(),
                       ElevatedButton(
-                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
+                          style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blue)),
                           onPressed: (){
                             // widget.callback();
                             Navigator.pop(context);
@@ -86,7 +86,7 @@ class _imageViewerState extends State<imageViewer> {
           refresh?Container(
             width: w,
             height: h,
-            color: Colors.black.withOpacity(.4),
+            color: Colors.black.withValues(alpha: .4),
             child: Center(
               child: Container(
                 width: 60,

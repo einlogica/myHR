@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:html' as html;
+// import 'dart:html' as html;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
@@ -12,23 +12,22 @@ FlutterLocalNotificationsPlugin();
 class savefile{
 
   Future<String> downloadCSVFile(String fileName, String data)async{
-    print("Executing download file method");
-    var filePath;
-    var file;
+    String filePath='';
+    File file;
     String status="";
 
     String directoryPath;
-    if(kIsWeb){
-      print("Detected web activity");
-      final blob = html.Blob([data]);
-      final url = html.Url.createObjectUrlFromBlob(blob);
-      final anchor = html.AnchorElement(href: url)
-        ..setAttribute("download", fileName)
-        ..click();
-      html.Url.revokeObjectUrl(url);
-      status = "Success";
-    }
-    else
+    // if(kIsWeb){
+    //   print("Detected web activity");
+    //   final blob = html.Blob([data]);
+    //   final url = html.Url.createObjectUrlFromBlob(blob);
+    //   final anchor = html.AnchorElement(href: url)
+    //     ..setAttribute("download", fileName)
+    //     ..click();
+    //   html.Url.revokeObjectUrl(url);
+    //   status = "Success";
+    // }
+    // else
     if (Platform.isAndroid) {
       // final directory = await getExternalStorageDirectory();
       // filePath = '$directory/$fileName';
@@ -49,7 +48,6 @@ class savefile{
       });
     }
     else {
-      print("unsupported operating system");
     }
 
     return status;
@@ -59,9 +57,8 @@ class savefile{
 
 
   Future<String> downloadImage(String fileName, Uint8List data)async{
-    print("Executing download file method");
-    var filePath;
-    var file;
+    String filePath='';
+    File file;
     String status="";
 
     String directoryPath;
@@ -97,7 +94,7 @@ class savefile{
       });
     }
     else {
-      print("unsupported operating system");
+      // print("unsupported operating system");
     }
 
     return status;
@@ -106,7 +103,6 @@ class savefile{
 
 
   Future<void> downloadAndNotify(String filePath) async {
-    print("Showing notification");
     // final response = await HttpClient().getUrl(Uri.parse(url));
     // final bytes = await response.close().then((r) => r.fold<List<int>>([], (b, data) => b..addAll(data)));
     //

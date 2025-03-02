@@ -231,7 +231,7 @@ class _attendancePageState extends State<attendancePage> {
                     // height: h/2,
                     // color: Colors.grey,
                     child: ListView.builder(
-                        padding: EdgeInsets.only(bottom: 50),
+                        padding: const EdgeInsets.only(bottom: 50),
                         // physics: NeverScrollableScrollPhysics(),
                         itemCount: attList.length,
                         itemBuilder: (context,index){
@@ -243,7 +243,7 @@ class _attendancePageState extends State<attendancePage> {
                                 color: Colors.white,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.3),
+                                    color: Colors.black.withValues(alpha: .3),
                                     spreadRadius: 2,
                                     blurRadius: 2,
                                     offset: const Offset(0, 2),
@@ -311,7 +311,7 @@ Widget calendar(){
             lastDay: DateTime(currYear, currMonth, 31),
             focusedDay: DateTime(currYear, currMonth, 1),
             daysOfWeekStyle: DaysOfWeekStyle(
-              weekendStyle: TextStyle().copyWith(color: Colors.red),
+              weekendStyle: const TextStyle().copyWith(color: Colors.red),
             ),
             calendarStyle: const CalendarStyle(
               weekendTextStyle: TextStyle(color: Colors.white),
@@ -330,7 +330,7 @@ Widget calendar(){
                   child: Center(
                     child: Text(
                       '${day.day}',
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
                 );
@@ -399,8 +399,8 @@ Widget calendar(){
     return showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        contentPadding: EdgeInsets.all(15),
-        insetPadding: EdgeInsets.all(20),
+        contentPadding: const EdgeInsets.all(15),
+        insetPadding: const EdgeInsets.all(20),
         // backgroundColor: AppColors.boxColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
@@ -615,7 +615,7 @@ Widget calendar(){
               padding: const EdgeInsets.all(10),
               child: const Text("Mark Absent",style: TextStyle(color: Colors.white),),
             ),
-          ):SizedBox(),
+          ):const SizedBox(),
           TextButton(
             onPressed: () {
               _commentsCtrl.clear();

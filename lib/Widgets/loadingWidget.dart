@@ -14,7 +14,7 @@ class loadingWidget extends StatelessWidget {
     return Container(
       width: w,
       height: h,
-      color: Colors.black.withOpacity(.4),
+      color: Colors.black.withValues(alpha: .4),
       child: Center(
         child: Container(
           width: w/2,

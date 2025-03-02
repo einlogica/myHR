@@ -54,7 +54,7 @@ class _transactionsPageState extends State<transactionsPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: Container(
+      body: SizedBox(
         width: w,
         height: h,
         child: Stack(
@@ -121,7 +121,7 @@ class _transactionsPageState extends State<transactionsPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // Text("Bill Period:",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
-                                  Text("Bill Period: ${DateFormat('MMM yyyy').format(DateTime.parse(paymentList[index].FromDate))}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                                  Text("Bill Period: ${DateFormat('MMM yyyy').format(DateTime.parse(paymentList[index].FromDate))}",style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
                                   // Text("${paymentList[index].FromDate} - ${paymentList[index].ToDate} ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
                                 ],
                               ),
@@ -132,7 +132,7 @@ class _transactionsPageState extends State<transactionsPage> {
                                   Text("Date: ${DateFormat('dd MM yyyy').format(DateTime.parse(paymentList[index].Date))}")
                                 ],
                               ),
-                              trailing: Text("${paymentList[index].Total}/-",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                              trailing: Text("${paymentList[index].Total}/-",style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
                             ),
                           ),
                         );

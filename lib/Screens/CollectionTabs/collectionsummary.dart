@@ -62,7 +62,7 @@ class _collectionSumaryPageState extends State<collectionSumaryPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: Container(
+      body: SizedBox(
         width: w,
         height: h,
         child: Stack(
@@ -236,6 +236,7 @@ class _collectionSumaryPageState extends State<collectionSumaryPage> {
                             ),
                           ),
                         ),
+                      // ignore: prefer_const_constructors
                       SizedBox(height: 30,),
                     ],
                     ),
