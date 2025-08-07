@@ -41,6 +41,7 @@ class _dashboardState extends State<dashboard> {
   var data;
   List summary = ["","","",""];
   bool loadSummary=false;
+  String collectionTab='0';
   DateTime currDate = DateTime.now();
   List<Map<String, dynamic>> attendanceData = [];
   List<Map<String, dynamic>> fetchedAttendanceData = [];
@@ -63,6 +64,7 @@ class _dashboardState extends State<dashboard> {
   fetchMonthlyData()async{
     //Attendance
     fetchedAttendanceData = await apiServices().getMonthlyAttendance(widget.currentUser.Mobile,currDate.month.toString(),currDate.year.toString());
+
     attendanceData=fetchedAttendanceData.sublist(fetchedAttendanceData.length-8,fetchedAttendanceData.length-1);
     employeeCount=attendanceData[0]['Total'];
     // print(fetchedAttendanceData.last['Day']);
@@ -90,6 +92,7 @@ class _dashboardState extends State<dashboard> {
   fetchEmployeeData()async{
     // employeeList
     formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    collectionTab = await apiServices().getSettings('CollectionTab');
     employeeList.clear();
     if(widget.currentUser.Permission=="Admin"){
       employeeList = await apiServices().getReportees(widget.currentUser.Mobile,"ALL",formattedDate);
@@ -263,12 +266,12 @@ class _dashboardState extends State<dashboard> {
                               // });
                               if(widget.currentUser.Permission=="Admin"){
                                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                                  return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "ALL",);
+                                  return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "ALL",collection: collectionTab,);
                                 }));
                               }
                               else{
                                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                                  return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "MAN",);
+                                  return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "MAN",collection: collectionTab,);
                                 }));
                               }
 

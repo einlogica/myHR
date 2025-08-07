@@ -27,11 +27,12 @@ class collectMaterial extends StatefulWidget {
       {super.key,
       required this.mobile,
       required this.name,
-      required this.permission});
+      required this.permission, required this.collection});
 
   final String mobile;
   final String name;
   final String permission;
+  final String collection;
 
   @override
   State<collectMaterial> createState() => _collectMaterialState();
@@ -425,7 +426,7 @@ class _collectMaterialState extends State<collectMaterial> {
                                                         children: [
                                                           filteredcollectionList[index].vehicle=="NA"?const SizedBox():Text("Vehicle : ${filteredcollectionList[index].vehicle} Kg"),
                                                           filteredcollectionList[index].dry=="0"?const SizedBox():Text("Dry : ${filteredcollectionList[index].dry} Kg"),
-                                                          filteredcollectionList[index].cloth=="0"?const SizedBox():Text("Cloth : ${filteredcollectionList[index].cloth} Kg"),
+                                                          filteredcollectionList[index].cloth=="0"?const SizedBox():Text(widget.collection=='1'?"Cloth : ${filteredcollectionList[index].cloth} Kg":"Liquid : ${filteredcollectionList[index].cloth} L"),
                     
                                                         ],
                                                       ),
@@ -436,7 +437,7 @@ class _collectMaterialState extends State<collectMaterial> {
                                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                         children: [
                                                           filteredcollectionList[index].item=="Cash"?const Text("CASH",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),):filteredcollectionList[index].amt=="0"?const SizedBox():Text("Amount : ${filteredcollectionList[index].amt} /-"),
-                                                          filteredcollectionList[index].tot=="0"?const SizedBox():Text("Total : ${filteredcollectionList[index].tot} /-",style: const TextStyle(fontWeight: FontWeight.bold),),
+                                                          filteredcollectionList[index].tot=="0" || (widget.collection=='2' && filteredcollectionList[index].item!="Cash")?const SizedBox():Text("Total : ${filteredcollectionList[index].tot} /-",style: const TextStyle(fontWeight: FontWeight.bold),),
                     
                                                         ],
                                                       ),
@@ -534,6 +535,7 @@ class _collectMaterialState extends State<collectMaterial> {
     _clothController.clear();
     _amountCtrl.clear();
     imageLoaded=false;
+    _billnoCtrl.clear();
   }
 
   Future getImage() async {
@@ -745,8 +747,8 @@ class _collectMaterialState extends State<collectMaterial> {
                               .addressl2),
                           Text(selectedBiller
                               .addressl3),
-                          Text(selectedBiller
-                              .district),
+                          widget.collection=='1'?Text(selectedBiller
+                              .district):SizedBox(),
                           Text(selectedBiller
                               .mobile),
                           Text(
@@ -785,14 +787,14 @@ class _collectMaterialState extends State<collectMaterial> {
                     ctrl: _L3Controller,
                     type: TextInputType.text,
                     len: 50),
-                FieldAreaWithDropDown(title: "District", dropList: districtList, dropdownValue: distDropDown, callback: dropDownCallback),
+                widget.collection!="2"?FieldAreaWithDropDown(title: "District", dropList: districtList, dropdownValue: distDropDown, callback: dropDownCallback):SizedBox(),
                 FieldArea(
                     title: "Phone",
                     ctrl: _phoneController,
                     type: TextInputType.text,
                     len: 15),
                 FieldArea(
-                    title: "GST",
+                    title: widget.collection!="2"?"GST":"Tax",
                     ctrl: _gstController,
                     type: TextInputType.text,
                     len: 20),
@@ -804,8 +806,9 @@ class _collectMaterialState extends State<collectMaterial> {
                 itemDropDown=="Yard" && selectedVehicle=="Other"?FieldArea(title: "Specify", ctrl: _specifyCtrl, type: TextInputType.text, len: 20):const SizedBox(),
                 // FieldAreaWithDropDown(title: "Item", dropList: itemList, dropdownValue: itemDropDown, callback: dropDownCallback),
                 itemDropDown!='Material' && itemDropDown!="Yard"?const SizedBox():FieldArea(title: "Dry Weight (KG)", ctrl: _dryController, type: TextInputType.number, len: 8),
-                itemDropDown!='Material'?const SizedBox():FieldArea(title: "Cloth Weight (KG)", ctrl: _clothController, type: TextInputType.number, len: 8),
+                itemDropDown!='Material'?const SizedBox():FieldArea(title: widget.collection=='1'?"Cloth Weight (KG)":"Liquid Weight (L)", ctrl: _clothController, type: TextInputType.number, len: 8),
                 itemDropDown=="Yard"?const SizedBox():FieldArea(title: "Collected Amount", ctrl: _amountCtrl, type: TextInputType.number, len: 5),
+                (itemDropDown=="Material" || itemDropDown=="Yard")?const SizedBox():FieldArea(title: "Bill Number", ctrl: _billnoCtrl, type: TextInputType.text, len: 40),
                 const SizedBox(height: 5,),
                 itemDropDown=="Yard"?const SizedBox():SizedBox(
                   width: w-20,
@@ -943,7 +946,7 @@ class _collectMaterialState extends State<collectMaterial> {
 
                           //to add a new shop
                           if(addNewShop){
-                            if(dropDownDiv!="Select" && dropDownType!="Select" && _shopNameController.text!="" && _L1Controller.text!="" && distDropDown!="Select"){
+                            if(dropDownDiv!="Select" && dropDownType!="Select" && _shopNameController.text!="" && _L1Controller.text!="" && (distDropDown!="Select" || widget.collection=='2')){
 
                               setState(() {
                                 _loading=true;
@@ -1003,10 +1006,10 @@ class _collectMaterialState extends State<collectMaterial> {
                                 if(selectedVehicle=="Other"){
                                   veh = _specifyCtrl.text;
                                 }
-                                res = await apiServices().uploadCollection(widget.mobile, widget.name, "2","Yard",veh,_dateController.text, _dryController.text, "0", "0","",_position.latitude,_position.longitude,itemDropDown);
+                                res = await apiServices().uploadCollection(widget.mobile, widget.name, "2","Yard",veh,_dateController.text, _dryController.text, "0", "0","",_position.latitude,_position.longitude,itemDropDown,_billnoCtrl.text);
                               }
                               else{
-                                res = await apiServices().uploadCollection(widget.mobile, widget.name, selectedBiller.id, selectedBiller.name,"NA",_dateController.text, _dryController.text, _clothController.text, _amountCtrl.text,baseimage,_position.latitude,_position.longitude,itemDropDown);
+                                res = await apiServices().uploadCollection(widget.mobile, widget.name, selectedBiller.id, selectedBiller.name,"NA",_dateController.text, _dryController.text, _clothController.text, _amountCtrl.text,baseimage,_position.latitude,_position.longitude,itemDropDown,_billnoCtrl.text);
                               }
                               // var res = await apiServices().uploadCollection(widget.mobile, widget.name, selectedBiller.id, selectedBiller.name,_dateController.text, _dryController.text, _clothController.text, _amountCtrl.text,baseimage,_position.latitude,_position.longitude,itemDropDown);
                               var data = jsonDecode(res);

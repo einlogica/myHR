@@ -15,7 +15,8 @@ class timesheetPage extends StatefulWidget {
   final String mobile;
   final String name;
   final String permission;
-  const timesheetPage({super.key,required this.mobile,required this.name,required this.permission});
+  final String collection;
+  const timesheetPage({super.key,required this.mobile,required this.name,required this.permission,required this.collection});
 
   @override
   State<timesheetPage> createState() => _timesheetPageState();
@@ -325,7 +326,7 @@ class _timesheetPageState extends State<timesheetPage> {
 
                                                 // const SizedBox(height: 10,),
                                                 filteredactList[index].type=='Pending'?const SizedBox():filteredactList[index].time!=""?Align(alignment: Alignment.centerRight,child: Text(filteredactList[index].time.substring(0,5),style: const TextStyle(color: Colors.black,fontSize: 10),)):const SizedBox(),
-                                                filteredactList[index].cust!=""?Text("Customer: ${filteredactList[index].cust}",style: const TextStyle(color: Colors.black,fontSize: 14),):const SizedBox(),
+                                                filteredactList[index].cust!="" && widget.collection!='2'?Text("Customer: ${filteredactList[index].cust}",style: const TextStyle(color: Colors.black,fontSize: 14),):const SizedBox(),
                                                 filteredactList[index].site!=""?Text("Location: ${filteredactList[index].site}",style: const TextStyle(color: Colors.black,fontSize: 14),):const SizedBox(),
 
                                                 // filteredactList[index].drive==true?Text("${filteredactList[index].sKM} to ${filteredactList[index].eKM} KM",style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 14),):const SizedBox(),
@@ -512,7 +513,7 @@ class _timesheetPageState extends State<timesheetPage> {
                             // const SizedBox(height: 20,),
                             FieldAreaWithDropDown(title: "Activity", dropList: typeList, dropdownValue: dropdownvalue, callback: dropdowncallback),
                             dropdownvalue=="Others"?FieldArea(title: "Activity Name", ctrl: _activityCtrl, type: TextInputType.text, len: 50):const SizedBox(),
-                            FieldAreaWithDropDown(title: "Customer", dropList: customerList, dropdownValue: dropdowncustomer, callback: dropdowncallback),
+                            widget.collection!='2'?FieldAreaWithDropDown(title: "Customer", dropList: customerList, dropdownValue: dropdowncustomer, callback: dropdowncallback):SizedBox(),
                             dropdowncustomer=="Others"?FieldArea(title: "Customer Name", ctrl: custCtrl, type: TextInputType.text, len: 20):const SizedBox(),
                             // FieldArea(title: "Location", ctrl: _siteCtrl, type: TextInputType.text, len: 40),
                             FieldAreaWithDropDown(title: "Location", dropList: siteList, dropdownValue: dropdownsite, callback: dropdowncallback),
@@ -616,7 +617,7 @@ class _timesheetPageState extends State<timesheetPage> {
                                         loc=_siteCtrl.text;
                                       }
 
-                                      if(dropdownsite!="Select" && dateController.text!="" && dropdownvalue!="Select" && dropdowncustomer!="Select" && loc!=""){
+                                      if(dropdownsite!="Select" && dateController.text!="" && dropdownvalue!="Select" && (dropdowncustomer!="Select" || widget.collection=='2') && loc!=""){
                                         String cust=dropdowncustomer;
                                         String act=dropdownvalue;
 

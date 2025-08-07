@@ -364,7 +364,7 @@ class _leaveApprovalPageState extends State<leaveApprovalPage> {
                                 SizedBox(
                                   width: 60,
                                   // height: 180,
-                                  child: Center(child: item.Days==.5?Image.asset('assets/halfday.png',scale: 15,):Image.asset('assets/fullday.png',scale: 15,)),
+                                  child: Center(child: item.Days==.5?item.WhichHalf=='1st Half'?Image.asset('assets/halfday.png',scale: 15,):Image.asset('assets/halfday2.png',scale: 15,):Image.asset('assets/fullday.png',scale: 15,)),
                                 ),
                                 // Container(
                                 //     height: 180,

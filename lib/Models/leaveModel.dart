@@ -14,6 +14,7 @@ class leaveModel{
   final String L1Comments;
   final String L2Status;
   final String L2Comments;
+  final String WhichHalf;
 
   leaveModel({
     required this.Id,
@@ -30,7 +31,7 @@ class leaveModel{
     required this.L1Comments,
     required this.L2Status,
     required this.L2Comments,
-
+    required this.WhichHalf
   });
 
 }

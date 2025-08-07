@@ -51,6 +51,7 @@ class _profilePageState extends State<profilePage> {
   personalInfoModel personalInfo = personalInfoModel(ID: 0, Name: "", Mobile: "", Sex: "", DOB: "", AddL1: "", AddL2: "", AddL3: "", Zip: "", BloodGroup: "", EmContactName: "", EmContactNum: "", BankName: "", AccNum: "",UAN: "",PAN: "",ESICNo: "");
   List<String> Acc = [];
   String dropdownAcc = 'Select';
+  String collectionTab='0';
   userModel currentUser = userModel(Mobile: "", Name: "", Email: "", EmployeeID: "", Employer: "", Department: "", Position: "", Permission: "", Manager: "", ManagerID: "", DOJ: "", LeaveCount: 0, Status: "", ImageFile: "");
   advanceModel advanceData = advanceModel(mobile: "", name: "", amount: "", date: "", emi: "", startdate: "", balance: "", status: "");
 
@@ -101,11 +102,12 @@ class _profilePageState extends State<profilePage> {
   getInfo()async{
     // print(widget.mobile);
     currentUser = await apiServices().getProfile(widget.mobile);
+    collectionTab = await apiServices().getSettings('CollectionTab');
     // print(currentUser.Name);
     setState(() {
       progressIndicator=false;
     });
-    // Acc=await apiServices().getAccounts();
+    Acc=await apiServices().getAccounts();
     personalInfo = await apiServices().checkPersonalInfo(widget.mobile);
   }
 
@@ -399,7 +401,7 @@ class _profilePageState extends State<profilePage> {
                                     style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                     onPressed: (){
                                       Navigator.push(context, MaterialPageRoute(builder: (context){
-                                        return timesheetPage(mobile: currentUser.Mobile, name: currentUser.Name,permission: "EMP-MAN",);
+                                        return timesheetPage(mobile: currentUser.Mobile, name: currentUser.Name,permission: "EMP-MAN",collection: collectionTab,);
                                       }));
                                     },
                                     child: const Text("Activity",style: TextStyle(color: Colors.white),),),
@@ -758,14 +760,12 @@ class _profilePageState extends State<profilePage> {
             TextButton(
               onPressed: () async{
                 // print(reset);
-                if(_newPin.text==_rePin.text && _newPin.text.length>3){
+                if(_newPin.text==_rePin.text && _newPin.text.length>3 && _curPin.text!=_newPin.text){
                   String status = await apiServices().changePassword(currentUser.Mobile,_curPin.text,_newPin.text,reset);
                   clearFields();
                   // print(status);
                   Navigator.pop(context);
-                  if(status=="Success"){
-                    showMessage(status);
-                  }
+                  showMessage(status);
                 }
                 else{
                   showMessage("Invalid Password");

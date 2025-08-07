@@ -208,9 +208,10 @@ class _editEmployeePageState extends State<editEmployeePage> {
   }
 
   fetchSalary()async{
-    if(paySlip.Name==""){
-      paySlip = await apiServices().getSalaryStructure(widget.User.Mobile);
-    }
+    // if(paySlip.Name==""){
+    //
+    // }
+    paySlip = await apiServices().getSalaryStructure(widget.User.Mobile);
     setState(() {
 
     });
@@ -666,16 +667,16 @@ class _editEmployeePageState extends State<editEmployeePage> {
                         showSalary?SizedBox(
                           child: Column(
                             children: [
-                              salaryEdit?FieldArea(title: "Basic",ctrl: _basicCtrl,type: TextInputType.number,len:6):buildText("Basic", paySlip.Basic.toString()),
-                              salaryEdit?FieldArea(title: "Special",ctrl: _specialCtrl,type: TextInputType.number,len:6):buildText("Special", paySlip.Allowance.toString()),
-                              salaryEdit?FieldArea(title: "HRA",ctrl: _hraCtrl,type: TextInputType.number,len:6):buildText("HRA", paySlip.HRA.toString()),
-                              salaryEdit?FieldArea(title: "TA",ctrl: _taCtrl,type: TextInputType.number,len:6):buildText("TA", paySlip.TA.toString()),
-                              salaryEdit?FieldArea(title: "DA",ctrl: _daCtrl,type: TextInputType.number,len:6):buildText("DA", paySlip.DA.toString()),
-                              salaryEdit?FieldArea(title: "Incentive",ctrl: _incentiveCtrl,type: TextInputType.number,len:6):buildText("Incentive", paySlip.Incentive.toString()),
+                              salaryEdit?FieldArea(title: "Basic",ctrl: _basicCtrl,type: TextInputType.numberWithOptions(),len:6):buildText("Basic", paySlip.Basic.toString()),
+                              salaryEdit?FieldArea(title: "Special",ctrl: _specialCtrl,type: TextInputType.numberWithOptions(),len:6):buildText("Special", paySlip.Allowance.toString()),
+                              salaryEdit?FieldArea(title: "HRA",ctrl: _hraCtrl,type: TextInputType.numberWithOptions(),len:6):buildText("HRA", paySlip.HRA.toString()),
+                              salaryEdit?FieldArea(title: "TA",ctrl: _taCtrl,type: TextInputType.numberWithOptions(),len:6):buildText("TA", paySlip.TA.toString()),
+                              salaryEdit?FieldArea(title: "DA",ctrl: _daCtrl,type: TextInputType.numberWithOptions(),len:6):buildText("DA", paySlip.DA.toString()),
+                              salaryEdit?FieldArea(title: "Incentive",ctrl: _incentiveCtrl,type: TextInputType.numberWithOptions(),len:6):buildText("Incentive", paySlip.Incentive.toString()),
                               salaryEdit?const SizedBox():buildText("Gross Income", _grossCtrl.text.toString()),
-                              salaryEdit?FieldArea(title: "PF(%)",ctrl: _pfCtrl,type: TextInputType.number,len:5):buildText("PF(%)", paySlip.PF.toString()),
-                              salaryEdit?FieldArea(title: "ESIC(%)",ctrl: _esicCtrl,type: TextInputType.number,len:5):buildText("ESIC(%)", paySlip.ESIC.toString()),
-                              salaryEdit?FieldArea(title: "ProTax",ctrl: _proTaxCtrl,type: TextInputType.number,len:5):buildText("ProTax", paySlip.ProTax.toString()),
+                              salaryEdit?FieldArea(title: "PF(%)",ctrl: _pfCtrl,type: TextInputType.numberWithOptions(),len:5):buildText("PF(%)", paySlip.PF.toString()),
+                              salaryEdit?FieldArea(title: "ESIC(%)",ctrl: _esicCtrl,type: TextInputType.numberWithOptions(),len:5):buildText("ESIC(%)", paySlip.ESIC.toString()),
+                              salaryEdit?FieldArea(title: "ProTax",ctrl: _proTaxCtrl,type: TextInputType.numberWithOptions(),len:5):buildText("ProTax", paySlip.ProTax.toString()),
                               const SizedBox(height: 10,),
                               salaryEdit?SizedBox(
                                 width: w,

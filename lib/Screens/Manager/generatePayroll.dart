@@ -385,6 +385,7 @@ class _generatePayrollPageState extends State<generatePayrollPage> {
                                     _loading=true;
                                   });
                                   String status = await apiServices().generatePayroll(_selected!.month.toString(),_selected!.year.toString(),enableLOP.toString(),selectedUsers);
+                                  // print(status);
                                   if(status == "Success"){
                                     type="Template";
                                     await fetchData(type);

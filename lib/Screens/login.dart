@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
 
 import '../style/patternPainter.dart';
+import 'Accounts/settingsPage.dart';
 
 
 
@@ -147,67 +148,44 @@ class _loginState extends State<login> {
                 child: Stack(
                   children: [
                     !defPass?Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // SizedBox(
-                          //   width: w,
-                          //   height: 80,
-                          //   child: Image(image: AssetImage('$logo'),),
-                          //
-                          // ),
-                          // const Text("Spectra Telecom",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
-                          // const SizedBox(height: 20,),
-                          SizedBox(
-                            width: w-(w/3),
-                              child: const Text("Sign In",style: TextStyle(fontSize: 30,color: Colors.blue),),
-                          ),
-                          const SizedBox(height: 10,),
-                          SizedBox(
-                            width: w-(w/3),
-                            child: const Text("Please use your credentials",style: TextStyle(fontSize: 12,color: Colors.grey),),
-                          ),
-                          const SizedBox(height: 40,),
-                          SizedBox(
-                            width: w-(w/3),
-                            // height: 50,
-                            child:TextFormField(
-                              enabled: true,
-                              controller: _mobileCtrl,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                prefixIcon: const Icon(Icons.phone),
-                                hintText: "Mobile",
-                                enabled: true,
-                                // border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.blue.shade900),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                              ),
-                            )
-                          ),
-                          const SizedBox(height: 20,),
-                          SizedBox(
-                              width: w-w/3,
+                      child: SingleChildScrollView(
+
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // SizedBox(
+                            //   width: w,
+                            //   height: 80,
+                            //   child: Image(image: AssetImage('$logo'),),
+                            //
+                            // ),
+                            // const Text("Spectra Telecom",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                            // const SizedBox(height: 20,),
+                            SizedBox(
+                              width: w-(w/3),
+                                child: const Text("Sign In",style: TextStyle(fontSize: 30,color: Colors.blue),),
+                            ),
+                            const SizedBox(height: 10,),
+                            SizedBox(
+                              width: w-(w/3),
+                              child: const Text("Please use your credentials",style: TextStyle(fontSize: 12,color: Colors.grey),),
+                            ),
+                            const SizedBox(height: 40,),
+                            SizedBox(
+                              width: w-(w/3),
                               // height: 50,
                               child:TextFormField(
                                 enabled: true,
-                                obscureText: true,
-                                controller: _passwordCtrl,
+                                controller: _mobileCtrl,
                                 keyboardType: TextInputType.number,
+                                maxLength: 10,
+
                                 decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.password),
-                                  hintText: "Pin",
+                                  prefixIcon: const Icon(Icons.phone),
+                                  hintText: "Mobile",
                                   enabled: true,
+                                  counterText: '',
                                   // border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8.0),
@@ -222,52 +200,81 @@ class _loginState extends State<login> {
                                   ),
                                 ),
                               )
-                          ),
-                          const SizedBox(height: 20,),
-                          SizedBox(
-                            width: w-w/3,
-                            child: ElevatedButton(
-                                style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blue)),
-                                onPressed: (){
-                              _onLogin();
-                                },
-                                child: const Text("Login",style: TextStyle(color: Colors.white),)),
-                          ),
-
-                          const SizedBox(height: 20,),
-                          SizedBox(
-                            child: Row(
-                              children: [
-                                const Spacer(),
-                                const Text("New Registration? "),
-                                const SizedBox(width: 5,),
-                                InkWell(
-                                  onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context){
-                                      return const registration();
-                                    }));
-                                  },
-                                  child: Container(
-                                    width: 30,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      color: Colors.blue
-                                    ),
-                                    child: const Icon(Icons.arrow_forward,color: Colors.white,),
-                                  ),
-                                ),
-                                // SizedBox(width: 20,),
-                                const Spacer(),
-                              ],
                             ),
-                          )
-                          // Container(
-                          //   width: w-100,
-                          //   height: 20,
-                          //   child: Center(child: Text("$_error",style: TextStyle(color: Colors.red),),),
-                          // )
-                        ],
+                            const SizedBox(height: 20,),
+                            SizedBox(
+                                width: w-w/3,
+                                // height: 50,
+                                child:TextFormField(
+                                  enabled: true,
+                                  obscureText: true,
+                                  controller: _passwordCtrl,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    prefixIcon: const Icon(Icons.password),
+                                    hintText: "Pin",
+                                    enabled: true,
+                                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.blue.shade900),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                  ),
+                                )
+                            ),
+                            const SizedBox(height: 20,),
+                            SizedBox(
+                              width: w-w/3,
+                              child: ElevatedButton(
+                                  style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blue)),
+                                  onPressed: (){
+                                _onLogin();
+                                  },
+                                  child: const Text("Login",style: TextStyle(color: Colors.white),)),
+                            ),
+
+                            const SizedBox(height: 20,),
+                            SizedBox(
+                              child: Row(
+                                children: [
+                                  const Spacer(),
+                                  const Text("New Registration? "),
+                                  const SizedBox(width: 5,),
+                                  InkWell(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                                        return const registration();
+                                      }));
+                                    },
+                                    child: Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Colors.blue
+                                      ),
+                                      child: const Icon(Icons.arrow_forward,color: Colors.white,),
+                                    ),
+                                  ),
+                                  // SizedBox(width: 20,),
+                                  const Spacer(),
+                                ],
+                              ),
+                            )
+                            // Container(
+                            //   width: w-100,
+                            //   height: 20,
+                            //   child: Center(child: Text("$_error",style: TextStyle(color: Colors.red),),),
+                            // )
+                          ],
+                        ),
                       ),
                     ):const SizedBox(),
                     defPass?Center(
@@ -512,6 +519,12 @@ class _loginState extends State<login> {
           loginPressed=false;
         });
       }
+      else if(data['Status']=='LOCKED'){
+        setState(() {
+          loginPressed=false;
+        });
+        routeToSettings(currentUser);
+      }
       else{
         //go to home page
         setState(() {
@@ -553,6 +566,12 @@ class _loginState extends State<login> {
   routeToSuperUser(userModel currentUser){
     Navigator.push(context, MaterialPageRoute(builder: (context){
       return superUser(currentUser: currentUser,);
+    }));
+  }
+
+  routeToSettings(userModel currentUser){
+    Navigator.push(context, MaterialPageRoute(builder: (context){
+      return settingsPage(currentUser:currentUser,callback: (){},);
     }));
   }
 

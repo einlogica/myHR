@@ -194,9 +194,9 @@ class _locationsPageState extends State<locationsPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 FieldArea(title: "Location", ctrl: _nameCtrl, type: TextInputType.text, len: 20),
-                FieldArea(title: "Latitude", ctrl: _latCtrl, type: TextInputType.number, len: 8),
-                FieldArea(title: "Longitude", ctrl: _longCtrl, type: TextInputType.number, len: 8),
-                FieldArea(title: "Range (Meter)", ctrl: _rangeCtrl, type: TextInputType.number, len: 3),
+                FieldArea(title: "Latitude", ctrl: _latCtrl, type: TextInputType.numberWithOptions(), len: 8),
+                FieldArea(title: "Longitude", ctrl: _longCtrl, type: TextInputType.numberWithOptions(), len: 8),
+                FieldArea(title: "Range (Meter)", ctrl: _rangeCtrl, type: TextInputType.numberWithOptions(), len: 3),
             
                 const SizedBox(height: 20,),
             

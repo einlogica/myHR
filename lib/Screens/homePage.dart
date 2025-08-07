@@ -58,9 +58,10 @@ class _homePageState extends State<homePage> {
   List<eventsModel> eventList = [];
   List<summaryModel> pendingList = [];
   // List<String,int> pendingList = [];
-  String collectionTab='';
+  String collectionTab='0';
   String financeTab='';
   String version="";
+  String Bench='';
 
 
   //Current attendance status
@@ -125,6 +126,7 @@ class _homePageState extends State<homePage> {
   fetchData2()async{
     collectionTab = await apiServices().getSettings('CollectionTab');
     financeTab = await apiServices().getSettings('FinanceTab');
+    Bench = await apiServices().getSettings('Bench');
     if(widget.superAdmin==false){
       // print("Updating FCM");
       apiServices().updateFCM(widget.currentUser.Mobile);
@@ -171,6 +173,7 @@ class _homePageState extends State<homePage> {
     // });
     // print("Running fetchAttStatus");
     String response = await apiServices().attendanceStatus(widget.currentUser.Mobile);
+    // print("==============");
     // print(response);
     if(response.trim()!="Pending"){
       var data = jsonDecode(response.trim());
@@ -591,23 +594,23 @@ class _homePageState extends State<homePage> {
                                 }),
                                 gridContainer2('assets/activities.png', "Activity", (){
                                   Navigator.push(context, MaterialPageRoute(builder: (context){
-                                    return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "EMP",);
+                                    return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "EMP",collection: collectionTab,);
                                   }));
                                 }),
 
                               ],
                             ),
                           ),
-                          collectionTab=='1'?const SizedBox(height: 30,):const SizedBox(),
-                          collectionTab=='1'?gridContainer3('assets/getMaterial.png', "Collection", (){
+                          int.parse(collectionTab)>0?const SizedBox(height: 30,):const SizedBox(),
+                          int.parse(collectionTab)>0?gridContainer3('assets/getMaterial.png', "Collection", (){
                               Navigator.push(context, MaterialPageRoute(builder: (context){
-                                return collectMaterial(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: widget.currentUser.Permission,);
+                                return collectMaterial(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: widget.currentUser.Permission,collection: collectionTab,);
                               }));
                           }):const SizedBox(),
-                          collectionTab=='1' && widget.currentUser.Permission=='Admin'?const SizedBox(height: 30,):const SizedBox(),
-                          collectionTab=='1' && widget.currentUser.Permission=='Admin'?gridContainer3('assets/summary.png', "Collection Summary", (){
+                          int.parse(collectionTab)>0 && widget.currentUser.Permission=='Admin'?const SizedBox(height: 30,):const SizedBox(),
+                          int.parse(collectionTab)>0 && widget.currentUser.Permission=='Admin'?gridContainer3('assets/summary.png', "Collection Summary", (){
                             Navigator.push(context, MaterialPageRoute(builder: (context){
-                              return collectionSumaryPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: widget.currentUser.Permission,);
+                              return collectionSumaryPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: widget.currentUser.Permission,collection: collectionTab,);
                             }));
                           }):const SizedBox(),
 
@@ -835,7 +838,7 @@ class _homePageState extends State<homePage> {
                               width: w>h?w/8:40,
                               child: Align(
                                 alignment: Alignment.centerRight,
-                                  child: Text(pendingList[index].count.toStringAsFixed(0))),
+                                  child: Text(pendingList[index].count)),
                             ),
                             const Spacer(),
                           ],
@@ -895,6 +898,27 @@ class _homePageState extends State<homePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Bench=='YES'?TextButton(
+                        onPressed: () async{
+                          Navigator.of(ctx).pop();
+                          String status = await apiServices().postAttendance(widget.currentUser.Name, widget.currentUser.Mobile, currLocation.posLat, currLocation.posLong, 'Bench', type);
+                          await fetchAttStatus();
+                          setState(() {
+                            checkinWidth=false;
+                          });
+                          showMessage(status);
+
+                        },
+                        child: Container(
+                          // color: AppColors.buttonColor,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: AppColors.buttonColorDark,
+                          ),
+                          padding: const EdgeInsets.all(14),
+                          child: const Text("In Bench",style: TextStyle(color: Colors.white),),
+                        ),
+                      ):SizedBox(),
                       TextButton(
                         onPressed: () async{
                           Navigator.of(ctx).pop();
@@ -913,7 +937,7 @@ class _homePageState extends State<homePage> {
                             color: AppColors.buttonColorDark,
                           ),
                           padding: const EdgeInsets.all(14),
-                          child: const Text("Confirm",style: TextStyle(color: Colors.white),),
+                          child: const Text("Check-In",style: TextStyle(color: Colors.white),),
                         ),
                       ),
                       TextButton(

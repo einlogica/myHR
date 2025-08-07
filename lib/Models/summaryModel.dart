@@ -1,7 +1,7 @@
 class summaryModel{
 
   final String type;
-  final double count;
+  final String count;
 
   summaryModel({
     required this.type,

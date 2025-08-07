@@ -313,15 +313,17 @@ class _addEmployeePageState extends State<addEmployeePage> {
                                 child: ElevatedButton(
                                     style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blueAccent)),
                                     onPressed: ()async{
-                                      setState(() {
-                                        _loading=true;
-                                      });
+
                                       // print(dropdownSex);
                                       if(_mobileCtrl.text.length!=10){
                                         showMessage("Invalid Mobile Number");
                                         // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Invalid Mobile Number")));
                                         return;
                                       }
+
+                                      setState(() {
+                                        _loading=true;
+                                      });
 
                                       Map<String,dynamic> newUser = {"Mobile": _mobileCtrl.text, "Name": _nameCtrl.text, "Email":_emailCtrl.text,"EmployeeID": _employeeidCtrl.text,"Employer":widget.employer, "Department": dropdownDep,
                                           "Position": dropdownPos, "Permission": dropdownUser, "Manager": managerList[dropIndex-1].Name, "ManagerID": managerList[dropIndex-1].EmployeeID,

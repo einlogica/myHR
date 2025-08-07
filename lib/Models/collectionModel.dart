@@ -25,6 +25,7 @@ class collectionModel{
   final String lat;
   final String long;
   final String tot;
+  final String billno;
 
   collectionModel({
     required this.id,
@@ -53,6 +54,7 @@ class collectionModel{
     required this.lat,
     required this.long,
     required this.tot,
+    required this.billno,
   });
 
 

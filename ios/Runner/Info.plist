@@ -62,5 +62,7 @@
 	</array>
 	<key>NSFaceIDUsageDescription</key>
     <string>We use Face ID to provide secure access to user account</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Camera permission are required to upload bill images</string>
 </dict>
 </plist>

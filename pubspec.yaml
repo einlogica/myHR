@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.1.7+31
+version: 1.4.3+43
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -30,35 +30,36 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: ^2.3.2
+  shared_preferences: ^2.5.3
   image_picker: ^1.1.2
-  image_cropper: ^8.0.2
+  image_cropper: ^9.1.0
   intl: ^0.19.0
   photo_view: ^0.15.0
-  share_plus: ^10.1.0
-  path_provider: ^2.1.4
+  share_plus: ^10.1.4
+  path_provider: ^2.1.5
   csv: ^6.0.0
 #  unique_identifier: ^0.3.0
-  geolocator: ^13.0.1
+  geolocator: ^13.0.4
   month_year_picker: ^0.4.0+1
   table_calendar: ^3.1.2
-  pie_chart: ^5.3.2
-  url_launcher: ^6.2.1
-  pdf: ^3.10.6
+  pie_chart: ^5.4.0
+  url_launcher: ^6.3.1
+  pdf: ^3.11.3
   flutter_typeahead: ^5.2.0
-  file_picker: ^8.0.5
-  upgrader: ^10.3.0
+  file_picker: ^10.0.0
+  upgrader: ^11.3.1
   encrypt: ^5.0.3
-  fl_chart: ^0.68.0
+  fl_chart: ^0.70.2
   razorpay_flutter: ^1.4.0
-  flutter_local_notifications: ^18.0.1
-  open_filex: ^4.6.0
-  firebase_in_app_messaging: ^0.8.0+8 # changed
-  firebase_core: ^3.8.0 # changed
-  firebase_core_web: ^2.19.0
-  firebase_messaging: ^15.1.5
-  fluttertoast: ^8.2.6
-  flutter_image_compress: ^2.3.0
+  flutter_local_notifications: ^19.0.0
+  open_filex: ^4.7.0
+  firebase_in_app_messaging: ^0.8.1+5 # changed
+  firebase_core: ^3.13.0 # changed
+  firebase_core_web: ^2.22.0
+  firebase_messaging: ^15.2.5
+  fluttertoast: ^8.2.12
+  flutter_image_compress: ^2.4.0
+  web: ^1.1.1
   unique_identifier:
     path: /Users/jinuchandran/Developer/Flutter/unique_identifier-master
 

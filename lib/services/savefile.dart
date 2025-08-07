@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'dart:html' as html;
+// import 'package:web/web.dart' as web;
+// import 'dart:js_interop';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
@@ -18,6 +20,7 @@ class savefile{
 
     String directoryPath;
     // if(kIsWeb){
+    //
     //   print("Detected web activity");
     //   final blob = html.Blob([data]);
     //   final url = html.Url.createObjectUrlFromBlob(blob);

@@ -51,7 +51,7 @@ class _downloadsPageState extends State<downloadsPage> {
   DateTime? pickedDate1=DateTime.now();
   DateTime? pickedDate2=DateTime.now();
   bool refresh=true;
-  String collectionTab='';
+  String collectionTab='0';
 
   @override
   void initState() {
@@ -63,6 +63,7 @@ class _downloadsPageState extends State<downloadsPage> {
 
   fetchAll()async{
     reporteeList = await apiServices().getReportees(widget.mobile,"ALL",DateTime.now().toString());
+
     // employees.clear();
     for (var d in reporteeList){
       employees.add(d.Name);
@@ -76,7 +77,7 @@ class _downloadsPageState extends State<downloadsPage> {
     // print("fetching data");
     collectionTab = await apiServices().getSettings('CollectionTab');
     // print(collectionTab);
-    if(collectionTab=='1'){
+    if(int.parse(collectionTab)>0){
       ReportList.addAll(["Material","Cash","Locations","Collection Image"]);
     }
     setState(() {
@@ -239,7 +240,7 @@ class _downloadsPageState extends State<downloadsPage> {
                           itemCount: employees.length,
                           itemBuilder: (context,index){
                             return ListTile(
-                              title: Text("$employees[index]"),
+                              title: Text("${employees[index]}"),
                               leading: SizedBox(
                                 width: 40,
                                 height: 40,
@@ -366,6 +367,7 @@ class _downloadsPageState extends State<downloadsPage> {
         // columnSpacing: 20,
         columns: const [
           DataColumn(label: Text('Name')),
+          DataColumn(label: Text('Status')),
           DataColumn(label: Text('Location')),
           DataColumn(label: Text('Date')),
           DataColumn(label: Text('In Time')),
@@ -376,6 +378,7 @@ class _downloadsPageState extends State<downloadsPage> {
           return DataRow(
             cells: [
               DataCell(Text(model.Name)),
+              DataCell(Text(model.status)),
               DataCell(Text(model.location)),
               DataCell(Text(model.attDate)),
               DataCell(Text(model.attTime)),
@@ -439,7 +442,7 @@ class _downloadsPageState extends State<downloadsPage> {
       );
     }
     else if(reportDropDown=="Material"){
-      return DataTable(
+      return collectionTab=='1'?DataTable(
         // columnSpacing: 20,
         columns: const [
           DataColumn(label: Text('Name')),
@@ -461,6 +464,26 @@ class _downloadsPageState extends State<downloadsPage> {
             ],
           );
         }).toList(),
+      ):DataTable(
+        // columnSpacing: 20,
+        columns: const [
+          DataColumn(label: Text('Name')),
+          DataColumn(label: Text('Shop')),
+          DataColumn(label: Text('Dry Weight (KG)')),
+          DataColumn(label: Text('Liquid Weight (L)')),
+          DataColumn(label: Text('Amount')),
+        ],
+        rows: collectionList.map((model) {
+          return DataRow(
+            cells: [
+              DataCell(Text(model.name)),
+              DataCell(Text(model.shopname)),
+              DataCell(Text(model.dry)),
+              DataCell(Text(model.cloth)),
+              DataCell(Text(model.amt)),
+            ],
+          );
+        }).toList(),
       );
     }
     else if(reportDropDown=="Cash"){
@@ -472,7 +495,7 @@ class _downloadsPageState extends State<downloadsPage> {
           DataColumn(label: Text('Method')),
           DataColumn(label: Text('Date')),
           DataColumn(label: Text('Time')),
-          // DataColumn(label: Text('Rej Price')),
+          DataColumn(label: Text('Bill No')),
           DataColumn(label: Text('Amount')),
         ],
         rows: collectionList.map((model) {
@@ -483,7 +506,7 @@ class _downloadsPageState extends State<downloadsPage> {
               DataCell(Text(model.item)),
               DataCell(Text(model.date)),
               DataCell(Text(model.time)),
-              // DataCell(Text(model.amt)),
+              DataCell(Text(model.billno)),
               DataCell(Text(model.tot)),
             ],
           );
@@ -607,7 +630,7 @@ class _downloadsPageState extends State<downloadsPage> {
           activityList.add(activityModel(id: d['ID'], mobile: d['Mobile'], name: d['Name'],type: d['Type'], site: d['Site'], drive: bool.parse(d['Drive']), sKM: int.parse(d['StartKM']), eKM: int.parse(d['EndKM']), lat: d['PosLat'], long: d['PosLong'], date: d['Date'], time: d['Time'], cust: d['Customer'],remarks: d['Remarks']));
         }
         else if (item=='Material' || item=='Cash'){
-          collectionList.add(collectionModel(id: d['ID'], mobile: d['Mobile'], name: d['Name'], shopid: d['ShopID'], shopname: d['ShopName'],vehicle: d['Vehicle'],l1: d['AddressL1'],l2:d['AddressL2'],l3:d['AddressL3'],dist: d['District'],phone: d['Phone'],gst: d['GST'],div: d['Division'],type: d['Type'], date: d['Date'],time: d['Time'], item: d['Item'],dry: d['DryWeight'],dryPrice: d['DryPrice'], cloth: d['ClothWeight'],clothPrice: d['ClothPrice'], amt: d['Amount'], file: d['Filename'],lat: d['Lat'],long: d['Long'],tot: d['Total']));
+          collectionList.add(collectionModel(id: d['ID'], mobile: d['Mobile'], name: d['Name'], shopid: d['ShopID'], shopname: d['ShopName'],vehicle: d['Vehicle'],l1: d['AddressL1'],l2:d['AddressL2'],l3:d['AddressL3'],dist: d['District'],phone: d['Phone'],gst: d['GST'],div: d['Division'],type: d['Type'], date: d['Date'],time: d['Time'], item: d['Item'],dry: d['DryWeight'],dryPrice: d['DryPrice'], cloth: d['ClothWeight'],clothPrice: d['ClothPrice'], amt: d['Amount'], file: d['Filename'],lat: d['Lat'],long: d['Long'],tot: d['Total'],billno: d['BillNo']));
         }
         else if(item=='Locations'){
           billerList.add(billerModel(id: d['ShopID'], name: d['ShopName'], addressl1: d['AddressL1'], addressl2: d['AddressL2'], addressl3: d['AddressL3'], district: d['District'], mobile: d['Phone'], gst: d['GST'],division: d['Division'],type: d['Type'],createDate: d['CreateDate'],createTime: d['CreateTime'],createUser: d['CreateUser'],createMobile: d['CreateMobile']));
@@ -703,14 +726,21 @@ class _downloadsPageState extends State<downloadsPage> {
       });
     }
     else if(item=="Activity"){
-      rows.add(["Mobile","Name","Activity","Customer","Site","Drive","StartKM","EndKM","PosLat","PosLong","Date","Time","Remarks"]);
+
+      if(collectionTab=='2'){
+        rows.add(["Mobile","Name","Activity","Site","Drive","StartKM","EndKM","PosLat","PosLong","Date","Time","Remarks"]);
+      }
+      else{
+        rows.add(["Mobile","Name","Activity","Customer","Site","Drive","StartKM","EndKM","PosLat","PosLong","Date","Time","Remarks"]);
+      }
+
 
       activityList.forEach((element) async{
         List<dynamic> row = [];//List<dynamic>();
         row.add(element.mobile);
         row.add(element.name);
         row.add(element.type);
-        row.add(element.cust);
+        collectionTab=='2'?null:row.add(element.cust);
         row.add(element.site);
         row.add(element.drive);
         row.add(element.sKM);
@@ -725,7 +755,13 @@ class _downloadsPageState extends State<downloadsPage> {
       });
     }
     else if(item=="Material"){
-      rows.add(["Mobile","Name","Division","Type","BuildingName","AddressL1","AddressL2","AddressL3","District","Phone","GST","Date","DryWeight","DryPrice","ClothWeight","ClothPrice",'Amount(Rejected)','Total','FileName']);
+      if(collectionTab=='2'){
+        rows.add(["Mobile","Name","Division","Type","BuildingName","AddressL1","AddressL2","AddressL3","Phone","GST","Date","DryWeight","DryPrice","ClothWeight","ClothPrice",'Amount(Rejected)','Total','FileName']);
+      }
+      else{
+        rows.add(["Mobile","Name","Division","Type","BuildingName","AddressL1","AddressL2","AddressL3","District","Phone","GST","Date","DryWeight","DryPrice","ClothWeight","ClothPrice",'Amount(Rejected)','Total','FileName']);
+      }
+
 
       collectionList.forEach((element) async{
           List<dynamic> row = [];//List<dynamic>();
@@ -737,7 +773,7 @@ class _downloadsPageState extends State<downloadsPage> {
           row.add(element.l1);
           row.add(element.l2);
           row.add(element.l3);
-          row.add(element.dist);
+          collectionTab=='2'?null:row.add(element.dist);
           row.add(element.phone);
           row.add(element.gst);
           row.add(element.date);
@@ -752,7 +788,13 @@ class _downloadsPageState extends State<downloadsPage> {
       });
     }
     else if(item=="Cash"){
-      rows.add(["Mobile","Name","Division","Method","Type","BuildingName","AddressL1","AddressL2","AddressL3","District","Phone","GST","Date",'Amount','FileName']);
+      if(collectionTab=='2'){
+        rows.add(["Mobile","Name","Division","Method","Type","BuildingName","AddressL1","AddressL2","AddressL3","Phone","GST","Date",'Amount','BillNo','FileName']);
+      }
+      else{
+        rows.add(["Mobile","Name","Division","Method","Type","BuildingName","AddressL1","AddressL2","AddressL3","District","Phone","GST","Date",'Amount','BillNo','FileName']);
+      }
+
 
       collectionList.forEach((element) async{
           List<dynamic> row = [];//List<dynamic>();
@@ -765,17 +807,24 @@ class _downloadsPageState extends State<downloadsPage> {
           row.add(element.l1);
           row.add(element.l2);
           row.add(element.l3);
-          row.add(element.dist);
+          collectionTab=='2'?null:row.add(element.dist);
           row.add(element.phone);
           row.add(element.gst);
           row.add(element.date);
           row.add(element.tot);
+          row.add(element.billno);
           row.add(element.file);
           rows.add(row);
       });
     }
     else if(item=="Locations"){
-      rows.add(["ShopName","Address L1","Address L2","Address L3","District","Phone","GST","Division","Type","Date","Time","User",'UserMobile']);
+      if(collectionTab=='2'){
+        rows.add(["ShopName","Address L1","Address L2","Address L3","Phone","GST","Division","Type","Date","Time","User",'UserMobile']);
+      }
+      else{
+        rows.add(["ShopName","Address L1","Address L2","Address L3","District","Phone","GST","Division","Type","Date","Time","User",'UserMobile']);
+      }
+
       // billerList.add(billerModel(id: d['ShopID'], name: d['ShopName'], addressl1: d['AddressL1'], addressl2: d['AddressL2'], addressl3: d['AddressL3'], district: d['District'], mobile: d['Phone'], gst: d['GST'],division: d['Division'],type: d['Type'],createDate: d['CreateDate'],createTime: d['CreateTime'],createUser: d['CreateUser'],createMobile: d['CreateMobile']));
 
       billerList.forEach((element) async{
@@ -785,7 +834,7 @@ class _downloadsPageState extends State<downloadsPage> {
           row.add(element.addressl1);
           row.add(element.addressl2);
           row.add(element.addressl3);
-          row.add(element.district);
+          collectionTab=='2'?null:row.add(element.district);
           row.add(element.mobile);
           row.add(element.gst);
           row.add(element.division);

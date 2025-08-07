@@ -1,4 +1,5 @@
 // import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_calendar_carousel/classes/event.dart';
 // import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
@@ -48,6 +49,13 @@ class _leavePageState extends State<leavePage> {
   double leaveCount=0.0;
   bool deletePressed=false;
   DateTime? _selectedMY = DateTime.now();
+
+  final Map<String, Widget> _segments = const {
+    'Full Day': Text('Full Day'),
+    '1st Half': Text ('1st Half'),
+    '2nd Half': Text('2nd Half'),
+  };
+  String _selectedSegment = 'Full Day';
 
   @override
   void dispose() {
@@ -307,7 +315,7 @@ class _leavePageState extends State<leavePage> {
                                   leading: SizedBox(
                                     width: 30,
                                     height: 30,
-                                    child: Center(child: leaveList[index].Days==.5?Image.asset('assets/halfday.png',scale: 15,):Image.asset('assets/fullday.png',scale: 15,)),
+                                    child: Center(child: leaveList[index].Days==.5?leaveList[index].WhichHalf=='1st Half'?Image.asset('assets/halfday.png',scale: 15,):Image.asset('assets/halfday2.png',scale: 15,):Image.asset('assets/fullday.png',scale: 15,)),
                                   ),
 
                                 )
@@ -322,7 +330,7 @@ class _leavePageState extends State<leavePage> {
             ),
             AnimatedPositioned(
                 // top:leavePressed?h-230-(w-40):h-40,
-                top:leavePressed?h*.2:h-50,
+                top:leavePressed?h*.2:h-80,
                 duration: const Duration(milliseconds: 500),
                 child: SizedBox(
                   width: w,
@@ -337,6 +345,7 @@ class _leavePageState extends State<leavePage> {
                               dateList2.clear();
                               _commentCtrl.clear();
                               leavePressed=!leavePressed;
+                              _selectedSegment='Full Day';
                             });
                         },
                         child: Container(
@@ -389,32 +398,48 @@ class _leavePageState extends State<leavePage> {
                               SizedBox(
                                 width: w-20,
                                 height: 50,
-                                child: dateList.length<2?Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(width: 50,),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Checkbox(
+                                child:
+                                // dateList.length<2?Row(
+                                //   mainAxisAlignment: MainAxisAlignment.start,
+                                //   children: [
+                                //     const SizedBox(width: 50,),
+                                //     Align(
+                                //       alignment: Alignment.centerLeft,
+                                //       child: Checkbox(
+                                //
+                                //         value: halfDay,
+                                //         onChanged: (value){
+                                //           halfDay= !halfDay;
+                                //           setState(() {
+                                //
+                                //           });
+                                //         },
+                                //       ),
+                                //     ),
+                                //     SizedBox(
+                                //       width: w/4,
+                                //       // color: Colors.green,
+                                //       child: const Text("Half Day?",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),),
+                                //     ),
+                                //
+                                //   ],
+                                // )
+                                dateList.length<2?CupertinoSlidingSegmentedControl<String>(
+                                  proportionalWidth: w>h?false:true,
+                                  thumbColor: AppColors.buttonColor,
+                                  groupValue: _selectedSegment,
+                                  children: _segments,
+                                  onValueChanged: (value){
 
-                                        value: halfDay,
-                                        onChanged: (value){
-                                          halfDay= !halfDay;
-                                          setState(() {
+                                    setState(() {
+                                      _selectedSegment = value!;
+                                    });
 
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: w/4,
-                                      // color: Colors.green,
-                                      child: const Text("Half Day?",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),),
-                                    ),
-                                  ],
+                                  },
                                 ):SizedBox(
                                   child: Center(child: Text("Selected Days : ${dateList.length.toString()}",style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 16),)),
                                 ),
+
                               ),
                               const SizedBox(height: 20,),
                               // Spacer(),
@@ -448,7 +473,7 @@ class _leavePageState extends State<leavePage> {
                                             });
 
                                             dateList.forEach((element) {dateList2.add(DateFormat('yyyy-MM-dd').format(element));});
-                                            String status = await apiServices().applyLeave(widget.mobile,widget.name,dateList2, _commentCtrl.text, halfDay?0.5:dateList.length.toDouble());
+                                            String status = await apiServices().applyLeave(widget.mobile,widget.name,dateList2, _commentCtrl.text, (_selectedSegment!='Full Day')?0.5:dateList.length.toDouble(),_selectedSegment);
                                             showMessage(status);
                                             // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(status)));
                                             _commentCtrl.clear();
@@ -758,7 +783,7 @@ class _leavePageState extends State<leavePage> {
                   SizedBox(
                     width: 50,
                     height: 50,
-                    child: Center(child: leaveList[index].Days==.5?Image.asset('assets/halfday.png',scale: 15,):Image.asset('assets/fullday.png',scale: 15,)),
+                    child: Center(child: leaveList[index].Days==.5?leaveList[index].WhichHalf=='1st Half'?Image.asset('assets/halfday.png',scale: 15,):Image.asset('assets/halfday2.png',scale: 15,):Image.asset('assets/fullday.png',scale: 15,)),
                   ),
                   Text(leaveList[index].LeaveDate,style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
                   Text(leaveList[index].Status,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: leaveList[index].Status=="Approved"?Colors.green:Colors.orange),),

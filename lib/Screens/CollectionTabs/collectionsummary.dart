@@ -11,11 +11,12 @@ class collectionSumaryPage extends StatefulWidget {
       {super.key,
         required this.mobile,
         required this.name,
-        required this.permission});
+        required this.permission, required this.collection});
 
   final String mobile;
   final String name;
   final String permission;
+  final String collection;
 
   @override
   State<collectionSumaryPage> createState() => _collectionSumaryPageState();
@@ -149,7 +150,7 @@ class _collectionSumaryPageState extends State<collectionSumaryPage> {
                           // height: expenseData.length*50,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            child: DataTable(
+                            child: widget.collection=='1'?DataTable(
                               // headingRowColor: WidgetStateColor.resolveWith(
                               //         (states) => Colors.blue),
                               columnSpacing: 20,
@@ -157,9 +158,33 @@ class _collectionSumaryPageState extends State<collectionSumaryPage> {
                                 DataColumn(label: Text('Division')),
                                 DataColumn(label: Text('Type')),
                                 DataColumn(label: Text('Count')),
-                                DataColumn(label: Text('Dry Weight')),
-                                DataColumn(label: Text('Cloth Weight')),
+                                DataColumn(label: Text('Dry Weight (KG)')),
+                                DataColumn(label: Text('Cloth Weight (KG)')),
                                 DataColumn(label: Text('Rej Amount')),
+                              ],
+                              rows: materialData.map((model) {
+                                return DataRow(
+                                  cells: [
+                                    DataCell(Text(model['division'])),
+                                    DataCell(Text(model['type'])),
+                                    DataCell(Text(model['Shops'])),
+                                    DataCell(Text(model['dryweight'])),
+                                    DataCell(Text(model['clothweight'])),
+                                    DataCell(Text(model['rejAmount'])),
+                                  ],
+                                );
+                              }).toList(),
+                            ):DataTable(
+                              // headingRowColor: WidgetStateColor.resolveWith(
+                              //         (states) => Colors.blue),
+                              columnSpacing: 20,
+                              columns: const [
+                                DataColumn(label: Text('Division')),
+                                DataColumn(label: Text('Type')),
+                                DataColumn(label: Text('Count')),
+                                DataColumn(label: Text('Dry Weight (KG)')),
+                                DataColumn(label: Text('Liquid Weight (L)')),
+                                DataColumn(label: Text('Amount')),
                               ],
                               rows: materialData.map((model) {
                                 return DataRow(

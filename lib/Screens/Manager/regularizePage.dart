@@ -146,7 +146,7 @@ class _regularizePageState extends State<regularizePage> {
                                                     color: AppColors.buttonColorDark,
                                                   ),
                                                   padding: const EdgeInsets.all(14),
-                                                  child: const Center(child: Text("Regularize",style: TextStyle(color: Colors.white),)),
+                                                  child: const Center(child: Text("Approve",style: TextStyle(color: Colors.white),)),
                                                 ),
                                               ),
                                               TextButton(

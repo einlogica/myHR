@@ -102,7 +102,7 @@ class _settingsPageState extends State<settingsPage> {
         return dropDownSettingsPage(currentUser: widget.currentUser);
       }));
     }
-    else if(name=="Locations"){
+    else if(name=="Office Locations"){
       Navigator.push(context, MaterialPageRoute(builder: (context){
         return locationsPage(currentUser: widget.currentUser);
       }));
@@ -385,7 +385,7 @@ class _settingsPageState extends State<settingsPage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             menuButton("Drop Down",menuFunction),
-                            menuButton("Locations",menuFunction),
+                            menuButton("Office Locations",menuFunction),
                             menuButton("Transactions",menuFunction),
                           ],
                         ),

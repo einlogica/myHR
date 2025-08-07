@@ -18,6 +18,8 @@ class _superUserState extends State<superUser> {
 
   var w=0.00,h=0.00,t=0.00;
   List<userModel> adminList = [];
+
+  // final TextEditingController _searchCtrl = new TextEditingController();
   // bool _loading = false;
 
   @override
