@@ -19,7 +19,7 @@ class leaveApprovalPage extends StatefulWidget {
 
 class _leaveApprovalPageState extends State<leaveApprovalPage> {
 
-  var w=0.00,h=0.00,t=0.00;
+  var w=0.00,h=0.00,t=0.00,b=0.00;
 
   List<leaveModel> leaveList = [];
   List<leaveModel> approvedList = [];
@@ -128,6 +128,7 @@ class _leaveApprovalPageState extends State<leaveApprovalPage> {
     w=MediaQuery.of(context).size.width;
     h=MediaQuery.of(context).size.height;
     t=MediaQuery.of(context).viewPadding.top;
+    b = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
       body: Stack(

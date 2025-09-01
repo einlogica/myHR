@@ -16,7 +16,8 @@ class timesheetPage extends StatefulWidget {
   final String name;
   final String permission;
   final String collection;
-  const timesheetPage({super.key,required this.mobile,required this.name,required this.permission,required this.collection});
+  final Function callback;
+  const timesheetPage({super.key,required this.mobile,required this.name,required this.permission,required this.collection,required this.callback});
 
   @override
   State<timesheetPage> createState() => _timesheetPageState();
@@ -24,7 +25,7 @@ class timesheetPage extends StatefulWidget {
 
 class _timesheetPageState extends State<timesheetPage> {
 
-  var w=0.00,h=0.00,t=0.00;
+  var w=0.00,h=0.00,t=0.00,b=0.00;
   DateTime selectedDate = DateTime.now();
   bool addPressed=false;
   Position _position = Position(longitude: 0.00, latitude: 0.00, timestamp: DateTime.now(), accuracy: 0.00, altitude: 0.00, altitudeAccuracy: 0.00,
@@ -154,6 +155,7 @@ class _timesheetPageState extends State<timesheetPage> {
     w=MediaQuery.of(context).size.width;
     h=MediaQuery.of(context).size.height;
     t=MediaQuery.of(context).viewPadding.top;
+    b=MediaQuery.of(context).viewPadding.bottom;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -465,7 +467,7 @@ class _timesheetPageState extends State<timesheetPage> {
           ),
            widget.permission=="EMP"?unknowndevice?const SizedBox():AnimatedPositioned(
             duration: const Duration(milliseconds: 100),
-            top: addPressed?t:widget.permission=="MAN"?h:h-60,
+            top: addPressed?t:widget.permission=="MAN"?h:h-b-60,
             child: SizedBox(
               width: w,
               height: h,
@@ -637,7 +639,7 @@ class _timesheetPageState extends State<timesheetPage> {
                                             clearFields();
                                             addPressed=false;
                                             fetchList(DateTime?.now());
-                      
+                                            widget.callback();
                                           }
                                           else{
                                             showMessage("Error submitting data");

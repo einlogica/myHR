@@ -27,7 +27,7 @@ class leavePage extends StatefulWidget {
 
 class _leavePageState extends State<leavePage> {
 
-  var w=0.0,h=0.0,t=0.0;
+  var w=0.0,h=0.0,t=0.0,b=0.00;
   bool leavePressed = false;
   DateTime _currentDate = DateTime.now();
   final TextEditingController _commentCtrl= TextEditingController();
@@ -112,11 +112,13 @@ class _leavePageState extends State<leavePage> {
     w = MediaQuery.of(context).size.width;
     h = MediaQuery.of(context).size.height;
     t=MediaQuery.of(context).viewPadding.top;
+    b=MediaQuery.of(context).viewPadding.top;
 
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       body: Container(
-        color:Colors.white,
+        height: h-b,
+        // color:Colors.green,
         child: Stack(
           children: [
             Column(
@@ -257,12 +259,12 @@ class _leavePageState extends State<leavePage> {
                     ],
                   ),
                 ):const SizedBox(),
-                const SizedBox(height: 10,),
-                Container(
-                    width: w,
-                    color: Colors.grey.withValues(alpha: .3),
-                    child: Center(child: Text("${DateFormat.MMMM().format(DateTime(0, int.parse(_selMonth)))} - $_sel",style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold),))
-                ),
+                // const SizedBox(height: 10,),
+                // Container(
+                //     width: w,
+                //     color: Colors.grey.withValues(alpha: .3),
+                //     child: Center(child: Text("${DateFormat.MMMM().format(DateTime(0, int.parse(_selMonth)))} - $_sel",style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold),))
+                // ),
                 const SizedBox(height: 10,),
                 Expanded(
                   child: SizedBox(
@@ -330,7 +332,7 @@ class _leavePageState extends State<leavePage> {
             ),
             AnimatedPositioned(
                 // top:leavePressed?h-230-(w-40):h-40,
-                top:leavePressed?h*.2:h-80,
+                top:leavePressed?h*.12:h-50-b,
                 duration: const Duration(milliseconds: 500),
                 child: SizedBox(
                   width: w,
@@ -346,6 +348,8 @@ class _leavePageState extends State<leavePage> {
                               _commentCtrl.clear();
                               leavePressed=!leavePressed;
                               _selectedSegment='Full Day';
+                              _selMonth=_selectedMY!.month.toString();
+
                             });
                         },
                         child: Container(
@@ -375,7 +379,7 @@ class _leavePageState extends State<leavePage> {
                           child: Column(
                             // crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 30,),
+                              const SizedBox(height: 20,),
                               // Text("Add Comments"),
                               Center(
                                 child: SizedBox(
@@ -386,13 +390,13 @@ class _leavePageState extends State<leavePage> {
 
                                 ),
                               ),
-                              Container(
-                                width: w,
-                                height: 30,
-                                color: Colors.white.withValues(alpha: .2),
-                                child:Center(child: Text("${DateFormat.MMMM().format(DateTime(0, int.parse(_selMonth)))} - $_sel",style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Colors.white),))
-                              ),
-                              const SizedBox(height: 10,),
+                              // Container(
+                              //   width: w,
+                              //   height: 30,
+                              //   color: Colors.white.withValues(alpha: .2),
+                              //   child:Center(child: Text("${DateFormat.MMMM().format(DateTime(0, int.parse(_selMonth)))} - $_sel",style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Colors.white),))
+                              // ),
+                              // const SizedBox(height: 10,),
                               calendar(),
 
                               SizedBox(
@@ -461,7 +465,7 @@ class _leavePageState extends State<leavePage> {
                                           onPressed: ()async{
                                             // print(_currentDate);
                                             if(_commentCtrl.text==""){
-                                              showMessage("Invalid entry");
+                                              showMessage("Please add comments");
                                               return;
                                             }
                                             else if(dateList.isEmpty){
@@ -539,8 +543,9 @@ class _leavePageState extends State<leavePage> {
         child: Padding(
           padding: const EdgeInsets.only(bottom: 20.0),
           child: TableCalendar(
-            headerVisible: false,
-            headerStyle: const HeaderStyle(formatButtonVisible: false),
+
+            headerVisible: true,
+            headerStyle: const HeaderStyle(formatButtonVisible: false,titleCentered: true,titleTextStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
             pageJumpingEnabled: false,
             firstDay: DateTime(DateTime.now().year-1,01,01),
             lastDay: DateTime(DateTime.now().year+2,01,01),

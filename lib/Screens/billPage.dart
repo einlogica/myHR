@@ -37,7 +37,7 @@ class billPage extends StatefulWidget {
 
 class _billPageState extends State<billPage> {
 
-  var w=0.00,h=0.00,t=0.00;
+  var w=0.00,h=0.00,t=0.00,b=0.00;
   double cleared=0,pending=0,rejected=0,advance=0,salary=0;
   List<userExpenseModel> userExpenseList=[];
   bool addBillPressed = false;
@@ -98,6 +98,7 @@ class _billPageState extends State<billPage> {
     w=MediaQuery.of(context).size.width;
     h=MediaQuery.of(context).size.height;
     t=MediaQuery.of(context).viewPadding.top;
+    b=MediaQuery.of(context).viewPadding.bottom;
 
     return Scaffold(
 
@@ -111,414 +112,417 @@ class _billPageState extends State<billPage> {
       //   child: Icon(Icons.add_circle_outline),
       // ),
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Container(
-                width: w,
-                // height: h,
-                height: 120+t,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(20),bottomLeft: Radius.circular(20)),
-                  gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [AppColors.themeStart,AppColors.themeStop]
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(height: t,),
-                    SizedBox(
-                      width:w,
-                      height: 50,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap:(){
-                              Navigator.pop(context);
-                            },
-                            child: const SizedBox(
-                              width: 60,
-                              height: 40,
-                              child: Center(child: Icon(Icons.arrow_back,size: 20,color: Colors.white),),
-                            ),
-                          ),
-                          const Text("Expense Tracker",style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold)),
-                          InkWell(
-                            onTap: ()async{
-                              _selected = await showMonthYearPicker(
-
-                                context: context,
-                                initialDate: _selected ?? DateTime.now(),
-                                firstDate: DateTime(2020),
-                                lastDate: DateTime.now(),
-                                // locale: localeObj,
-                              );
-                              if(_selected!=null){
-                                fetchBills(_selected);
-                              }
-
-                            },
-                            child: const SizedBox(
-                              width: 60,
-                              height: 40,
-                              child: Icon(Icons.calendar_month,color: Colors.white,),
-                            ),
-                          )
-                        ],
-                      ),
+      body: SizedBox(
+        height: h-b,
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                Container(
+                  width: w,
+                  // height: h,
+                  height: 120+t,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(20),bottomLeft: Radius.circular(20)),
+                    gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [AppColors.themeStart,AppColors.themeStop]
                     ),
-                    SizedBox(
-                      width: w,
-                      height: 60,
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(height: t,),
+                      SizedBox(
+                        width:w,
+                        height: 50,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap:(){
+                                Navigator.pop(context);
+                              },
+                              child: const SizedBox(
+                                width: 60,
+                                height: 40,
+                                child: Center(child: Icon(Icons.arrow_back,size: 20,color: Colors.white),),
+                              ),
+                            ),
+                            const Text("Expense Tracker",style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold)),
+                            InkWell(
+                              onTap: ()async{
+                                _selected = await showMonthYearPicker(
 
-                      child: Center(
-                        child: Container(
-                          width: w-30,
-                          height: 60,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              border: Border.all(width: 1,color: Colors.black)
-                          ),
-                          // color: Colors.green.shade300,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              // Container(
-                              //   width: w-20,
-                              //   height: 30,
-                              //   decoration: BoxDecoration(
-                              //     borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
-                              //     color: Colors.green,
-                              //   ),
-                              //
-                              //   child: Center(child: Text("Summary",style: TextStyle(fontWeight: FontWeight.bold),),),
-                              // ),
-                              SizedBox(
-                                width: w-20,
-                                height: 20,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    SizedBox(
-                                      // width: w/3,
-                                      height: 20,
-                                      child: Center(child: Text("Advance: $advance",style: const TextStyle(fontWeight: FontWeight.bold),),),
-                                    ),
-                                    SizedBox(
-                                      // width: w/3,
-                                      height: 20,
-                                      child: Center(child: Text("Salary Adv: $salary",style: const TextStyle(fontWeight: FontWeight.bold),),),
-                                    )
-                                  ],
-                                ),
+                                  context: context,
+                                  initialDate: _selected ?? DateTime.now(),
+                                  firstDate: DateTime(2020),
+                                  lastDate: DateTime.now(),
+                                  // locale: localeObj,
+                                );
+                                if(_selected!=null){
+                                  fetchBills(_selected);
+                                }
+
+                              },
+                              child: const SizedBox(
+                                width: 60,
+                                height: 40,
+                                child: Icon(Icons.calendar_month,color: Colors.white,),
                               ),
-                              SizedBox(
-                                width: w-20,
-                                height: 20,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    SizedBox(
-                                      // width: w/3,
-                                      height: 20,
-                                      child: Center(child: Text("Expense: $pending",style: const TextStyle(fontWeight: FontWeight.bold),),),
-                                    ),
-                                    SizedBox(
-                                      // width: w/3,
-                                      height: 20,
-                                      child: Center(child: Text("Balance: ${pending-advance}",style: const TextStyle(fontWeight: FontWeight.bold),),),
-                                    )
-                                  ],
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: w,
+                        height: 60,
+
+                        child: Center(
+                          child: Container(
+                            width: w-30,
+                            height: 60,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                border: Border.all(width: 1,color: Colors.black)
+                            ),
+                            // color: Colors.green.shade300,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                // Container(
+                                //   width: w-20,
+                                //   height: 30,
+                                //   decoration: BoxDecoration(
+                                //     borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
+                                //     color: Colors.green,
+                                //   ),
+                                //
+                                //   child: Center(child: Text("Summary",style: TextStyle(fontWeight: FontWeight.bold),),),
+                                // ),
+                                SizedBox(
+                                  width: w-20,
+                                  height: 20,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      SizedBox(
+                                        // width: w/3,
+                                        height: 20,
+                                        child: Center(child: Text("Advance: $advance",style: const TextStyle(fontWeight: FontWeight.bold),),),
+                                      ),
+                                      SizedBox(
+                                        // width: w/3,
+                                        height: 20,
+                                        child: Center(child: Text("Salary Adv: $salary",style: const TextStyle(fontWeight: FontWeight.bold),),),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                                SizedBox(
+                                  width: w-20,
+                                  height: 20,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      SizedBox(
+                                        // width: w/3,
+                                        height: 20,
+                                        child: Center(child: Text("Expense: $pending",style: const TextStyle(fontWeight: FontWeight.bold),),),
+                                      ),
+                                      SizedBox(
+                                        // width: w/3,
+                                        height: 20,
+                                        child: Center(child: Text("Balance: ${pending-advance}",style: const TextStyle(fontWeight: FontWeight.bold),),),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
 
-                    // SizedBox(height: 50,)
-                  ],
+                      // SizedBox(height: 50,)
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: SizedBox(
-                  width: w,
-                  // height: widget.permission=="admin"?h-100:h,
-                  child: ListView.builder(
-                      padding: EdgeInsets.zero,
-                      itemCount: userExpenseList.length,
-                      itemBuilder: (context,int index){
-                        // print(index);
-                        var item=userExpenseList[userExpenseList.length-index-1];
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: InkWell(
-                            onTap: ()async{
-                              // if(widget.permission!="MAN"){
-                              //   // if(item.Type=="Purchase"){
-                              //   //   selectedBiller.clear();
-                              //   //   selectedBiller = await apiServices().getBiller(item.Site,"ID");
-                              //   // }
-                              //   setState(() {
-                              //     userItem=item;
-                              //     expenseCardPressed=true;
-                              //   });
-                              // }
-                              setState(() {
-                                userItem=item;
-                                expenseCardPressed=true;
-                              });
+                Expanded(
+                  child: SizedBox(
+                    width: w,
+                    // height: widget.permission=="admin"?h-100:h,
+                    child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: userExpenseList.length,
+                        itemBuilder: (context,int index){
+                          // print(index);
+                          var item=userExpenseList[userExpenseList.length-index-1];
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                              onTap: ()async{
+                                // if(widget.permission!="MAN"){
+                                //   // if(item.Type=="Purchase"){
+                                //   //   selectedBiller.clear();
+                                //   //   selectedBiller = await apiServices().getBiller(item.Site,"ID");
+                                //   // }
+                                //   setState(() {
+                                //     userItem=item;
+                                //     expenseCardPressed=true;
+                                //   });
+                                // }
+                                setState(() {
+                                  userItem=item;
+                                  expenseCardPressed=true;
+                                });
 
-                            },
-                            child: Container(
-                              width: w-20,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
-                                  boxShadow: const [BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 2,
-                                    spreadRadius: 3,
-                                    offset: Offset(0.0, 2,),
-                                  ),
-                                  ]
-                              ),
-                              child: ListTile(
-                                  title: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(item.Type,style: const TextStyle(fontWeight: FontWeight.bold),),
-                                      Text(item.Date,style: const TextStyle(fontSize: 14),)
-                                    ],
-                                  ),
-                                  // trailing: Container(
-                                  //   width: 80,
-                                  //   height: 40,
-                                  //   decoration: BoxDecoration(
-                                  //       borderRadius: BorderRadius.circular(5),
-                                  //       color: AppColors.boxColor
-                                  //   ),
-                                  //   child: Center(child: Text(item.Amount)),
-                                  // ),
-                                  subtitle: SizedBox(child: Row(
-                                    children: [
-                                      Text(item.Status,style: TextStyle(fontSize: 14,color: item.Status=="Approved"?Colors.green:Colors.orange),),
-                                      const Spacer(),
-                                      Container(
-                                        width: 80,
-                                        // height: 40,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5),
-                                            color: AppColors.boxColor
+                              },
+                              child: Container(
+                                width: w-20,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                    boxShadow: const [BoxShadow(
+                                      color: Colors.black26,
+                                      blurRadius: 2,
+                                      spreadRadius: 3,
+                                      offset: Offset(0.0, 2,),
+                                    ),
+                                    ]
+                                ),
+                                child: ListTile(
+                                    title: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(item.Type,style: const TextStyle(fontWeight: FontWeight.bold),),
+                                        Text(item.Date,style: const TextStyle(fontSize: 14),)
+                                      ],
+                                    ),
+                                    // trailing: Container(
+                                    //   width: 80,
+                                    //   height: 40,
+                                    //   decoration: BoxDecoration(
+                                    //       borderRadius: BorderRadius.circular(5),
+                                    //       color: AppColors.boxColor
+                                    //   ),
+                                    //   child: Center(child: Text(item.Amount)),
+                                    // ),
+                                    subtitle: SizedBox(child: Row(
+                                      children: [
+                                        Text(item.Status,style: TextStyle(fontSize: 14,color: item.Status=="Approved"?Colors.green:Colors.orange),),
+                                        const Spacer(),
+                                        Container(
+                                          width: 80,
+                                          // height: 40,
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(5),
+                                              color: AppColors.boxColor
+                                          ),
+                                          child: Center(child: Text("${item.Amount}/-",style: const TextStyle(fontWeight: FontWeight.bold),)),
                                         ),
-                                        child: Center(child: Text("${item.Amount}/-",style: const TextStyle(fontWeight: FontWeight.bold),)),
-                                      ),
-                                    ],
-                                  )),
-                                  leading: InkWell(
-                                    onTap: ()async{
-                                      setState(() {
-                                        refresh=true;
-                                      });
+                                      ],
+                                    )),
+                                    leading: InkWell(
+                                      onTap: ()async{
+                                        setState(() {
+                                          refresh=true;
+                                        });
 
-                                      newImage=await apiServices().getBill(item.Filename,"Bill");
-                                      // print(newImage.toString());
+                                        newImage=await apiServices().getBill(item.Filename,"Bill");
+                                        // print(newImage.toString());
 
-                                      setState(() {
-                                        refresh=false;
-                                        // imageDownloaded=true;
-                                      });
-                                      Navigator.push(context, MaterialPageRoute(builder: (context){
-                                        return imageViewer(imagefile: newImage, mobile: widget.mobile,download: true,);
-                                      }));
-                                    },
-                                    child: SizedBox(
-                                        width: 40,
-                                        height: 40,
-                                        child: Center(child: Icon(Icons.receipt,color: item.Filename.length>10?Colors.green:Colors.grey,))),
-                                  )
+                                        setState(() {
+                                          refresh=false;
+                                          // imageDownloaded=true;
+                                        });
+                                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                                          return imageViewer(imagefile: newImage, mobile: widget.mobile,download: true,);
+                                        }));
+                                      },
+                                      child: SizedBox(
+                                          width: 40,
+                                          height: 40,
+                                          child: Center(child: Icon(Icons.receipt,color: item.Filename.length>10?Colors.green:Colors.grey,))),
+                                    )
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      }
+                          );
+                        }
+                    ),
+                  ),
+                ),
+                widget.permission!="MAN"?SizedBox(
+                  width: w,
+                  height: 60,
+                  child: ElevatedButton(
+                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark),shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(1.0),
+                        )
+                    )),
+                    onPressed: (){
+
+                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                        return upload_bill(mobile: widget.mobile,name:widget.name,callback: CallBack,);
+                      }));
+                    },
+                    child: const Text("Add Bill",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white)),
+                  ),
+                ):const SizedBox()
+
+              ],
+            ),
+            expenseCardPressed?Container(
+              width: w,
+              height: h,
+              color: Colors.black.withValues(alpha: .7),
+              child: expenseCard(),
+            ):const SizedBox(),
+
+            // imageDownloaded?imageViewer(imagefile: newImage, mobile: widget.mobile,callback: imageViewerCallback,):SizedBox(),
+
+            // imageDownloaded?Container(
+            //   width: w,
+            //   height: h,
+            //   color: Colors.black,
+            //   child: Center(
+            //     child: SizedBox(
+            //       width: w-50,
+            //       height: h-50,
+            //       child: PhotoView(
+            //         imageProvider: Image.memory(newImage).image,
+            //       ),
+            //     ),
+            //   ),
+            // ):const SizedBox(),
+            // imageDownloaded?SafeArea(
+            //     child:Align(
+            //       alignment: Alignment.bottomCenter,
+            //       child: SizedBox(
+            //         width: w,
+            //         height: 50,
+            //         child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //           children: [
+            //             ElevatedButton(
+            //                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
+            //                 onPressed: ()async{
+            //
+            //                 setState(() {
+            //                   refresh=true;
+            //                 });
+            //                 String status = await savefile().downloadImage("${widget.mobile}-${DateTime.now().millisecond}.png" , newImage);
+            //                 showMessage(status);
+            //                 setState(() {
+            //                   refresh=false;
+            //                 });
+            //             }, child: const Text("Download",style: TextStyle(color: Colors.white),)),
+            //             ElevatedButton(
+            //                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
+            //                 onPressed: (){
+            //               setState(() {
+            //                 imageDownloaded=false;
+            //               });
+            //             }, child: const Text("Close",style: TextStyle(color: Colors.white),))
+            //           ],
+            //         ),
+            //       ),
+            //     )
+            // ):SizedBox(),
+            //
+
+            delPressed?Container(
+              width: w,
+              height: h,
+              color: Colors.black.withValues(alpha: .7),
+
+              child: Center(
+                child: Container(
+                  width: w-100,
+                  height: 160,
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1,color: Colors.black),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: w-100,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                            color: Colors.teal,
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))
+                        ),
+
+                        child: const Center(child: Text("Confirm Deletion!!",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),),
+                      ),
+                      SizedBox(
+                        width: w-100,
+                        height: 50,
+                        child: const Center(child: Text("Please confirm to delete this bill."),),
+                      ),
+                      SizedBox(
+                        width: w-100,
+                        height: 50,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              width: w/4,
+                              height: 30,
+                              child: ElevatedButton(
+                                style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.teal)),
+                                onPressed: (){
+                                  setState(() {
+                                    delPressed=false;
+                                  });
+                                },
+                                child: const Text("Cancel",style: TextStyle(color: Colors.white),),
+                              ),
+                            ),
+                            SizedBox(
+                              width: w/4,
+                              height: 30,
+                              child: ElevatedButton(
+                                style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.teal)),
+                                onPressed: ()async{
+                                  setState(() {
+                                    refresh=true;
+                                  });
+                                  String status = await apiServices().deleteBill(widget.mobile, selectedID);
+
+                                  refresh=false;
+                                  delPressed=false;
+                                  expenseCardPressed=false;
+                                  if(status=="Success"){
+                                    fetchBills(_selected);
+                                  }
+                                  else{
+                                    setState(() {
+                                    });
+                                  }
+
+                                },
+                                child: const Text("Delete",style: TextStyle(color: Colors.white),),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
-              widget.permission!="MAN"?SizedBox(
-                width: w,
-                height: 60,
-                child: ElevatedButton(
-                  style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark),shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(1.0),
-                      )
-                  )),
-                  onPressed: (){
+            ):const SizedBox(),
 
-                    Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return upload_bill(mobile: widget.mobile,name:widget.name,callback: CallBack,);
-                    }));
-                  },
-                  child: const Text("Add Bill",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white)),
-                ),
-              ):const SizedBox()
+            refresh?loadingWidget():const SizedBox(),
 
-            ],
-          ),
-          expenseCardPressed?Container(
-            width: w,
-            height: h,
-            color: Colors.black.withValues(alpha: .7),
-            child: expenseCard(),
-          ):const SizedBox(),
-
-          // imageDownloaded?imageViewer(imagefile: newImage, mobile: widget.mobile,callback: imageViewerCallback,):SizedBox(),
-
-          // imageDownloaded?Container(
-          //   width: w,
-          //   height: h,
-          //   color: Colors.black,
-          //   child: Center(
-          //     child: SizedBox(
-          //       width: w-50,
-          //       height: h-50,
-          //       child: PhotoView(
-          //         imageProvider: Image.memory(newImage).image,
-          //       ),
-          //     ),
-          //   ),
-          // ):const SizedBox(),
-          // imageDownloaded?SafeArea(
-          //     child:Align(
-          //       alignment: Alignment.bottomCenter,
-          //       child: SizedBox(
-          //         width: w,
-          //         height: 50,
-          //         child: Row(
-          //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //           children: [
-          //             ElevatedButton(
-          //                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
-          //                 onPressed: ()async{
-          //
-          //                 setState(() {
-          //                   refresh=true;
-          //                 });
-          //                 String status = await savefile().downloadImage("${widget.mobile}-${DateTime.now().millisecond}.png" , newImage);
-          //                 showMessage(status);
-          //                 setState(() {
-          //                   refresh=false;
-          //                 });
-          //             }, child: const Text("Download",style: TextStyle(color: Colors.white),)),
-          //             ElevatedButton(
-          //                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
-          //                 onPressed: (){
-          //               setState(() {
-          //                 imageDownloaded=false;
-          //               });
-          //             }, child: const Text("Close",style: TextStyle(color: Colors.white),))
-          //           ],
-          //         ),
-          //       ),
-          //     )
-          // ):SizedBox(),
-          //
-
-          delPressed?Container(
-            width: w,
-            height: h,
-            color: Colors.black.withValues(alpha: .7),
-
-            child: Center(
-              child: Container(
-                width: w-100,
-                height: 160,
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1,color: Colors.black),
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      width: w-100,
-                      height: 50,
-                      decoration: const BoxDecoration(
-                          color: Colors.teal,
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))
-                      ),
-
-                      child: const Center(child: Text("Confirm Deletion!!",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),),
-                    ),
-                    SizedBox(
-                      width: w-100,
-                      height: 50,
-                      child: const Center(child: Text("Please confirm to delete this bill."),),
-                    ),
-                    SizedBox(
-                      width: w-100,
-                      height: 50,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(
-                            width: w/4,
-                            height: 30,
-                            child: ElevatedButton(
-                              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.teal)),
-                              onPressed: (){
-                                setState(() {
-                                  delPressed=false;
-                                });
-                              },
-                              child: const Text("Cancel",style: TextStyle(color: Colors.white),),
-                            ),
-                          ),
-                          SizedBox(
-                            width: w/4,
-                            height: 30,
-                            child: ElevatedButton(
-                              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.teal)),
-                              onPressed: ()async{
-                                setState(() {
-                                  refresh=true;
-                                });
-                                String status = await apiServices().deleteBill(widget.mobile, selectedID);
-
-                                refresh=false;
-                                delPressed=false;
-                                expenseCardPressed=false;
-                                if(status=="Success"){
-                                  fetchBills(_selected);
-                                }
-                                else{
-                                  setState(() {
-                                  });
-                                }
-
-                              },
-                              child: const Text("Delete",style: TextStyle(color: Colors.white),),
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ):const SizedBox(),
-
-          refresh?loadingWidget():const SizedBox(),
-
-        ],
+          ],
+        ),
       ),
     );
   }

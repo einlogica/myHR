@@ -27,6 +27,8 @@ import 'package:einlogica_hr/Models/userExpenseModel.dart';
 import 'package:einlogica_hr/Models/userModel.dart';
 import 'package:unique_identifier/unique_identifier.dart';
 
+import '../Models/settingsModel.dart';
+
 
 var token;
 late String _identifier;
@@ -39,14 +41,14 @@ class apiServices{
 
 
   //--------------PRODUCTION
-  // var url = "https://phpcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443/index.php";
+  var url = "https://phpcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443/index.php";
 
   //--------------TEST
   // var url = "https://testingcontainerapp.greenpond-6d64ab18.centralindia.azurecontainerapps.io:443";
   // var url ="http://localhost:8083/index.php"; //web
-  var url = 'http://10.0.2.2:8083/index.php'; //Emulator
+  // var url = 'http://10.0.2.2:8083/index.php'; //Emulator
 
-  var appVersion ="V1.4.3+43";
+  var appVersion ="V1.4.5+45";
   // var emp = "";
 
 //================================================================================================================================================= USERS
@@ -429,7 +431,7 @@ class apiServices{
 
     final response = await apiRequest("attendance/markAbsent", {"usermobile": mobile,"date":formatteddate,"emp":emp});
     status = response.body.trim();
-    // print(status);
+
 
     return status;
   }
@@ -1051,7 +1053,7 @@ class apiServices{
     }
 
     final response = await apiRequest("activity/post_Activity", {"usermobile": mobile,"username":name,"type":type,"site":site,"date":date,"drive":drive.toString(),"sKM":sKM.toString(),"eKM":eKM.toString(),"lat":lat,"long":long,"activity":activity,"cust":cust,"custno":remarks});
-
+    print(response.body);
     if(response.statusCode==200){
       var data = jsonDecode(response.body);
       status=data['Status'];
@@ -1172,7 +1174,7 @@ class apiServices{
     List<payRollModel> payrollList =[];
 
     final response = await apiRequest("payslip/getPayrollTemplate", {"device": _identifier,"emp":emp});
-    print(response.body);
+
     if(response.statusCode==200 && response.body.trim().isNotEmpty){
       var data = jsonDecode(response.body.trim());
 
@@ -1203,7 +1205,7 @@ class apiServices{
 
     String status = "";
     final response = await apiRequest("payslip/generatePayroll", {"month":month,"year":year,"lop":LOP,"device": _identifier,"emp":emp,"users":users.toString()});
-    print(response.body);
+
     if(response.statusCode==200){
       status = response.body.trim();
     }
@@ -1583,6 +1585,18 @@ class apiServices{
       data = response.body.trim();
     }
     return data;
+  }
+
+  //Fetch Settings
+  Future<settingModel> getAllSettings()async{
+    settingModel setting= settingModel(id: '', employer: '', users: '', kmrate: '', collectiontab: '', financetab: '', weekoff: '', leave: '', overtime: '', status: '', timezone: '', bench: '', activityattendance: '');
+    final response = await apiRequest("extra/getAllSettings", {"emp":emp});
+
+    if(response.body.trim()!="Failed"){
+      var d = jsonDecode(response.body.trim());
+      setting = settingModel(id: d['ID'], employer: d['Employer'], users: d['Users'], kmrate: d['KMrate'], collectiontab: d['CollectionTab'], financetab: d['FinanceTab'], weekoff: d['WeekOff'], leave: d['LeaveStructure'], overtime: d['OverTime'], status: d['Status'], timezone: d['TimeZone'], bench: d['Bench'], activityattendance: d['ActivityAttendance']);
+    }
+    return setting;
   }
 
 

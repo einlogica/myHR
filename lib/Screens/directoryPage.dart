@@ -16,7 +16,7 @@ class directoryPage extends StatefulWidget {
 
 class _directoryPageState extends State<directoryPage> {
 
-  var w=0.00,h=0.00,t=0.00;
+  var w=0.00,h=0.00,t=0.00,b=0.00;
   final TextEditingController _nameCtrl= TextEditingController();
   List<directoryModel> searchList = [];
   List<directoryModel> dirList = [];
@@ -60,13 +60,14 @@ class _directoryPageState extends State<directoryPage> {
     w=MediaQuery.of(context).size.width;
     h=MediaQuery.of(context).size.height;
     t=MediaQuery.of(context).viewPadding.top;
+    b=MediaQuery.of(context).viewPadding.bottom;
 
     return Scaffold(
       body: Stack(
         children: [
           SizedBox(
             width: w,
-            height: h,
+            height: h-b,
             child: Column(
               children: [
                 Container(

@@ -64,8 +64,14 @@ class _dashboardState extends State<dashboard> {
   fetchMonthlyData()async{
     //Attendance
     fetchedAttendanceData = await apiServices().getMonthlyAttendance(widget.currentUser.Mobile,currDate.month.toString(),currDate.year.toString());
+    print(fetchedAttendanceData.length);
+    if(fetchedAttendanceData.length>8){
+      attendanceData=fetchedAttendanceData.sublist(fetchedAttendanceData.length-8,fetchedAttendanceData.length-1);
+    }
+    else{
+      attendanceData=fetchedAttendanceData;
+    }
 
-    attendanceData=fetchedAttendanceData.sublist(fetchedAttendanceData.length-8,fetchedAttendanceData.length-1);
     employeeCount=attendanceData[0]['Total'];
     // print(fetchedAttendanceData.last['Day']);
     if(fetchedAttendanceData.last['Day']==DateTime.now().day){
@@ -266,12 +272,12 @@ class _dashboardState extends State<dashboard> {
                               // });
                               if(widget.currentUser.Permission=="Admin"){
                                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                                  return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "ALL",collection: collectionTab,);
+                                  return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "ALL",collection: collectionTab,callback: (){},);
                                 }));
                               }
                               else{
                                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                                  return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "MAN",collection: collectionTab,);
+                                  return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "MAN",collection: collectionTab,callback: (){},);
                                 }));
                               }
 
@@ -430,7 +436,7 @@ class _dashboardState extends State<dashboard> {
                             // height: exp,
                             child: expenseTable(),
                           ),
-                          const SizedBox(height: 30,),
+                          const SizedBox(height: 60,),
                         ],
                       ):const Center(child:Text("Nothing to display"))
 

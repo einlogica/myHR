@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:einlogica_hr/Models/settingsModel.dart';
 import 'package:einlogica_hr/Screens/CollectionTabs/collectMaterial.dart';
 import 'package:einlogica_hr/Screens/Accounts/settingsPage.dart';
 import 'package:einlogica_hr/Screens/CollectionTabs/collectionsummary.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:einlogica_hr/Models/eventsModel.dart';
@@ -62,6 +64,8 @@ class _homePageState extends State<homePage> {
   String financeTab='';
   String version="";
   String Bench='';
+  String Activity='';
+  settingModel settings= settingModel(id: '', employer: '', users: '', kmrate: '', collectiontab: '', financetab: '', weekoff: '', leave: '', overtime: '', status: '', timezone: '', bench: '', activityattendance: '');
 
 
   //Current attendance status
@@ -115,6 +119,12 @@ class _homePageState extends State<homePage> {
     if(pendingList.isNotEmpty){
       pending=true;
     }
+    settings = await apiServices().getAllSettings();
+    collectionTab = settings.collectiontab;
+    financeTab = settings.financetab;
+    Bench = settings.bench;
+    Activity=settings.activityattendance;
+    // ActivityAttendance=settings.activityattendance;
     await fetchAttStatus();
     setState(() {
       gridAnim=true;
@@ -124,9 +134,11 @@ class _homePageState extends State<homePage> {
   }
 
   fetchData2()async{
-    collectionTab = await apiServices().getSettings('CollectionTab');
-    financeTab = await apiServices().getSettings('FinanceTab');
-    Bench = await apiServices().getSettings('Bench');
+
+
+    // collectionTab = await apiServices().getSettings('CollectionTab');
+    // financeTab = await apiServices().getSettings('FinanceTab');
+    // Bench = await apiServices().getSettings('Bench');
     if(widget.superAdmin==false){
       // print("Updating FCM");
       apiServices().updateFCM(widget.currentUser.Mobile);
@@ -167,6 +179,13 @@ class _homePageState extends State<homePage> {
     });
   }
 
+  callbackFromActivity()async{
+    await fetchAttStatus();
+    setState(() {
+      checkinWidth=false;
+    });
+  }
+
   fetchAttStatus()async{
     // setState(() {
     //   gridAnim=true;
@@ -193,11 +212,29 @@ class _homePageState extends State<homePage> {
       checkinWidth=true;
     }
     else{
+
       buttonText="Check In";
       checkinWidth=false;
     }
     checkOutPressed=false;
     // gridAnim=true;
+  }
+
+
+  void _startService() async {
+    final service = FlutterBackgroundService();
+    service.startService();
+  }
+
+
+
+  Future<void> _stopAutoCheckIn() async {
+    final service = FlutterBackgroundService();
+
+    service.invoke("stopService");
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Auto Check-In stopped")));
   }
 
   // String getDurationBetweenTimes(String start, String end) {
@@ -445,11 +482,11 @@ class _homePageState extends State<homePage> {
 
                                   ],
                                 ),
-                                kIsWeb?const SizedBox():Align(
+                                kIsWeb ?const SizedBox():Align(
                                     alignment: Alignment.topRight,
                                     child: Padding(
                                         padding: const EdgeInsets.only(right: 20.0),
-                                        child: InkWell(
+                                        child: (settings.activityattendance=='1' && buttonText=='Check In')?SizedBox():InkWell(
                                           onTap: ()async{
                                             // print(buttonText);
                                             if(buttonText!="Check In" && buttonText!="Check Out"){
@@ -594,7 +631,7 @@ class _homePageState extends State<homePage> {
                                 }),
                                 gridContainer2('assets/activities.png', "Activity", (){
                                   Navigator.push(context, MaterialPageRoute(builder: (context){
-                                    return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "EMP",collection: collectionTab,);
+                                    return timesheetPage(mobile: widget.currentUser.Mobile, name: widget.currentUser.Name,permission: "EMP",collection: collectionTab,callback: callbackFromActivity,);
                                   }));
                                 }),
 
@@ -937,7 +974,7 @@ class _homePageState extends State<homePage> {
                             color: AppColors.buttonColorDark,
                           ),
                           padding: const EdgeInsets.all(14),
-                          child: const Text("Check-In",style: TextStyle(color: Colors.white),),
+                          child: Text(type,style: TextStyle(color: Colors.white),),
                         ),
                       ),
                       TextButton(

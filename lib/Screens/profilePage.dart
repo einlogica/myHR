@@ -38,7 +38,7 @@ class profilePage extends StatefulWidget {
 
 class _profilePageState extends State<profilePage> {
 
-  var w=0.00,h=0.00,t=0.00;
+  var w=0.00,h=0.00,t=0.00,b=0.00;
   // TextEditingController _nameCtrl= TextEditingController();
   late var pickedImage;
   bool imgFromCamera=false;
@@ -119,6 +119,7 @@ class _profilePageState extends State<profilePage> {
     w=MediaQuery.of(context).size.width;
     h=MediaQuery.of(context).size.height;
     t=MediaQuery.of(context).viewPadding.top;
+    b=MediaQuery.of(context).viewPadding.bottom;
 
     // Define controllers for text input fields
     // TextEditingController dobCtrl = TextEditingController();
@@ -144,7 +145,7 @@ class _profilePageState extends State<profilePage> {
         children: [
           SizedBox(
             width: w,
-            // height: h,
+            height: h-b,
             child: Column(
               children: [
                 Container(
@@ -316,7 +317,7 @@ class _profilePageState extends State<profilePage> {
                                   },
                                   child: const Text("Change Password",style: TextStyle(color: Colors.white),),),
                               ),
-                              // SizedBox(height: 10,),
+                              SizedBox(height: 20,),
                               // SizedBox(
                               //   width: w-50,
                               //   height: 40,
@@ -401,7 +402,7 @@ class _profilePageState extends State<profilePage> {
                                     style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.buttonColorDark)),
                                     onPressed: (){
                                       Navigator.push(context, MaterialPageRoute(builder: (context){
-                                        return timesheetPage(mobile: currentUser.Mobile, name: currentUser.Name,permission: "EMP-MAN",collection: collectionTab,);
+                                        return timesheetPage(mobile: currentUser.Mobile, name: currentUser.Name,permission: "EMP-MAN",collection: collectionTab,callback: (){},);
                                       }));
                                     },
                                     child: const Text("Activity",style: TextStyle(color: Colors.white),),),
@@ -474,8 +475,8 @@ class _profilePageState extends State<profilePage> {
                                   width: w-50,
                                   height: 40,
 
-                                  child: currentUser.Status=="INACTIVE"?const SizedBox():ElevatedButton(
-                                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.deepOrangeAccent)),
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(currentUser.Status=='ACTIVE'?Colors.deepOrangeAccent:Colors.lightGreen)),
                                     onPressed: ()async{
                                       // String status = await apiServices().deactivateEmployee(widget.currentUser.Mobile);
                                       // showMessage(status);
@@ -492,8 +493,8 @@ class _profilePageState extends State<profilePage> {
                                             shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(15.0),
                                             ),
-                                            title: const Text("Deactivate Employee !!"),
-                                            content: const Text("Are you sure to deactivate employee?"),
+                                            title: Text(currentUser.Status=='ACTIVE'?"Deactivate Employee !!":"Activate Employee"),
+                                            content: Text(currentUser.Status=='ACTIVE'?"Are you sure to deactivate employee?":"Are you sure to activate this employee"),
 
                                             actions: <Widget>[
                                               TextButton(
@@ -506,7 +507,7 @@ class _profilePageState extends State<profilePage> {
                                                 child: Container(
                                                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: AppColors.buttonColorDark,),
                                                   padding: const EdgeInsets.all(14),
-                                                  child: const Text("Deactivate",style: TextStyle(color: Colors.white),),
+                                                  child: Text(currentUser.Status=='ACTIVE'?"Deactivate":"Activate",style: TextStyle(color: Colors.white),),
                                                 ),
                                               ),
                                               TextButton(
@@ -526,12 +527,13 @@ class _profilePageState extends State<profilePage> {
                                       );
 
                                     },
-                                    child: const Text("Deactivate Employee",style: TextStyle(color: Colors.white),),),
+                                    child: Text(currentUser.Status=='ACTIVE'?"Deactivate Employee":"Activate Employee",style: TextStyle(color: Colors.white),),),
                                 ),
                               ),
+                              const SizedBox(height: 60),
                             ],
                           ),
-                          const SizedBox(height: 30),
+
 
                         ],
                       ),

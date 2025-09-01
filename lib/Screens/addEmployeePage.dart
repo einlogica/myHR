@@ -321,6 +321,12 @@ class _addEmployeePageState extends State<addEmployeePage> {
                                         return;
                                       }
 
+                                      if(dropIndex==0){
+                                        showMessage("Choose valid Manager");
+                                        // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Invalid Mobile Number")));
+                                        return;
+                                      }
+
                                       setState(() {
                                         _loading=true;
                                       });

@@ -17,7 +17,7 @@ class dropDownSettingsPage extends StatefulWidget {
 
 class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
 
-  var w=0.00,h=0.00,t=0.00;
+  var w=0.00,h=0.00,t=0.00,b=0.0;
   final TextEditingController _addCtrl = TextEditingController();
   String selectedOption = "";
   bool optionSelected=false;
@@ -50,7 +50,9 @@ class _dropDownSettingsPageState extends State<dropDownSettingsPage> {
 
     w=MediaQuery.of(context).size.width;
     h=MediaQuery.of(context).size.height;
-    t=MediaQuery.of(context).viewPadding.top;
+    t = MediaQuery.of(context).padding.top;
+    // b = MediaQuery.of(context).padding.bottom;
+
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
