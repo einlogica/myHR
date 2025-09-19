@@ -21,9 +21,10 @@ FlutterLocalNotificationsPlugin();
 
 
 Future<void> main() async{
-
+// print('einlogica")
   WidgetsFlutterBinding.ensureInitialized();
   // print("=============");
+  
   // print(Firebase.apps.toString());
 
   // if (Firebase.apps.isEmpty) {
